@@ -46,6 +46,7 @@ The design focuses on simplicity, readability, and a professional layout inspire
 - `index.html` - Main layout and styles
 - `script` - Experience data, modal behavior, and contact form submission
 - `Images/` - All images used in the portfolio (projects, certificates, experience galleries)
+- `Yongama_Goso_CV.pdf` - The CV served by the "Download CV" button. Edit `cv/resume.html`, then run `sh cv/build.sh` to regenerate it
 
 ---
 

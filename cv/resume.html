@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Yongama Goso — CV</title>
+<style>
+  /* Fonts are bundled locally so the PDF build never depends on the network (all SIL OFL, via Google Fonts). */
+  @font-face { font-family: "Bricolage Grotesque"; src: url("fonts/bricolage-grotesque.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "Instrument Sans"; src: url("fonts/instrument-sans.woff2") format("woff2"); font-weight: 400 700; }
+  @font-face { font-family: "JetBrains Mono"; src: url("fonts/jetbrains-mono.woff2") format("woff2"); font-weight: 100 800; }
+
+  /* Palette taken from the portfolio's :root (index.html) */
+  :root {
+    --slate: #1b212c;
+    --cyan: #00e6ff;
+    --teal-ink: #007c8f;        /* darker cyan so accents stay legible on white and in greyscale */
+    --ink: #1b212c;
+    --ink-2: #48515f;
+    --rule: #dfe3e8;
+    --paper: #ffffff;
+    --side-text: rgba(255,255,255,.9);
+    --side-muted: rgba(255,255,255,.62);
+    --display: "Bricolage Grotesque", "Liberation Sans", sans-serif;
+    --body: "Instrument Sans", "Liberation Sans", sans-serif;
+    --mono: "JetBrains Mono", "DejaVu Sans Mono", monospace;
+  }
+
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body {
+    font-family: var(--body);
+    color: var(--ink);
+    font-size: 8.2pt;
+    line-height: 1.36;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    display: grid;
+    grid-template-columns: 66mm 1fr;
+    overflow: hidden;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .side {
+    background:
+      linear-gradient(180deg, rgba(0,230,255,.07), transparent 38%),
+      var(--slate);
+    color: var(--side-text);
+    padding: 15mm 7.5mm 12mm 9mm;
+    position: relative;
+  }
+  .side::after {               /* thin cyan edge where the columns meet */
+    content: "";
+    position: absolute; top: 0; right: 0; bottom: 0;
+    width: 1.2mm;
+    background: var(--cyan);
+  }
+  .side h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 9.4pt;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 2.4mm;
+    display: flex; align-items: center; gap: 2mm;
+  }
+  .side h2::before {
+    content: ""; width: 3.2mm; height: .7mm; background: var(--cyan);
+  }
+  .side section + section { margin-top: 6.4mm; }
+
+  .contact { list-style: none; display: grid; gap: 1.7mm; }
+  .contact li { display: grid; grid-template-columns: 9mm 1fr; align-items: baseline; }
+  .contact .k {
+    font-family: var(--mono); font-size: 6.6pt; color: var(--cyan);
+    text-transform: lowercase;
+  }
+  .contact a { color: var(--side-text); text-decoration: none; word-break: break-word; }
+
+  .edu { display: grid; gap: 3mm; }
+  .edu .when { font-family: var(--mono); font-size: 6.8pt; color: var(--cyan); }
+  .edu b { display: block; font-weight: 600; color: #fff; font-size: 8.4pt; line-height: 1.3; margin-top: .4mm; }
+  .edu span { color: var(--side-muted); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 1.3mm; }
+  .chips span {
+    font-family: var(--mono); font-size: 6.7pt;
+    padding: .55mm 1.7mm;
+    border: .25mm solid rgba(0,230,255,.45);
+    border-radius: 1mm;
+    color: #fff;
+  }
+
+  .plain { list-style: none; display: grid; gap: 1mm; }
+  .plain li { padding-left: 3.2mm; position: relative; }
+  .plain li::before {
+    content: ""; position: absolute; left: 0; top: .62em;
+    width: 1.3mm; height: 1.3mm; background: var(--cyan); transform: rotate(45deg);
+  }
+  .plain em { font-style: normal; color: var(--side-muted); }
+
+  .langs { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1mm 3mm; }
+  .langs em { font-style: normal; color: var(--side-muted); font-size: 7.4pt; display: block; }
+
+  /* ---------- Main column ---------- */
+  .main { padding: 12mm 12mm 9mm 10mm; }
+
+  .head { margin-bottom: 3mm; }
+  .head h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 30pt;
+    line-height: .95;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+  }
+  .head h1 span { color: var(--teal-ink); }
+  .head .role {
+    margin-top: 2.6mm;
+    font-family: var(--mono); font-size: 8pt; color: var(--ink-2);
+    display: flex; align-items: center; gap: 2.4mm;
+  }
+  .head .role::before { content: ""; width: 9mm; height: .9mm; background: var(--cyan); }
+
+  .main section { margin-top: 4mm; }
+  .main h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 11pt;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    display: flex; align-items: baseline; gap: 2.2mm;
+    padding-bottom: 1.3mm;
+    border-bottom: .3mm solid var(--rule);
+    margin-bottom: 2mm;
+  }
+  .main h2 .n { font-family: var(--mono); font-size: 7pt; font-weight: 500; color: var(--teal-ink); letter-spacing: 0; }
+
+  .profile { color: var(--ink-2); }
+
+  .job-top { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .job-top b { font-family: var(--display); font-weight: 700; font-size: 10.6pt; }
+  .date { font-family: var(--mono); font-size: 7pt; color: var(--teal-ink); white-space: nowrap; }
+  .org { color: var(--ink-2); margin: .4mm 0 1.6mm; }
+
+  .bullets { list-style: none; display: grid; gap: .6mm; }
+  .bullets li { padding-left: 3.6mm; position: relative; }
+  .bullets li::before {
+    content: ""; position: absolute; left: 0; top: .6em;
+    width: 1.5mm; height: .45mm; background: var(--teal-ink);
+  }
+  .bullets b { font-weight: 600; }
+
+  .certs { display: grid; gap: 1.6mm; }
+  .cert-top { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .cert-top b { font-weight: 600; font-size: 8.8pt; }
+  .cert p { color: var(--ink-2); }
+
+  .events { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8mm 6mm; }
+  .events b { font-weight: 600; display: block; font-size: 8.6pt; }
+  .events p { color: var(--ink-2); }
+
+  .refs { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .refs b { font-weight: 600; display: block; font-size: 8.8pt; }
+  .refs span { color: var(--ink-2); }
+  .refs-note { margin-top: 1.6mm; font-family: var(--mono); font-size: 6.8pt; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <aside class="side">
+    <section>
+      <h2>Contact</h2>
+      <ul class="contact">
+        <li><span class="k">tel</span><span>069 768 7985</span></li>
+        <li><span class="k">mail</span><a href="mailto:goso.yonga@gmail.com">goso.yonga@gmail.com</a></li>
+        <li><span class="k">loc</span><span>Southernwood, KuGompo City (East London), Eastern Cape</span></li>
+        <li><span class="k">git</span><a href="https://github.com/BigGee6566">github.com/BigGee6566</a></li>
+        <li><span class="k">in</span><a href="https://www.linkedin.com/in/yongama-goso-85aaaa2b0">linkedin.com/in/yongama-goso-85aaaa2b0</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="edu">
+        <div>
+          <span class="when">2023 – present</span>
+          <b>University of Fort Hare</b>
+          <span>Bachelor of Commerce (Information Systems)</span>
+        </div>
+        <div>
+          <span class="when">2020 – 2022</span>
+          <b>Tlokweng Senior Secondary School</b>
+          <span>National Senior Certificate</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Tech Stack</h2>
+      <div class="chips">
+        <span>React</span><span>Next.js</span><span>JavaScript</span><span>HTML</span><span>CSS</span>
+        <span>C#</span><span>.NET</span><span>SQL Server</span><span>PostgreSQL</span>
+        <span>Python</span><span>Git</span><span>GitHub</span><span>Visual Studio</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Tools</h2>
+      <ul class="plain">
+        <li>Microsoft Office <em>(Word, Excel, PowerPoint, Access)</em></li>
+        <li>Google Workspace <em>(Docs, Sheets, Slides)</em></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Strengths</h2>
+      <ul class="plain">
+        <li>Effective communication</li>
+        <li>Critical thinking</li>
+        <li>Teamwork &amp; leadership</li>
+        <li>Time management</li>
+        <li>Public relations</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Languages</h2>
+      <ul class="langs">
+        <li>English<em>Fluent</em></li>
+        <li>isiXhosa<em>Fluent</em></li>
+        <li>isiZulu<em>Fluent</em></li>
+        <li>Setswana<em>Intermediate</em></li>
+        <li>Sesotho<em>Basic</em></li>
+        <li>Sepedi<em>Basic</em></li>
+      </ul>
+    </section>
+  </aside>
+
+  <main class="main">
+    <header class="head">
+      <h1>Yongama <span>Goso</span></h1>
+      <div class="role">Software Developer · BCom (Information Systems) Student</div>
+    </header>
+
+    <section>
+      <h2><span class="n">01</span>Profile</h2>
+      <p class="profile">
+        Self-driven Bachelor of Commerce (Information Systems) student and software developer who has built and
+        deployed web applications, a full-stack mobile app and live database-backed systems that address real
+        community and business problems in the Eastern Cape. I apply information systems knowledge to the
+        operational and entrepreneurial needs of an organisation, pay close attention to detail, and bring strong
+        communication and organisational skills to every team.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="n">02</span>Experience</h2>
+      <div class="job-top">
+        <b>Software Developer</b>
+        <span class="date">Sep 2025 – Sep 2026</span>
+      </div>
+      <p class="org">Youth@Work (host employer) · YES Programme, sponsored by Fairtree Asset Management (Pty) Ltd</p>
+      <ul class="bullets">
+        <li>Built user interfaces in <b>React and Next.js</b> and server-side logic and APIs in <b>C#/.NET</b>, integrated with <b>SQL Server and PostgreSQL</b> databases.</li>
+        <li>Translated business requirements and user stories into technical specifications, database schemas and API contracts.</li>
+        <li>Wrote unit and integration tests, debugged production and legacy code, and reviewed peer code for quality and security.</li>
+        <li>Managed CI/CD pipelines to automate builds and releases; monitored performance and shipped regular updates and security patches.</li>
+        <li>Worked in Agile sprints (stand-ups, planning, retrospectives) with designers, QA and stakeholders, and maintained technical documentation and API guides.</li>
+        <li>Provided first-line IT support, including weekend shifts: logged, diagnosed and resolved or escalated hardware and software faults.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="n">03</span>Training &amp; Certifications</h2>
+      <div class="certs">
+        <div class="cert">
+          <div class="cert-top"><b>YES Quality Work Experience Programme</b><span class="date">1 Aug 2026</span></div>
+          <p>12-month programme completed in full, hosted by Youth@Work. Certificate of completion and reference letter on file.</p>
+        </div>
+        <div class="cert">
+          <div class="cert-top"><b>UCT–Cortex Hub Fintech Lab 2026 Summer School</b><span class="date">12 – 31 Jan 2026</span></div>
+          <p>Three-week intensive programme on Open Banking and fintech innovation, held at The Cortex Hub, East London.</p>
+        </div>
+        <div class="cert">
+          <div class="cert-top"><b>Certificate in Full Stack Development — FNB App Academy 2025</b><span class="date">23 Jul 2025</span></div>
+          <p>Issued by IT Varsity. SDLC, APIs and backend development, data management, UX and design thinking, GitHub collaboration, AI in development.</p>
+        </div>
+        <div class="cert">
+          <div class="cert-top"><b>HP LIFE — HP Foundation</b></div>
+          <p>Effective Business Websites · AI for Beginners · Starting a Small Business · Finding Funding</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="n">04</span>Hackathons &amp; Events</h2>
+      <div class="events">
+        <div>
+          <b>Human Rights Hackathon</b>
+          <p>Defined the problem statement and user flow, built responsive UI screens, and delivered the final demo and pitch.</p>
+        </div>
+        <div>
+          <b>Telkom10X Hackathon</b>
+          <p>Built a working web prototype under tight deadlines with a multidisciplinary team; contributed front-end layout and feature prioritisation.</p>
+        </div>
+        <div>
+          <b>UCT Cortex Hub Fintech Hackathon</b>
+          <p>Mapped fintech user journeys, designed onboarding and dashboard UI, and showcased a working demo flow.</p>
+        </div>
+        <div>
+          <b>StartUpGrind All-Star Pitch Battle</b>
+          <p>Crafted a clear value proposition, prepared slides and demo flow, and pitched live for mentor feedback.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="n">05</span>References</h2>
+      <div class="refs">
+        <div><b>Zibuko Baliso</b><span>Supervisor · Fairtree Asset Management (Pty) Ltd</span></div>
+        <div><b>Chuma Memela</b><span>Managing Director · Genie-yus AI</span></div>
+      </div>
+      <p class="refs-note">Contact details available on request.</p>
+    </section>
+  </main>
+
+</div>
+</body>
+</html>
