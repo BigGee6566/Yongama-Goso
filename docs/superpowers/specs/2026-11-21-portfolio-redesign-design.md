@@ -21,10 +21,10 @@ Two requirements came directly from him:
 2. **Every repo project must be shown as images or video of the application actually running**,
    the same way the four existing projects are shown with screenshots.
 
-Who the site is for is **not yet confirmed** (see §11, Q1). The CV's profile says he is "seeking
-opportunities to apply and further develop technical and analytical skills", and the biography
-positions him as founder of Gonex Innovation Hub. The primary call to action depends on which
-audience comes first.
+**Audience (confirmed 2026-11-21):** employers come first. The CV's profile says he is "seeking
+opportunities to apply and further develop technical and analytical skills". The primary call to
+action is **"Work with me"**, and **"Partner with Gonex"** is the secondary one for partners,
+funders and schools.
 
 ## 2. Content sources (the only sources allowed)
 
@@ -37,7 +37,7 @@ or shown as an explicit "pending" item. Nothing is invented.
 | S2 | Delegate Biography and Business Profile (uploaded 2026-11-21) | user upload |
 | S3 | Current portfolio | `index.html` (this repo, commit `610e5cc`) |
 | S4 | CV source | `cv/resume.html` |
-| S5 | GitHub repo READMEs, code and metadata | the 12 repos in §6 |
+| S5 | GitHub repo READMEs, code, metadata and commit history | the 10 repos in §6 |
 | S6 | Live deployments, verified loading on 2026-11-21 | URLs in §6 |
 
 ## 3. Goals, non-goals, anti-goals
@@ -79,9 +79,13 @@ or shown as an explicit "pending" item. Nothing is invented.
   student email or referee contacts.
 - **Repo scope (his choice):** his own public repos with real app code, plus the four projects
   already on the current site.
-- **Windows-only apps** (ASP.NET Web Forms, .NET Framework 4.x, SQL Server) cannot run in the cloud
-  build container. They are captured on his Windows PC through Claude Remote Control (his choice).
-  Until that happens, those cards show a labelled "capture pending" state.
+- **Windows-only apps** (ASP.NET Web Forms, .NET Framework 4.x, SQL Server, or PostgreSQL for
+  TutorConnect) cannot run in the cloud build container. They are captured on his Windows PC
+  through Claude Remote Control (his choice), as a **separate later phase**. The site ships first
+  with those five cards in a labelled "capture pending" state. The PC phase:
+  - creates new, separately named demo databases from each repo's own seed and migration scripts;
+  - never reads or modifies his existing development databases, which may hold real data;
+  - confirms with him before running anything on his PC.
 
 ## 5. Approaches considered
 
@@ -104,22 +108,26 @@ The capture method is decided per project. "Live" means the URL loaded with real
 | 1 | NOVA Journal (HexSoftwares blog) | `HexSoftwares_Simple_Blog_Website` | HTML, CSS, JS, localStorage | Live: `simple-blog-website-mu.vercel.app` | Ready |
 | 2 | Open Data Dashboard | `open-data-api-dashboard` | HTML, CSS, JS, World Bank API | Live: GitHub Pages | Ready |
 | 3 | Thaba Shield | `thaba-shield` | JS client, Python, Docker | Live: `thaba-shield.vercel.app` (description to be taken from code, since there is no README) | Ready |
-| 4 | SA-NQOBA | `SA-NQOBA` | Expo/React Native web, Node/Express, MongoDB, Groq LLM | Run locally: Expo web plus API with local MongoDB in Docker. Without a Groq key the LLM commentary is off, and captures must not show it as working | Run here |
-| 5 | CONQUEST | `CONQUEST-GAME` | Expo, TypeScript, Express 5, Mongoose, JWT, Groq | Same as #4 | Run here |
-| 6 | MoMali (UCT Cortex Hub Fintech Hackathon) | `UCT-Cortex-Hub-Fintech-Hackathon` | TypeScript, Expo, backend, docker-compose | Run locally. The Vercel URL returns 404, so no live link is shown | Run here |
-| 7 | Fintech FastAPI tutorial API | `fintech_tut_fastAPI` | Python, FastAPI | Run `uvicorn` and capture the interactive `/docs` UI exercising real endpoints | Run here |
-| 8 | TutorConnect | `TutorConnect` | VB.NET, ASP.NET Web Forms, SQL Server | His Windows PC via Remote Control | Pending PC |
-| 9 | StudyLink | `StudyLink` | C#, ASP.NET Web Forms, EF6, SQL Server | His PC | Pending PC |
-| 10 | SmartShelf | `SmartShelf` | C#, ASP.NET Web Forms | His PC | Pending PC |
-| 11 | BusNova | `BusNova_System` | C#, ASP.NET Web Forms, ADO.NET, SQL Server | His PC | Pending PC |
-| 12 | Logisticore Courier Service | `C-Sharp-Shooter` | C#, ASP.NET Web Forms, .NET 4.8, SQL Server | His PC | Pending PC |
-| 13 | PlaceMe | (current site) | HTML, CSS, JS, SQL | Existing screenshot, reused | Ready |
-| 14 | EduRand | (current site) | HTML, CSS, JS, UI/UX | Existing screenshot | Ready |
-| 15 | JourneyMap | (current site) | HTML, CSS, JS, React | Existing screenshot | Ready |
-| 16 | Laundry Website | (current site) | HTML, CSS, JS | Existing screenshot | Ready |
+| 4 | MoMali (UCT Cortex Hub Fintech Hackathon) | `UCT-Cortex-Hub-Fintech-Hackathon` | TypeScript, Expo, backend, docker-compose | Run locally. The Vercel URL returns 404, so no live link is shown | Run here |
+| 5 | Fintech FastAPI tutorial API | `fintech_tut_fastAPI` | Python, FastAPI | Run `uvicorn` and capture the interactive `/docs` UI exercising real endpoints | Run here |
+| 6 | TutorConnect | `TutorConnect` | VB.NET, ASP.NET Web Forms, PostgreSQL (per its `App_Data/Scripts/postgres`) | His Windows PC via Remote Control | Pending PC |
+| 7 | StudyLink | `StudyLink` | C#, ASP.NET Web Forms, EF6, SQL Server | His PC | Pending PC |
+| 8 | SmartShelf | `SmartShelf` | C#, ASP.NET Web Forms, SQL Server | His PC | Pending PC |
+| 9 | BusNova | `BusNova_System` | C#, ASP.NET Web Forms, ADO.NET, SQL Server | His PC | Pending PC |
+| 10 | Logisticore Courier Service | `C-Sharp-Shooter` | C#, ASP.NET Web Forms, .NET 4.8, SQL Server | His PC | Pending PC |
+| 11 | PlaceMe | (current site) | HTML, CSS, JS, SQL | Existing screenshot, reused | Ready |
+| 12 | EduRand | (current site) | HTML, CSS, JS, UI/UX | Existing screenshot | Ready |
+| 13 | JourneyMap | (current site) | HTML, CSS, JS, React | Existing screenshot | Ready |
+| 14 | Laundry Website | (current site) | HTML, CSS, JS | Existing screenshot | Ready |
 
 Excluded by his choice: `Edurand_V2` and `UFH-MARKETPLACE` (README only), `hello-world`, this
 portfolio repo, private repos and repos owned by others.
+
+**Held back until the UCT INF4001N 2027 entrance exam is marked** (his decision, 2026-11-21):
+- `SA-NQOBA`: 19 commits by BigGee6566 and 1 by AsandaDingezweni.
+- `CONQUEST-GAME`: its only commit is authored by Liyema Vundle.
+
+Neither appears anywhere on the site. Adding them later is a data-only change.
 
 **Team projects** are labelled honestly, using the team names in the READMEs (for example "Nova
 Tech Developers, UFH IFS303" for StudyLink and "C Sharp Shooters" for Logisticore). His individual
@@ -137,7 +145,7 @@ what exists in the sources:
 
 | Page | File | Sections (in order) |
 |---|---|---|
-| Home | `index.html` | Hero (role ticker: Chief Problem Solver, Full-Stack Developer, Techpreneur, Founder of Gonex Innovation Hub [S2, S3]; stacked name YONGAMA / GOSO; portrait; buttons for Projects, Contact and LinkedIn) → counter strip → About (bio from S2 and S3) → What I Do (capabilities, §8) → Featured projects (4 cards with video) → Recognition highlights → photo CTA band → My Approach (from his own words in S3) → footer |
+| Home | `index.html` | Hero (role ticker: Chief Problem Solver, Full-Stack Developer, Techpreneur, Founder of Gonex Innovation Hub [S2, S3]; stacked name YONGAMA / GOSO; portrait; buttons: **Work with me** as the primary (goes to Contact), View Projects, LinkedIn) → counter strip → About (bio from S2 and S3) → What I Do (capabilities, §8) → Featured projects (4 cards with video) → Recognition highlights → photo CTA band → My Approach (from his own words in S3) → footer |
 | Projects | `projects.html` | Intro → filter chips (All, Web, Mobile/Expo, .NET, APIs, Games) → project grid (§9) → project modal |
 | Journey | `journey.html` | Growth timeline (§10) → Experience (work and Gonex) → Events and hackathons (the 4 existing events with galleries, plus the inter-university hackathon mentor role) → Education → Skills & Tools (§8) → Languages |
 | Recognition | `recognition.html` | Awards and selections (§10) → Gonex Innovation Hub profile and vision (S2) → Certificates gallery (6 existing plus YES and UCT–Cortex Hub from S1) |
@@ -162,8 +170,12 @@ site.
 **Skills & Tools:** each tool chip lists the projects that use it ("Used in: …"), generated from
 the project data so the claim is always backed by a project:
 - Languages: HTML, CSS, JavaScript, TypeScript, C#, VB.NET, Python, SQL
-- Frameworks: React, React Native/Expo, Node.js/Express, ASP.NET Web Forms, Entity Framework 6, FastAPI, Bootstrap
-- Data: SQL Server, MongoDB/Mongoose, localStorage
+- Frameworks: React, React Native/Expo, ASP.NET Web Forms, Entity Framework 6, FastAPI, Bootstrap
+- Data: SQL Server, PostgreSQL, localStorage
+
+The final chip list is whatever the in-scope projects' `stack` fields contain, plus the CV tools.
+A technology with no in-scope project behind it is dropped (for example MongoDB and Groq, which
+only the held-back games use).
 - Tooling: Git/GitHub, Docker, Vercel, Visual Studio, Google Workspace, Microsoft Office (Word, Excel, PowerPoint, Access) [S1]
 - Soft skills [S1]: teamwork, leadership, time management, effective communication, critical thinking, public relations
 
@@ -229,7 +241,8 @@ capture coming soon". It must not look like a screenshot.
 - Finalist, East London Startup Grind All-Star Pitch Battle. *(S2, S3. Date pending.)*
 - Mentor, Inter-University Hackathon, 17–18 Oct 2026. *(S1)*
 - Certificates: the 6 on the current site [S3], plus the YES Quality Work Experience Programme and
-  the UCT–Cortex Hub Fintech Lab Summer School [S1].
+  the UCT–Cortex Hub Fintech Lab Summer School [S1]. The repo has no images of the last two, so
+  they get **text-only certificate cards** until he supplies scans (a data-only swap later).
 
 **Counter strip:** only countable, sourced numbers, computed from `data.js` so they cannot drift:
 - public projects on GitHub
@@ -239,17 +252,36 @@ capture coming soon". It must not look like a screenshot.
 
 Gonex reach numbers (people trained, schools visited) appear only if he supplies them.
 
-## 11. Open questions for Yongama
+## 11. Decisions and remaining questions
 
-These change what gets built; see the hand-off message. The design proceeds with the marked
-default until he answers.
+**Decided by Yongama (2026-11-21):**
 
-- **Q1. Primary audience and call to action.** Default: "Hire me / work with me" first and
-  "Partner with Gonex" second.
-- **Q2. Public CV.** The downloadable PDF built from `cv/resume.html` includes his phone number,
-  which conflicts with "email + socials only". Default: build a public CV without the phone number.
-- **Q3. Counter numbers, dates and media coverage** (Gonex reach, the InnoVarsity date, the
-  Startup Grind date, the Gonex founding date, any press links). Default: show "pending" or omit.
+| Topic | Decision |
+|---|---|
+| Build approach | A: static multi-page HTML/CSS/JS on GitHub Pages |
+| Look | Same structure as the reference, his own colours |
+| Public contact details | Email and socials only |
+| Repo scope | Own public repos with app code, plus the 4 existing projects |
+| Windows apps | Captured on his PC through Remote Control, in a later phase |
+| Exam games | SA-NQOBA and CONQUEST held back until the exam is marked |
+| Main call to action | "Work with me" (employers) first, "Partner with Gonex" second |
+
+**Public CV (decided):**
+- Rebuild `cv/resume.html` from S1: degree completed, Gonex founder, October 2026 mentor role and
+  YES completion.
+- Leave out the phone number, suburb and street address; the location reads "KuGompo City (East
+  London), Eastern Cape".
+- References become "available on request", with no referee names or contacts.
+- Regenerate `Yongama_Goso_CV.pdf` with `sh cv/build.sh` and **replace** the current PDF, which
+  publishes his phone number today.
+
+**Builder's calls (he can overrule):**
+- The PC capture is a separate later phase, with fresh demo databases as described in §4.
+- The YES and UCT–Cortex Hub certificates use text-only cards.
+
+**Still open (non-blocking; defaults apply until answered):**
+- **Q3. Counter numbers, dates and media coverage:** Gonex reach, the InnoVarsity date, the
+  Startup Grind date, the Gonex founding date and any press links. Default: show "pending" or omit.
 - **Q4. His role in team projects** (StudyLink, TutorConnect, Logisticore and others). Default:
   show the team name only.
 
