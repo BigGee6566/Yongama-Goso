@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 24" width="48" height="24">
+<!-- Beadwork-inspired divider tile. It repeats horizontally (background-repeat: repeat-x).
+     Two ink edge rows frame a row of triangles that meet tip to tip, alternating
+     vermilion over ink and ink over vermilion; the bone ground shows as diamonds between. -->
+<rect width="48" height="24" fill="#F5F1EA"/>
+<rect width="48" height="3" fill="#0E1116"/>
+<rect y="21" width="48" height="3" fill="#0E1116"/>
+<polygon points="0,3 24,3 12,12" fill="#FF5A36"/>
+<polygon points="0,21 24,21 12,12" fill="#0E1116"/>
+<polygon points="24,3 48,3 36,12" fill="#0E1116"/>
+<polygon points="24,21 48,21 36,12" fill="#FF5A36"/>
+</svg>

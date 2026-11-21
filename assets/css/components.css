@@ -1,0 +1,79 @@
+/* ==========================================================================
+   components.css: reusable pieces that sit inside the layout.
+   For now: the skip link and buttons. Later tasks add cards, chips, badges,
+   counters, the timeline, the modal, galleries and the form here.
+   ========================================================================== */
+
+/* ---- Skip link -----------------------------------------------------------
+   The first thing a keyboard user reaches. Parked above the viewport until
+   it receives focus, then it drops into view. */
+.skip-link {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--gutter);
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-s);
+  background: var(--vermilion);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--space-5)));
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* ---- Buttons -------------------------------------------------------------
+   .btn is the shape; a modifier picks the colours.
+   - .btn--primary: vermilion with an ink label (6.1:1). On hover it flips to
+     --btn-hover-bg/-fg, which tokens.css sets per ground (ink on bone,
+     bone on ink), so the hover is always visible.
+   - .btn--ghost: an outline in the current text colour. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;                 /* touch target */
+  padding: .625rem 1.125rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-s);
+  font: inherit;
+  font-size: var(--text-s);
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.btn--primary {
+  background: var(--vermilion);
+  color: var(--ink);
+}
+
+.btn--primary:hover {
+  background: var(--btn-hover-bg);
+  color: var(--btn-hover-fg);
+}
+
+.btn--ghost {
+  border-color: currentColor;
+  background: transparent;
+  color: inherit;
+}
+
+.btn--ghost:hover {
+  border-color: var(--vermilion);
+}
+
+/* Font Awesome icons inside buttons sit at the label's size. */
+.btn i {
+  font-size: .95em;
+}

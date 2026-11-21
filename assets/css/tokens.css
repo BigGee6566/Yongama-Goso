@@ -1,0 +1,111 @@
+/* ==========================================================================
+   tokens.css: the design system's raw values, as CSS custom properties.
+   Every other stylesheet reads from these, so a colour or size changes in
+   one place. Load order on every page: tokens.css, layout.css, components.css.
+   ========================================================================== */
+
+:root {
+  /* ---- Palette (exact values from the design spec, section 12) ---------- */
+  --ink: #0E1116;            /* hero, header, footer, CTA band */
+  --ink-2: #161B22;          /* raised surfaces on ink (cards, panels) */
+  --bone: #F5F1EA;           /* light content sections, instead of white */
+  --bone-2: #EAE3D6;         /* alternate light sections, card fills */
+  --vermilion: #FF5A36;      /* the one hot accent: buttons, emphasis, ticker */
+  --teal: #14B8A6;           /* status only: "Live" chips and similar */
+  --muted-on-bone: #4A4F57;  /* secondary text on bone (7.3:1) */
+  --muted-on-ink: rgba(245,241,234,.66); /* secondary text on ink (7.6:1) */
+
+  /* Contrast rules worth remembering:
+     - ink text on vermilion is 6.1:1, so vermilion buttons get ink labels;
+     - vermilion on bone is only 2.8:1, so it is never used there for text
+       under 24px, nor for focus rings (non-text needs 3:1). */
+
+  /* Hairlines: bone or ink at low alpha, so they sit quietly on either ground. */
+  --line-on-ink: rgba(245,241,234,.14);
+  --line-on-bone: rgba(14,17,22,.14);
+
+  /* Keyboard focus ring colour. Ink on light grounds; dark regions
+     (header, footer, hero, .on-ink) override it to vermilion. */
+  --focus-ring: var(--ink);
+
+  /* Primary-button hover on light grounds: flips to ink with a bone label. */
+  --btn-hover-bg: var(--ink);
+  --btn-hover-fg: var(--bone);
+
+  /* ---- Type families -------------------------------------------------- */
+  /* Each starts with the brand face from Google Fonts; the rest is a
+     fallback used only until (or if) the web font loads. */
+  --font-display: "Big Shoulders Display", Impact, "Franklin Gothic Medium", sans-serif;
+  --font-body: "Instrument Sans", "Helvetica Neue", Helvetica, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* ---- Type scale ------------------------------------------------------
+     Steps follow the classic typographic scale (13, 15, 17, 21, 24, 36,
+     48, 72 ...). The large steps are fluid: clamp(min, preferred, max)
+     grows with the viewport width (vw) between a floor and a ceiling. */
+  --text-xs: .8125rem;                             /* 13px: fine print, mono labels */
+  --text-s: .9375rem;                              /* 15px: nav, captions */
+  --text-m: 1.0625rem;                             /* 17px: body */
+  --text-l: 1.3125rem;                             /* 21px: lead paragraphs */
+  --text-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);   /* 24 to 36px */
+  --text-2xl: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem); /* 36 to 60px: section titles */
+  --text-3xl: clamp(3rem, 1.8rem + 5.4vw, 6rem);       /* 48 to 96px: page titles */
+  --text-hero: clamp(4.5rem, 1rem + 15vw, 12.5rem);    /* the stacked name */
+
+  --leading-tight: .9;   /* display type is set tight: it reads as one shape */
+  --leading-snug: 1.25;
+  --leading-body: 1.6;
+
+  /* ---- Space (a 4px base, roughly doubling) --------------------------- */
+  --space-1: .25rem;  /*  4px */
+  --space-2: .5rem;   /*  8px */
+  --space-3: .75rem;  /* 12px */
+  --space-4: 1rem;    /* 16px */
+  --space-5: 1.5rem;  /* 24px */
+  --space-6: 2rem;    /* 32px */
+  --space-7: 3rem;    /* 48px */
+  --space-8: 4.5rem;  /* 72px */
+  --space-9: 7rem;    /* 112px */
+  --section-pad: clamp(var(--space-7), 4rem + 4vw, var(--space-9));
+
+  /* ---- Layout ----------------------------------------------------------- */
+  --container: 76rem;                    /* 1216px content width */
+  --gutter: clamp(16px, 4vw, 48px);      /* side padding: exactly 16px at 360px */
+  --header-h: 4.5rem;                    /* 72px; Home's hero pads by this */
+  --curve: clamp(28px, 6vw, 96px);       /* depth of the curved bottom edge on dark bands */
+
+  --radius-s: 4px;    /* buttons, chips */
+  --radius-m: 10px;   /* cards */
+  --radius-l: 22px;   /* large media, the counter card */
+
+  /* ---- Motion ----------------------------------------------------------- */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur-fast: 160ms;
+  --dur-base: 260ms;
+  --dur-slow: 600ms;
+}
+
+/* ---- Dark context --------------------------------------------------------
+   Regions on an ink ground swap the context tokens, so components inside them
+   (focus rings, button hovers) stay visible without needing their own rules.
+   Add .on-ink to any new dark block to opt in. */
+.on-ink,
+.site-header,
+.site-footer,
+.hero,
+.page-head,
+.section--ink {
+  --focus-ring: var(--vermilion);
+  --btn-hover-bg: var(--bone);
+  --btn-hover-fg: var(--ink);
+}
+
+/* People who ask for less motion get none: durations drop to zero, so every
+   transition that reads these tokens finishes instantly. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}
