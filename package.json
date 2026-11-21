@@ -1,0 +1,11 @@
+{
+  "name": "yongama-goso-portfolio",
+  "private": true,
+  "description": "Static portfolio site (no build step). Tests only.",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
