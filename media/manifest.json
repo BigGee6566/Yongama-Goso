@@ -1,0 +1,1170 @@
+{
+  "media/certificates/digital-learning.webp": {
+    "src": "Images/certificates/Screenshot-2026-01-21-013447.png",
+    "w": 495,
+    "h": 690,
+    "bytes": 11836
+  },
+  "media/certificates/fnb-full-stack.webp": {
+    "src": "Images/certificates/Screenshot-2026-01-21-013354.png",
+    "w": 500,
+    "h": 688,
+    "bytes": 21704
+  },
+  "media/certificates/hp-ai-for-beginners.webp": {
+    "src": "Images/certificates/Screenshot-2026-01-21-014354.png",
+    "w": 1125,
+    "h": 796,
+    "bytes": 48510
+  },
+  "media/certificates/hp-effective-business-websites.webp": {
+    "src": "Images/certificates/Screenshot-2026-01-21-014335.png",
+    "w": 1057,
+    "h": 740,
+    "bytes": 39306
+  },
+  "media/certificates/hp-finding-funding.webp": {
+    "src": "Images/certificates/Screenshot-2026-01-21-014441.png",
+    "w": 1122,
+    "h": 793,
+    "bytes": 40858
+  },
+  "media/certificates/hp-starting-small-business.webp": {
+    "src": "Images/certificates/Screenshot-2026-01-21-014420.png",
+    "w": 1126,
+    "h": 793,
+    "bytes": 41628
+  },
+  "media/events/human-rights/01-1400.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.31 (1).jpeg",
+    "w": 720,
+    "h": 540,
+    "bytes": 60796,
+    "role": "cover"
+  },
+  "media/events/human-rights/01-640.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.31 (1).jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 50408,
+    "role": "cover"
+  },
+  "media/events/human-rights/02-1400.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.31.jpeg",
+    "w": 720,
+    "h": 540,
+    "bytes": 50100,
+    "role": "hero"
+  },
+  "media/events/human-rights/02-640.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.31.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 41926,
+    "role": "hero"
+  },
+  "media/events/human-rights/03-1400.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.32.jpeg",
+    "w": 720,
+    "h": 540,
+    "bytes": 60664
+  },
+  "media/events/human-rights/03-640.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.32.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 51092
+  },
+  "media/events/human-rights/04-1400.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.33 (1).jpeg",
+    "w": 720,
+    "h": 540,
+    "bytes": 50130
+  },
+  "media/events/human-rights/04-640.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.33 (1).jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 42302
+  },
+  "media/events/human-rights/05-1400.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.33.jpeg",
+    "w": 720,
+    "h": 540,
+    "bytes": 51184
+  },
+  "media/events/human-rights/05-640.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.33.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 43760
+  },
+  "media/events/human-rights/06-1400.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.34 (1).jpeg",
+    "w": 1080,
+    "h": 1080,
+    "bytes": 48122
+  },
+  "media/events/human-rights/06-640.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.34 (1).jpeg",
+    "w": 640,
+    "h": 640,
+    "bytes": 24254
+  },
+  "media/events/human-rights/07-1400.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.34.jpeg",
+    "w": 707,
+    "h": 324,
+    "bytes": 21456
+  },
+  "media/events/human-rights/07-640.webp": {
+    "src": "Images/humanrights/WhatsApp Image 2026-02-05 at 20.19.34.jpeg",
+    "w": 640,
+    "h": 293,
+    "bytes": 20102
+  },
+  "media/events/startup-grind/01-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.48.jpeg",
+    "w": 1400,
+    "h": 788,
+    "bytes": 71662,
+    "role": "cover"
+  },
+  "media/events/startup-grind/01-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.48.jpeg",
+    "w": 640,
+    "h": 360,
+    "bytes": 23622,
+    "role": "cover"
+  },
+  "media/events/startup-grind/02-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.52.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 87852
+  },
+  "media/events/startup-grind/02-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.52.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 28234
+  },
+  "media/events/startup-grind/03-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.53.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 85850
+  },
+  "media/events/startup-grind/03-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.53.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 28780
+  },
+  "media/events/startup-grind/04-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.54.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 90468
+  },
+  "media/events/startup-grind/04-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.30.54.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 30234
+  },
+  "media/events/startup-grind/05-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.00 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 52628
+  },
+  "media/events/startup-grind/05-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.00 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 20840
+  },
+  "media/events/startup-grind/06-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.00 (2).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 67742
+  },
+  "media/events/startup-grind/06-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.00 (2).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 26768
+  },
+  "media/events/startup-grind/07-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.00.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 67372,
+    "role": "hero"
+  },
+  "media/events/startup-grind/07-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.00.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 27086,
+    "role": "hero"
+  },
+  "media/events/startup-grind/08-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.01 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 85410
+  },
+  "media/events/startup-grind/08-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.01 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 30336
+  },
+  "media/events/startup-grind/09-1400.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.01.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 65464
+  },
+  "media/events/startup-grind/09-640.webp": {
+    "src": "Images/startupgrind/WhatsApp Image 2026-02-05 at 20.31.01.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 25630
+  },
+  "media/events/telkom10x/01-1400.webp": {
+    "src": "Images/telkom10x/54800282502_ab8be95d1c_o.jpg",
+    "w": 933,
+    "h": 1400,
+    "bytes": 56908,
+    "role": "cover"
+  },
+  "media/events/telkom10x/01-640.webp": {
+    "src": "Images/telkom10x/54800282502_ab8be95d1c_o.jpg",
+    "w": 427,
+    "h": 640,
+    "bytes": 21590,
+    "role": "cover"
+  },
+  "media/events/telkom10x/02-1400.webp": {
+    "src": "Images/telkom10x/54801137346_00e70e52d4_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 58800,
+    "role": "hero"
+  },
+  "media/events/telkom10x/02-640.webp": {
+    "src": "Images/telkom10x/54801137346_00e70e52d4_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 22400,
+    "role": "hero"
+  },
+  "media/events/telkom10x/03-1400.webp": {
+    "src": "Images/telkom10x/54801377124_6d16a8262e_o.jpg",
+    "w": 933,
+    "h": 1400,
+    "bytes": 87862
+  },
+  "media/events/telkom10x/03-640.webp": {
+    "src": "Images/telkom10x/54801377124_6d16a8262e_o.jpg",
+    "w": 427,
+    "h": 640,
+    "bytes": 33216
+  },
+  "media/events/telkom10x/04-1400.webp": {
+    "src": "Images/telkom10x/54801378034_94ef7fcc2e_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 147092
+  },
+  "media/events/telkom10x/04-640.webp": {
+    "src": "Images/telkom10x/54801378034_94ef7fcc2e_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 34508
+  },
+  "media/events/telkom10x/05-1400.webp": {
+    "src": "Images/telkom10x/54801388458_c4e1e5b563_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 63786
+  },
+  "media/events/telkom10x/05-640.webp": {
+    "src": "Images/telkom10x/54801388458_c4e1e5b563_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 22274
+  },
+  "media/events/telkom10x/06-1400.webp": {
+    "src": "Images/telkom10x/54801389838_963e0e8ea2_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 79334
+  },
+  "media/events/telkom10x/06-640.webp": {
+    "src": "Images/telkom10x/54801389838_963e0e8ea2_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 27688
+  },
+  "media/events/telkom10x/07-1400.webp": {
+    "src": "Images/telkom10x/54801389843_4af24e5b9f_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 73712
+  },
+  "media/events/telkom10x/07-640.webp": {
+    "src": "Images/telkom10x/54801389843_4af24e5b9f_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 26732
+  },
+  "media/events/telkom10x/08-1400.webp": {
+    "src": "Images/telkom10x/54801390018_dca0737342_o.jpg",
+    "w": 933,
+    "h": 1400,
+    "bytes": 124402
+  },
+  "media/events/telkom10x/08-640.webp": {
+    "src": "Images/telkom10x/54801390018_dca0737342_o.jpg",
+    "w": 427,
+    "h": 640,
+    "bytes": 32104
+  },
+  "media/events/telkom10x/09-1400.webp": {
+    "src": "Images/telkom10x/54801474155_6e6ef4c05f_o.jpg",
+    "w": 933,
+    "h": 1400,
+    "bytes": 141050
+  },
+  "media/events/telkom10x/09-640.webp": {
+    "src": "Images/telkom10x/54801474155_6e6ef4c05f_o.jpg",
+    "w": 427,
+    "h": 640,
+    "bytes": 35580
+  },
+  "media/events/telkom10x/10-1400.webp": {
+    "src": "Images/telkom10x/54801474435_16b2d75563_o (1).jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 75598
+  },
+  "media/events/telkom10x/10-640.webp": {
+    "src": "Images/telkom10x/54801474435_16b2d75563_o (1).jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 26182
+  },
+  "media/events/telkom10x/11-1400.webp": {
+    "src": "Images/telkom10x/54801474435_16b2d75563_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 75598
+  },
+  "media/events/telkom10x/11-640.webp": {
+    "src": "Images/telkom10x/54801474435_16b2d75563_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 26182
+  },
+  "media/events/telkom10x/12-1400.webp": {
+    "src": "Images/telkom10x/54801474450_95f53fb006_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 84214
+  },
+  "media/events/telkom10x/12-640.webp": {
+    "src": "Images/telkom10x/54801474450_95f53fb006_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 24394
+  },
+  "media/events/telkom10x/13-1400.webp": {
+    "src": "Images/telkom10x/54801474465_91fb8b528c_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 70642
+  },
+  "media/events/telkom10x/13-640.webp": {
+    "src": "Images/telkom10x/54801474465_91fb8b528c_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 23994
+  },
+  "media/events/telkom10x/14-1400.webp": {
+    "src": "Images/telkom10x/54801474630_d6028e2612_o (1).jpg",
+    "w": 933,
+    "h": 1400,
+    "bytes": 141702
+  },
+  "media/events/telkom10x/14-640.webp": {
+    "src": "Images/telkom10x/54801474630_d6028e2612_o (1).jpg",
+    "w": 427,
+    "h": 640,
+    "bytes": 44410
+  },
+  "media/events/telkom10x/15-1400.webp": {
+    "src": "Images/telkom10x/54801474630_d6028e2612_o.jpg",
+    "w": 933,
+    "h": 1400,
+    "bytes": 141702
+  },
+  "media/events/telkom10x/15-640.webp": {
+    "src": "Images/telkom10x/54801474630_d6028e2612_o.jpg",
+    "w": 427,
+    "h": 640,
+    "bytes": 44410
+  },
+  "media/events/telkom10x/16-1400.webp": {
+    "src": "Images/telkom10x/54801474745_8680be3e02_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 139602
+  },
+  "media/events/telkom10x/16-640.webp": {
+    "src": "Images/telkom10x/54801474745_8680be3e02_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 44252
+  },
+  "media/events/telkom10x/17-1400.webp": {
+    "src": "Images/telkom10x/54809716746_9c954bac08_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 120430
+  },
+  "media/events/telkom10x/17-640.webp": {
+    "src": "Images/telkom10x/54809716746_9c954bac08_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 36256
+  },
+  "media/events/telkom10x/18-1400.webp": {
+    "src": "Images/telkom10x/54809718331_e9f3e5836f_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 60478
+  },
+  "media/events/telkom10x/18-640.webp": {
+    "src": "Images/telkom10x/54809718331_e9f3e5836f_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 22464
+  },
+  "media/events/telkom10x/19-1400.webp": {
+    "src": "Images/telkom10x/54809718771_4650c5fd1a_k.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 136712
+  },
+  "media/events/telkom10x/19-640.webp": {
+    "src": "Images/telkom10x/54809718771_4650c5fd1a_k.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 33380
+  },
+  "media/events/telkom10x/20-1400.webp": {
+    "src": "Images/telkom10x/54809718771_4d7820369d_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 117194
+  },
+  "media/events/telkom10x/20-640.webp": {
+    "src": "Images/telkom10x/54809718771_4d7820369d_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 33226
+  },
+  "media/events/telkom10x/21-1400.webp": {
+    "src": "Images/telkom10x/54809975813_f9cff248c8_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 110010
+  },
+  "media/events/telkom10x/21-640.webp": {
+    "src": "Images/telkom10x/54809975813_f9cff248c8_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 34686
+  },
+  "media/events/telkom10x/22-1400.webp": {
+    "src": "Images/telkom10x/54809979299_9210a8757b_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 64082
+  },
+  "media/events/telkom10x/22-640.webp": {
+    "src": "Images/telkom10x/54809979299_9210a8757b_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 22192
+  },
+  "media/events/telkom10x/23-1400.webp": {
+    "src": "Images/telkom10x/54810062025_3203ebbfe0_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 113956
+  },
+  "media/events/telkom10x/23-640.webp": {
+    "src": "Images/telkom10x/54810062025_3203ebbfe0_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 36714
+  },
+  "media/events/telkom10x/24-1400.webp": {
+    "src": "Images/telkom10x/54810062930_1bcc408cb7_o.jpg",
+    "w": 1400,
+    "h": 933,
+    "bytes": 118476
+  },
+  "media/events/telkom10x/24-640.webp": {
+    "src": "Images/telkom10x/54810062930_1bcc408cb7_o.jpg",
+    "w": 640,
+    "h": 427,
+    "bytes": 36380
+  },
+  "media/events/telkom10x/25-1400.webp": {
+    "src": "Images/telkom10x/Code.jpg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 41624
+  },
+  "media/events/telkom10x/25-640.webp": {
+    "src": "Images/telkom10x/Code.jpg",
+    "w": 640,
+    "h": 480,
+    "bytes": 15618
+  },
+  "media/events/telkom10x/26-1400.webp": {
+    "src": "Images/telkom10x/Image .jpeg",
+    "w": 1271,
+    "h": 1400,
+    "bytes": 58552
+  },
+  "media/events/telkom10x/26-640.webp": {
+    "src": "Images/telkom10x/Image .jpeg",
+    "w": 581,
+    "h": 640,
+    "bytes": 20010
+  },
+  "media/events/telkom10x/27-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.57 (1).jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 154432
+  },
+  "media/events/telkom10x/27-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.57 (1).jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 42510
+  },
+  "media/events/telkom10x/28-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.57 (2).jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 154432
+  },
+  "media/events/telkom10x/28-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.57 (2).jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 42510
+  },
+  "media/events/telkom10x/29-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.57.jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 108656
+  },
+  "media/events/telkom10x/29-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.57.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 29830
+  },
+  "media/events/telkom10x/30-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.58 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 102668
+  },
+  "media/events/telkom10x/30-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.58 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 35300
+  },
+  "media/events/telkom10x/31-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.58.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 256974
+  },
+  "media/events/telkom10x/31-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.58.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 59176
+  },
+  "media/events/telkom10x/32-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.59 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 186880
+  },
+  "media/events/telkom10x/32-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.59 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 47590
+  },
+  "media/events/telkom10x/33-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.59 (2).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 271722
+  },
+  "media/events/telkom10x/33-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.59 (2).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 59466
+  },
+  "media/events/telkom10x/34-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.59.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 125622
+  },
+  "media/events/telkom10x/34-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.54.59.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 38174
+  },
+  "media/events/telkom10x/35-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.00 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 230886
+  },
+  "media/events/telkom10x/35-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.00 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 54522
+  },
+  "media/events/telkom10x/36-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.00.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 235414
+  },
+  "media/events/telkom10x/36-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.00.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 54992
+  },
+  "media/events/telkom10x/37-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.01 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 212354
+  },
+  "media/events/telkom10x/37-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.01 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 50918
+  },
+  "media/events/telkom10x/38-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.01 (2).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 211242
+  },
+  "media/events/telkom10x/38-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.01 (2).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 53570
+  },
+  "media/events/telkom10x/39-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.01.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 211242
+  },
+  "media/events/telkom10x/39-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.01.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 53570
+  },
+  "media/events/telkom10x/40-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.02 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 181064
+  },
+  "media/events/telkom10x/40-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.02 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 44636
+  },
+  "media/events/telkom10x/41-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.02 (2).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 142896
+  },
+  "media/events/telkom10x/41-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.02 (2).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 38658
+  },
+  "media/events/telkom10x/42-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.02.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 217392
+  },
+  "media/events/telkom10x/42-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.02.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 52612
+  },
+  "media/events/telkom10x/43-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.03 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 121732
+  },
+  "media/events/telkom10x/43-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.03 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 34728
+  },
+  "media/events/telkom10x/44-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.03.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 181088
+  },
+  "media/events/telkom10x/44-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.03.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 47154
+  },
+  "media/events/telkom10x/45-1400.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.10.jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 111264
+  },
+  "media/events/telkom10x/45-640.webp": {
+    "src": "Images/telkom10x/WhatsApp Image 2025-09-21 at 22.55.10.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 38572
+  },
+  "media/events/uct-cortex-hub/01-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.36.jpeg",
+    "w": 1400,
+    "h": 1400,
+    "bytes": 64644,
+    "role": "cover"
+  },
+  "media/events/uct-cortex-hub/01-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.36.jpeg",
+    "w": 640,
+    "h": 640,
+    "bytes": 20068,
+    "role": "cover"
+  },
+  "media/events/uct-cortex-hub/02-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.37.jpeg",
+    "w": 1121,
+    "h": 1400,
+    "bytes": 70258,
+    "role": "hero"
+  },
+  "media/events/uct-cortex-hub/02-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.37.jpeg",
+    "w": 512,
+    "h": 640,
+    "bytes": 27914,
+    "role": "hero"
+  },
+  "media/events/uct-cortex-hub/03-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.39.jpeg",
+    "w": 1121,
+    "h": 1400,
+    "bytes": 75022
+  },
+  "media/events/uct-cortex-hub/03-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.39.jpeg",
+    "w": 512,
+    "h": 640,
+    "bytes": 29314
+  },
+  "media/events/uct-cortex-hub/04-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.44.jpeg",
+    "w": 1125,
+    "h": 1400,
+    "bytes": 72580
+  },
+  "media/events/uct-cortex-hub/04-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.44.jpeg",
+    "w": 514,
+    "h": 640,
+    "bytes": 29052
+  },
+  "media/events/uct-cortex-hub/05-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.45 (1).jpeg",
+    "w": 1121,
+    "h": 1400,
+    "bytes": 74446
+  },
+  "media/events/uct-cortex-hub/05-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.45 (1).jpeg",
+    "w": 512,
+    "h": 640,
+    "bytes": 29356
+  },
+  "media/events/uct-cortex-hub/06-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.45.jpeg",
+    "w": 1121,
+    "h": 1400,
+    "bytes": 55554
+  },
+  "media/events/uct-cortex-hub/06-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.45.jpeg",
+    "w": 512,
+    "h": 640,
+    "bytes": 21348
+  },
+  "media/events/uct-cortex-hub/07-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.46.jpeg",
+    "w": 719,
+    "h": 480,
+    "bytes": 35540
+  },
+  "media/events/uct-cortex-hub/07-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.46.jpeg",
+    "w": 640,
+    "h": 427,
+    "bytes": 30678
+  },
+  "media/events/uct-cortex-hub/08-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.47 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 90588
+  },
+  "media/events/uct-cortex-hub/08-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.47 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 32202
+  },
+  "media/events/uct-cortex-hub/09-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.47.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 91014
+  },
+  "media/events/uct-cortex-hub/09-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.13.47.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 31442
+  },
+  "media/events/uct-cortex-hub/10-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.35.jpeg",
+    "w": 1020,
+    "h": 765,
+    "bytes": 96942
+  },
+  "media/events/uct-cortex-hub/10-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.35.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 42484
+  },
+  "media/events/uct-cortex-hub/11-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.36.jpeg",
+    "w": 1020,
+    "h": 765,
+    "bytes": 91928
+  },
+  "media/events/uct-cortex-hub/11-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.36.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 40550
+  },
+  "media/events/uct-cortex-hub/12-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.49.jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 145316
+  },
+  "media/events/uct-cortex-hub/12-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.49.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 43374
+  },
+  "media/events/uct-cortex-hub/13-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.50.jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 137752
+  },
+  "media/events/uct-cortex-hub/13-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.50.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 40562
+  },
+  "media/events/uct-cortex-hub/14-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.51 (1).jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 34090
+  },
+  "media/events/uct-cortex-hub/14-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.51 (1).jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 13188
+  },
+  "media/events/uct-cortex-hub/15-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.51.jpeg",
+    "w": 1329,
+    "h": 1400,
+    "bytes": 107274
+  },
+  "media/events/uct-cortex-hub/15-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.51.jpeg",
+    "w": 608,
+    "h": 640,
+    "bytes": 41320
+  },
+  "media/events/uct-cortex-hub/16-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52 (1).jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 45422
+  },
+  "media/events/uct-cortex-hub/16-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52 (1).jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 16940
+  },
+  "media/events/uct-cortex-hub/17-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52 (2).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 62654
+  },
+  "media/events/uct-cortex-hub/17-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52 (2).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 21784
+  },
+  "media/events/uct-cortex-hub/18-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52 (3).jpeg",
+    "w": 765,
+    "h": 1020,
+    "bytes": 46496
+  },
+  "media/events/uct-cortex-hub/18-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52 (3).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 22494
+  },
+  "media/events/uct-cortex-hub/19-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52.jpeg",
+    "w": 1400,
+    "h": 1050,
+    "bytes": 46884
+  },
+  "media/events/uct-cortex-hub/19-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.52.jpeg",
+    "w": 640,
+    "h": 480,
+    "bytes": 17828
+  },
+  "media/events/uct-cortex-hub/20-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.53 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 77082
+  },
+  "media/events/uct-cortex-hub/20-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.53 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 24960
+  },
+  "media/events/uct-cortex-hub/21-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.53 (2).jpeg",
+    "w": 765,
+    "h": 1020,
+    "bytes": 49448
+  },
+  "media/events/uct-cortex-hub/21-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.53 (2).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 24548
+  },
+  "media/events/uct-cortex-hub/22-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.53.jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 67070
+  },
+  "media/events/uct-cortex-hub/22-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.53.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 22956
+  },
+  "media/events/uct-cortex-hub/23-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54 (1).jpeg",
+    "w": 1050,
+    "h": 1400,
+    "bytes": 111242
+  },
+  "media/events/uct-cortex-hub/23-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54 (1).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 30098
+  },
+  "media/events/uct-cortex-hub/24-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54 (2).jpeg",
+    "w": 765,
+    "h": 1020,
+    "bytes": 47484
+  },
+  "media/events/uct-cortex-hub/24-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54 (2).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 25010
+  },
+  "media/events/uct-cortex-hub/25-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54 (3).jpeg",
+    "w": 765,
+    "h": 1020,
+    "bytes": 41826
+  },
+  "media/events/uct-cortex-hub/25-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54 (3).jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 22588
+  },
+  "media/events/uct-cortex-hub/26-1400.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54.jpeg",
+    "w": 765,
+    "h": 1020,
+    "bytes": 42182
+  },
+  "media/events/uct-cortex-hub/26-640.webp": {
+    "src": "Images/uct-cortexhub/WhatsApp Image 2026-02-05 at 20.19.54.jpeg",
+    "w": 480,
+    "h": 640,
+    "bytes": 21200
+  },
+  "media/profile/portrait-1200.webp": {
+    "src": "Images/profile/Image.jpeg",
+    "w": 1200,
+    "h": 1321,
+    "bytes": 54216
+  },
+  "media/profile/portrait-640.webp": {
+    "src": "Images/profile/Image.jpeg",
+    "w": 640,
+    "h": 705,
+    "bytes": 22690
+  },
+  "media/projects/busnova/logo.webp": {
+    "src": "repos:BigGee6566_BusNova_System/BusNova_System_NoDB/Images/logo.jpeg",
+    "w": 800,
+    "h": 800,
+    "bytes": 27368
+  },
+  "media/projects/edurand/poster.webp": {
+    "src": "Images/projects/Screenshot-2025-09-17-232627.png",
+    "w": 436,
+    "h": 853,
+    "bytes": 15970
+  },
+  "media/projects/journeymap/poster.webp": {
+    "src": "Images/projects/Screenshot-2025-09-21-072807.png",
+    "w": 1600,
+    "h": 764,
+    "bytes": 55844
+  },
+  "media/projects/laundry/poster.webp": {
+    "src": "Images/projects/image.png",
+    "w": 827,
+    "h": 861,
+    "bytes": 39550
+  },
+  "media/projects/logisticore/logo.webp": {
+    "src": "repos:BigGee6566_C-Sharp-Shooter/Images/web/logo.png",
+    "w": 357,
+    "h": 90,
+    "bytes": 10832
+  },
+  "media/projects/pending-cover.webp": {
+    "src": "generated",
+    "w": 1440,
+    "h": 900,
+    "bytes": 8514
+  },
+  "media/projects/placeme/poster.webp": {
+    "src": "Images/projects/Screenshot-2026-01-21-015109.png",
+    "w": 1600,
+    "h": 766,
+    "bytes": 70416
+  },
+  "media/projects/smartshelf/logo.webp": {
+    "src": "repos:BigGee6566_SmartShelf/Images/smartshelf-logo.png",
+    "w": 514,
+    "h": 469,
+    "bytes": 4078
+  },
+  "media/projects/studylink/logo.webp": {
+    "src": "repos:BigGee6566_StudyLink/Images/branding/studylink-logo.png",
+    "w": 800,
+    "h": 257,
+    "bytes": 55482
+  },
+  "media/projects/tutorconnect/logo.webp": {
+    "src": "repos:BigGee6566_TutorConnect/Images/branding/tutorconnect-logo.png",
+    "w": 256,
+    "h": 185,
+    "bytes": 4900
+  }
+}
