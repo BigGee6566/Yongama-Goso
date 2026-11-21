@@ -161,7 +161,10 @@ test('the motifs exist: thin 18% contour lines and a triangle bead band', () => 
 });
 
 test('the script stubs define their globals and load in Node', () => {
-  assert.deepStrictEqual(require('../assets/js/data.js'), {});
+  // data.js was filled in Task 5 (its content is tested in data.test.js); it must still load.
+  const site = require('../assets/js/data.js');
+  assert.strictEqual(typeof site, 'object');
+  assert.ok(Array.isArray(site.projects), 'data.js exports SITE with projects');
   assert.deepStrictEqual(require('../assets/js/render.js'), {});
 });
 
