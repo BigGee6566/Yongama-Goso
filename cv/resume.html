@@ -31,8 +31,8 @@
   body {
     font-family: var(--body);
     color: var(--ink);
-    font-size: 8.2pt;
-    line-height: 1.36;
+    font-size: 7.7pt;
+    line-height: 1.3;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -109,13 +109,13 @@
   .langs em { font-style: normal; color: var(--side-muted); font-size: 7.4pt; display: block; }
 
   /* ---------- Main column ---------- */
-  .main { padding: 12mm 12mm 9mm 10mm; }
+  .main { padding: 9mm 11mm 6mm 9mm; }
 
   .head { margin-bottom: 3mm; }
   .head h1 {
     font-family: var(--display);
     font-weight: 800;
-    font-size: 30pt;
+    font-size: 27pt;
     line-height: .95;
     letter-spacing: -.02em;
     text-transform: uppercase;
@@ -128,7 +128,7 @@
   }
   .head .role::before { content: ""; width: 9mm; height: .9mm; background: var(--cyan); }
 
-  .main section { margin-top: 4mm; }
+  .main section { margin-top: 2.8mm; }
   .main h2 {
     font-family: var(--display);
     font-weight: 700;
@@ -157,15 +157,16 @@
   }
   .bullets b { font-weight: 600; }
 
-  .certs { display: grid; gap: 1.6mm; }
+  .certs { display: grid; gap: 1.2mm; }
   .cert-top { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
   .cert-top b { font-weight: 600; font-size: 8.8pt; }
   .cert p { color: var(--ink-2); }
 
-  .events { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8mm 6mm; }
+  .events { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2mm 6mm; }
   .events b { font-weight: 600; display: block; font-size: 8.6pt; }
   .events p { color: var(--ink-2); }
 
+  .jobs { display: grid; gap: 1.8mm; }
   .refs { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
   .refs b { font-weight: 600; display: block; font-size: 8.8pt; }
   .refs span { color: var(--ink-2); }
@@ -179,9 +180,8 @@
     <section>
       <h2>Contact</h2>
       <ul class="contact">
-        <li><span class="k">tel</span><span>069 768 7985</span></li>
         <li><span class="k">mail</span><a href="mailto:goso.yonga@gmail.com">goso.yonga@gmail.com</a></li>
-        <li><span class="k">loc</span><span>Southernwood, KuGompo City (East London), Eastern Cape</span></li>
+        <li><span class="k">loc</span><span>KuGompo City (East London), Eastern Cape</span></li>
         <li><span class="k">git</span><a href="https://github.com/BigGee6566">github.com/BigGee6566</a></li>
         <li><span class="k">in</span><a href="https://www.linkedin.com/in/yongama-goso-85aaaa2b0">linkedin.com/in/yongama-goso-85aaaa2b0</a></li>
       </ul>
@@ -191,7 +191,7 @@
       <h2>Education</h2>
       <div class="edu">
         <div>
-          <span class="when">2023 – present</span>
+          <span class="when">2023 – 2026</span>
           <b>University of Fort Hare</b>
           <span>Bachelor of Commerce (Information Systems)</span>
         </div>
@@ -204,30 +204,18 @@
     </section>
 
     <section>
-      <h2>Tech Stack</h2>
-      <div class="chips">
-        <span>React</span><span>Next.js</span><span>JavaScript</span><span>HTML</span><span>CSS</span>
-        <span>C#</span><span>.NET</span><span>SQL Server</span><span>PostgreSQL</span>
-        <span>Python</span><span>Git</span><span>GitHub</span><span>Visual Studio</span>
-      </div>
-    </section>
-
-    <section>
-      <h2>Tools</h2>
+      <h2>Skills</h2>
       <ul class="plain">
-        <li>Microsoft Office <em>(Word, Excel, PowerPoint, Access)</em></li>
-        <li>Google Workspace <em>(Docs, Sheets, Slides)</em></li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Strengths</h2>
-      <ul class="plain">
-        <li>Effective communication</li>
-        <li>Critical thinking</li>
-        <li>Teamwork &amp; leadership</li>
-        <li>Time management</li>
-        <li>Public relations</li>
+        <li>Programming</li>
+        <li>Public Relations</li>
+        <li>Teamwork</li>
+        <li>Time Management</li>
+        <li>Leadership</li>
+        <li>Effective Communication</li>
+        <li>Critical Thinking</li>
+        <li>Visual Studio</li>
+        <li>Google Workplace <em>(Docs, Sheets, Slides)</em></li>
+        <li>Microsoft <em>(Word, Excel, PowerPoint, Access)</em></li>
       </ul>
     </section>
 
@@ -235,11 +223,11 @@
       <h2>Languages</h2>
       <ul class="langs">
         <li>English<em>Fluent</em></li>
-        <li>isiXhosa<em>Fluent</em></li>
-        <li>isiZulu<em>Fluent</em></li>
-        <li>Setswana<em>Intermediate</em></li>
-        <li>Sesotho<em>Basic</em></li>
-        <li>Sepedi<em>Basic</em></li>
+        <li>Xhosa<em>Fluent</em></li>
+        <li>Zulu<em>Fluent</em></li>
+        <li>Tswana<em>Intermediate</em></li>
+        <li>Sotho<em>Basics</em></li>
+        <li>Pedi<em>Basics</em></li>
       </ul>
     </section>
   </aside>
@@ -247,55 +235,70 @@
   <main class="main">
     <header class="head">
       <h1>Yongama <span>Goso</span></h1>
-      <div class="role">Software Developer · BCom (Information Systems) Student</div>
+      <div class="role">Software Developer · BCom (Information Systems)</div>
     </header>
 
     <section>
       <h2><span class="n">01</span>Profile</h2>
       <p class="profile">
-        Self-driven Bachelor of Commerce (Information Systems) student and software developer who has built and
-        deployed web applications, a full-stack mobile app and live database-backed systems that address real
-        community and business problems in the Eastern Cape. I apply information systems knowledge to the
-        operational and entrepreneurial needs of an organisation, pay close attention to detail, and bring strong
-        communication and organisational skills to every team.
+        A hardworking, goal-driven and resourceful professional who recently completed a Bachelor of Commerce
+        (Information Systems) degree. Founder of Gonex Innovation Hub NPC and Gonex Hub (Pty) Ltd, with practical
+        experience in software development, IT support, programme facilitation and mentoring. Experienced in
+        developing and deploying web applications, full-stack mobile applications and database-driven systems that
+        address real-world challenges in communities and businesses, particularly in the Eastern Cape. A quick
+        learner with strong problem-solving, communication, adaptability and teamwork skills, and a passion for
+        technology, innovation and using digital solutions to create meaningful impact. Seeking opportunities to
+        apply and further develop technical and analytical skills in a dynamic professional environment.
       </p>
     </section>
 
     <section>
       <h2><span class="n">02</span>Experience</h2>
-      <div class="job-top">
-        <b>Software Developer</b>
-        <span class="date">Sep 2025 – Sep 2026</span>
+      <div class="jobs">
+        <div>
+          <div class="job-top"><b>Founder &amp; Programme Facilitator</b><span class="date">8-week programme</span></div>
+          <p class="org">Gonex Innovation Hub NPC, Sterkspruit, Eastern Cape</p>
+          <ul class="bullets">
+            <li>Founded Gonex Innovation Hub NPC, a community-driven nonprofit in Joe Gqabi District.</li>
+            <li>Facilitated the hub's first programmes over 8 weeks.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="job-top"><b>Mentor</b><span class="date">17 – 18 Oct 2026</span></div>
+          <p class="org">Inter-University Hackathon: Eduvos, UFH, Walter Sisulu University and Nelson Mandela University</p>
+          <ul class="bullets">
+            <li>Mentored participants at a two-day inter-university hackathon at The Cortex Hub, East London.</li>
+            <li>Hosted by Walter Sisulu University, supported by the Cortex Hub.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="job-top"><b>Software Developer</b><span class="date">Sep 2025 – Sep 2026</span></div>
+          <p class="org">Youth@Work (host employer), YES Programme sponsored by Fairtree Asset Management (Pty) Ltd</p>
+          <ul class="bullets">
+            <li>Provide first-line IT support to end users: log the fault, diagnose it, then fix or escalate it.</li>
+            <li>Troubleshoot desktop, notebook and printer faults across both hardware and software.</li>
+            <li>Install, service and replace hardware, and carry out routine maintenance checks.</li>
+            <li>Write and maintain support documentation so faults and fixes are recorded and repeatable.</li>
+            <li>Work the Saturday and Sunday support shift.</li>
+          </ul>
+        </div>
       </div>
-      <p class="org">Youth@Work (host employer) · YES Programme, sponsored by Fairtree Asset Management (Pty) Ltd</p>
-      <ul class="bullets">
-        <li>Built user interfaces in <b>React and Next.js</b> and server-side logic and APIs in <b>C#/.NET</b>, integrated with <b>SQL Server and PostgreSQL</b> databases.</li>
-        <li>Translated business requirements and user stories into technical specifications, database schemas and API contracts.</li>
-        <li>Wrote unit and integration tests, debugged production and legacy code, and reviewed peer code for quality and security.</li>
-        <li>Managed CI/CD pipelines to automate builds and releases; monitored performance and shipped regular updates and security patches.</li>
-        <li>Worked in Agile sprints (stand-ups, planning, retrospectives) with designers, QA and stakeholders, and maintained technical documentation and API guides.</li>
-        <li>Provided first-line IT support, including weekend shifts: logged, diagnosed and resolved or escalated hardware and software faults.</li>
-      </ul>
     </section>
 
     <section>
       <h2><span class="n">03</span>Training &amp; Certifications</h2>
       <div class="certs">
         <div class="cert">
-          <div class="cert-top"><b>YES Quality Work Experience Programme</b><span class="date">1 Aug 2026</span></div>
-          <p>12-month programme completed in full, hosted by Youth@Work. Certificate of completion and reference letter on file.</p>
+          <div class="cert-top"><b>Quality Work Experience Programme, Youth Employment Service (YES)</b><span class="date">1 Aug 2026</span></div>
+          <p>12-month quality work experience programme, completed in full. Certificate of Completion and reference letter on file. Hosted by Youth@Work; sponsored by Fairtree Asset Management (Pty) Ltd.</p>
         </div>
         <div class="cert">
           <div class="cert-top"><b>UCT–Cortex Hub Fintech Lab 2026 Summer School</b><span class="date">12 – 31 Jan 2026</span></div>
-          <p>Three-week intensive programme on Open Banking and fintech innovation, held at The Cortex Hub, East London.</p>
+          <p>Three-week intensive programme. Open Banking and Open Fintech innovation. Held at The Cortex Hub, East London.</p>
         </div>
         <div class="cert">
-          <div class="cert-top"><b>Certificate in Full Stack Development — FNB App Academy 2025</b><span class="date">23 Jul 2025</span></div>
-          <p>Issued by IT Varsity. SDLC, APIs and backend development, data management, UX and design thinking, GitHub collaboration, AI in development.</p>
-        </div>
-        <div class="cert">
-          <div class="cert-top"><b>HP LIFE — HP Foundation</b></div>
-          <p>Effective Business Websites · AI for Beginners · Starting a Small Business · Finding Funding</p>
+          <div class="cert-top"><b>Certificate in Full Stack Development, FNB App Academy 2025 (issued by IT Varsity)</b><span class="date">23 Jul 2025</span></div>
+          <p>Build an App with HTML and the SDLC. APIs, data input and processing. Backend development: building an API. Data management and analysis. UX design principles, layouts and transitions. Design thinking and user-centric app development. GitHub and collaboration; AI in development.</p>
         </div>
       </div>
     </section>
@@ -324,11 +327,7 @@
 
     <section>
       <h2><span class="n">05</span>References</h2>
-      <div class="refs">
-        <div><b>Zibuko Baliso</b><span>Supervisor · Fairtree Asset Management (Pty) Ltd</span></div>
-        <div><b>Chuma Memela</b><span>Managing Director · Genie-yus AI</span></div>
-      </div>
-      <p class="refs-note">Contact details available on request.</p>
+      <p class="profile">References available on request</p>
     </section>
   </main>
 
