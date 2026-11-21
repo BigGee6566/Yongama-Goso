@@ -12,14 +12,15 @@ gallery arrays (order frozen below), so cover/hero keep their roles.
 """
 import argparse
 import json
+import os
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
-MEDIA = ROOT / "media"
 
 QUALITY = 78
 METHOD = 6
@@ -183,11 +184,14 @@ LOGOS = {
     "logisticore": ("BigGee6566_C-Sharp-Shooter", "Images/web/logo.png"),
 }
 
+# Big Shoulders Display (OFL, see tools/fonts/OFL.txt); DejaVu Sans Bold fallback.
 FONT_CANDIDATES = [
-    "/usr/share/fonts/opentype/inter/Inter-Bold.otf",
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-    "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+    (ROOT / "tools/fonts/BigShouldersDisplay[wght].ttf", 800),
+    (Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"), None),
 ]
+
+OUT_ROOT = ROOT   # where media/ lives; overridable with --out-root (tests)
+STAGE = None      # staging dir for this run
 
 manifest = {}
 
@@ -214,7 +218,7 @@ def fit(im, long_edge=None, width=None, box=None):
 
 
 def save(im, rel, src, role=None):
-    out = ROOT / rel
+    out = STAGE / rel
     out.parent.mkdir(parents=True, exist_ok=True)
     has_alpha = im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info)
     im = im.convert("RGBA" if has_alpha else "RGB")
@@ -258,10 +262,13 @@ def do_logos(repos):
 
 
 def font(size):
-    for f in FONT_CANDIDATES:
-        if Path(f).is_file():
-            return ImageFont.truetype(f, size)
-    return ImageFont.load_default()
+    for path, weight in FONT_CANDIDATES:
+        if path.is_file():
+            f = ImageFont.truetype(str(path), size)
+            if weight:
+                f.set_variation_by_axes([weight])
+            return f
+    sys.exit("no usable font found (need tools/fonts/BigShouldersDisplay[wght].ttf or DejaVu Sans Bold)")
 
 
 def do_pending_cover():
@@ -269,7 +276,7 @@ def do_pending_cover():
     im = Image.new("RGB", (W, H), INK)
     d = ImageDraw.Draw(im)
     text = "Running capture coming soon"
-    f = font(64)
+    f = font(96)
     box = d.textbbox((0, 0), text, font=f)
     tw, th = box[2] - box[0], box[3] - box[1]
     x, y = (W - tw) // 2 - box[0], (H - th) // 2 - box[1] - 20
@@ -279,26 +286,47 @@ def do_pending_cover():
     save(im, "media/projects/pending-cover.webp", "generated")
 
 
+def publish(manifest_new):
+    """Swap staged files into media/. Touches only paths in the old or new manifest."""
+    media = OUT_ROOT / "media"
+    mpath = media / "manifest.json"
+    old = {}
+    if mpath.is_file():
+        old = json.loads(mpath.read_text())
+    for rel in old:
+        if rel not in manifest_new:
+            (OUT_ROOT / rel).unlink(missing_ok=True)
+    for rel in manifest_new:
+        dest = OUT_ROOT / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        os.replace(STAGE / rel, dest)
+    tmp = media / "manifest.json.tmp"
+    tmp.write_text(json.dumps({k: manifest_new[k] for k in sorted(manifest_new)}, indent=2, ensure_ascii=False) + "\n")
+    os.replace(tmp, mpath)
+
+
 def main():
+    global OUT_ROOT, STAGE
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--repos", required=True, help="directory containing the cloned repos")
+    ap.add_argument("--out-root", help="write media/ under this directory instead of the repo root (tests)")
     args = ap.parse_args()
     repos = Path(args.repos).resolve()
-
-    # start clean so renamed/resized outputs never leave stale files behind
-    shutil.rmtree(MEDIA, ignore_errors=True)
-
-    do_events()
-    do_simple(CERTIFICATES, CERT_LONG, "media/certificates/{slug}.webp")
-    do_portrait()
-    do_simple(POSTERS, POSTER_LONG, "media/projects/{slug}/poster.webp")
-    do_logos(repos)
-    do_pending_cover()
-
-    MEDIA.mkdir(parents=True, exist_ok=True)
-    ordered = {k: manifest[k] for k in sorted(manifest)}
-    (MEDIA / "manifest.json").write_text(json.dumps(ordered, indent=2, ensure_ascii=False) + "\n")
-    print(f"wrote {len(ordered)} entries to media/manifest.json")
+    if args.out_root:
+        OUT_ROOT = Path(args.out_root).resolve()
+    OUT_ROOT.mkdir(parents=True, exist_ok=True)
+    STAGE = Path(tempfile.mkdtemp(prefix=".media-stage-", dir=OUT_ROOT))
+    try:
+        do_events()
+        do_simple(CERTIFICATES, CERT_LONG, "media/certificates/{slug}.webp")
+        do_portrait()
+        do_simple(POSTERS, POSTER_LONG, "media/projects/{slug}/poster.webp")
+        do_logos(repos)
+        do_pending_cover()
+        publish(manifest)
+    finally:
+        shutil.rmtree(STAGE, ignore_errors=True)
+    print(f"wrote {len(manifest)} entries to media/manifest.json")
 
 
 if __name__ == "__main__":
