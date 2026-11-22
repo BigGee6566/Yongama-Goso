@@ -204,7 +204,7 @@
     return false;
   }
 
-  var FEATURED = ['nova-journal', 'open-data-dashboard', 'thaba-shield', 'momali'];
+  var FEATURED = ['nova-journal', 'open-data-dashboard', 'thaba-shield', 'fintech-api'];
 
   // Puts html into the element matching selector, if the page has one.
   function fill(selector, html) {

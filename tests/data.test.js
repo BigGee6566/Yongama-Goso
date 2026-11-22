@@ -14,13 +14,13 @@ const PENDING = 'Date to be confirmed';
 const MAX_CLIP_BYTES = 2621440;
 
 const SLUGS = [
-  'nova-journal', 'open-data-dashboard', 'thaba-shield', 'momali', 'fintech-api',
+  'nova-journal', 'open-data-dashboard', 'thaba-shield', 'fintech-api',
   'tutorconnect', 'studylink', 'smartshelf', 'busnova', 'logisticore',
   'placeme', 'edurand', 'journeymap', 'laundry',
 ];
 const WEB_FORMS = ['tutorconnect', 'studylink', 'smartshelf', 'busnova', 'logisticore'];
 const EXISTING = ['placeme', 'edurand', 'journeymap', 'laundry'];
-const LIVE_OR_LOCAL = ['nova-journal', 'open-data-dashboard', 'thaba-shield', 'momali', 'fintech-api'];
+const LIVE_OR_LOCAL = ['nova-journal', 'open-data-dashboard', 'thaba-shield', 'fintech-api'];
 const CATEGORIES = ['web', 'mobile', 'dotnet', 'api'];
 
 // The canonical stack spellings. Chart.js is the one addition, with code evidence in
@@ -44,7 +44,7 @@ test('manifest paths are url-safe and exist', () => {
   }
 });
 
-test('the 14 projects are in spec §6 order', () => {
+test('the 13 projects are in spec §6 order', () => {
   assert.deepStrictEqual(SITE.projects.map((p) => p.slug), SLUGS);
 });
 
@@ -57,11 +57,11 @@ test('project slugs are unique and every category is allowed', () => {
   }
 });
 
-test('category filters give web 11, mobile 2, api 2, dotnet 5', () => {
+test('category filters give web 11, mobile 1, api 1, dotnet 5', () => {
   const count = (c) => SITE.projects.filter((p) => p.categories.includes(c)).length;
   assert.deepStrictEqual(
     { all: SITE.projects.length, web: count('web'), mobile: count('mobile'), api: count('api'), dotnet: count('dotnet') },
-    { all: 14, web: 11, mobile: 2, api: 2, dotnet: 5 });
+    { all: 13, web: 11, mobile: 1, api: 1, dotnet: 5 });
 });
 
 test('every project has the text fields filled in', () => {
@@ -78,7 +78,6 @@ const CONTEXT = {
   'nova-journal': 'Hex Softwares Web Development Internship, Task 1', // README "Task", about.html
   'open-data-dashboard': 'Personal project',
   'thaba-shield': 'Team project', // client/app/(marketing)/team.jsx; members are not named on the site
-  'momali': 'Team project, UCT Cortex Hub Fintech Hackathon', // docs/architecture.md mentions a teammate
   'fintech-api': 'Personal project',
   'tutorconnect': 'Nova Tech Developers, UFH IFS303', // StudyLink README: "the team's earlier tutoring system"
   'studylink': 'Nova Tech Developers, UFH IFS303', // README
@@ -95,9 +94,9 @@ test('each project context names its team, course or programme; the rest are per
   assert.deepStrictEqual(Object.fromEntries(SITE.projects.map((p) => [p.slug, p.context])), CONTEXT);
 });
 
-test('repo is set for exactly the first 10, on github.com/BigGee6566', () => {
+test('repo is set for exactly the first 9, on github.com/BigGee6566', () => {
   SITE.projects.forEach((p, i) => {
-    if (i < 10) assert.ok(p.repo && p.repo.startsWith('https://github.com/BigGee6566/'), `${p.slug}: bad repo ${p.repo}`);
+    if (i < 9) assert.ok(p.repo && p.repo.startsWith('https://github.com/BigGee6566/'), `${p.slug}: bad repo ${p.repo}`);
     else assert.strictEqual(p.repo, undefined, `${p.slug} must have no repo`);
   });
 });
@@ -353,11 +352,11 @@ test('Gonex: two summary paragraphs, the vision verbatim, and the site URL', () 
   assert.strictEqual(SITE.gonex.url, 'https://gonex-website.vercel.app');
 });
 
-test('counter inputs: 10 public repos, 5 events, 8 certificates, 6 languages', () => {
+test('counter inputs: 9 public repos, 5 events, 8 certificates, 6 languages', () => {
   assert.deepStrictEqual([
     SITE.projects.filter((p) => p.repo).length,
     SITE.experiences.filter((e) => e.kind === 'event').length,
     SITE.certificates.length,
     SITE.languages.length,
-  ], [10, 5, 8, 6]);
+  ], [9, 5, 8, 6]);
 });

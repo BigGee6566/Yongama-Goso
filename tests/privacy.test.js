@@ -29,6 +29,18 @@ test('no served file mentions the withheld identifiers', () => {
   assert.deepStrictEqual(bad, []);
 });
 
+// Projects the owner has asked to keep off the site. Plain strings, case-insensitive.
+// The hyphenated repo name is matched, so the spaced event title
+// "UCT Cortex Hub Fintech Hackathon" stays allowed.
+const REMOVED = ['MoMali', 'UCT-Cortex-Hub-Fintech-Hackathon'];
+test('no served file mentions a removed project', () => {
+  const bad = scanned.filter((rel) => {
+    const text = fs.readFileSync(path.join(root, rel), 'utf8').toLowerCase();
+    return REMOVED.some((s) => text.includes(s.toLowerCase()));
+  });
+  assert.deepStrictEqual(bad, []);
+});
+
 // Builds a string from the real plaintext values at test time. The file is
 // git-ignored, so this is skipped wherever it is absent.
 const plaintext = path.join(root, '.superpowers/sdd/2026-11-21-portfolio-redesign/forbidden-plaintext.txt');

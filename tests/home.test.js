@@ -14,7 +14,7 @@ const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
 const SECTIONS = ['hero', 'counters', 'about', 'what-i-do', 'featured', 'recognition-highlights', 'cta', 'approach'];
-const FEATURED = ['nova-journal', 'open-data-dashboard', 'thaba-shield', 'momali'];
+const FEATURED = ['nova-journal', 'open-data-dashboard', 'thaba-shield', 'fintech-api'];
 const CTA_COPY = "I'm open to software development opportunities, and Gonex Innovation Hub welcomes partners, funders and schools.";
 const LINKEDIN = 'https://www.linkedin.com/in/yongama-goso-85aaaa2b0';
 const BUDGET = 2621440; // 2.5 MiB: Home's weight before any interaction (Global Constraints)
@@ -129,9 +129,9 @@ test('content is filled from SITE: about, capabilities, services, recognition an
   });
 });
 
-test('counters read 10 5 8 6 once scrolled into view', async () => {
+test('counters read 9 5 8 6 once scrolled into view', async () => {
   const expected = Render.computeCounters(SITE).map((c) => String(c.value)).join(' ');
-  assert.equal(expected, '10 5 8 6');
+  assert.equal(expected, '9 5 8 6');
   await onHome(async (page) => {
     await page.locator('#counters').scrollIntoViewIfNeeded();
     await page.waitForFunction((want) => [...document.querySelectorAll('#counters .counter__value')]
@@ -208,7 +208,7 @@ test('reduced motion: the ticker holds roles[0], counters and reveals are final,
     assert.equal(await page.locator('#hero .ticker-pause').isVisible(), false, 'no pause control when nothing moves');
     assert.equal(await page.$$eval('video', (vs) => vs.every((v) => v.paused)), true, 'every video is paused');
     const values = await page.$$eval('#counters .counter__value', (v) => v.map((x) => x.textContent.trim()).join(' '));
-    assert.equal(values, '10 5 8 6', 'counters show final values without scrolling');
+    assert.equal(values, '9 5 8 6', 'counters show final values without scrolling');
     const hidden = await page.$$eval('[data-reveal]', (els) => els.filter((e) => getComputedStyle(e).opacity !== '1').length);
     assert.equal(hidden, 0, 'every reveal element is visible');
   }, { reducedMotion: 'reduce' });

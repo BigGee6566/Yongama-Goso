@@ -108,7 +108,6 @@ The capture method is decided per project. "Live" means the URL loaded with real
 | 1 | NOVA Journal (HexSoftwares blog) | `HexSoftwares_Simple_Blog_Website` | HTML, CSS, JS, localStorage | Live: `simple-blog-website-mu.vercel.app` | Ready |
 | 2 | Open Data Dashboard | `open-data-api-dashboard` | HTML, CSS, JS, World Bank API | Live: GitHub Pages | Ready |
 | 3 | Thaba Shield | `thaba-shield` | JS client, Python, Docker | Live: `thaba-shield.vercel.app` (description to be taken from code, since there is no README) | Ready |
-| 4 | MoMali (UCT Cortex Hub Fintech Hackathon) | `UCT-Cortex-Hub-Fintech-Hackathon` | TypeScript, Expo, backend, docker-compose | Run locally. The Vercel URL returns 404, so no live link is shown | Run here |
 | 5 | Fintech FastAPI tutorial API | `fintech_tut_fastAPI` | Python, FastAPI | Run `uvicorn` and capture the interactive `/docs` UI exercising real endpoints | Run here |
 | 6 | TutorConnect | `TutorConnect` | VB.NET, ASP.NET Web Forms, PostgreSQL (per its `App_Data/Scripts/postgres`) | His Windows PC via Remote Control | Pending PC |
 | 7 | StudyLink | `StudyLink` | C#, ASP.NET Web Forms, EF6, SQL Server | His PC | Pending PC |
@@ -119,6 +118,8 @@ The capture method is decided per project. "Live" means the URL loaded with real
 | 12 | EduRand | (current site) | HTML, CSS, JS, UI/UX | Existing screenshot | Ready |
 | 13 | JourneyMap | (current site) | HTML, CSS, JS, React | Existing screenshot | Ready |
 | 14 | Laundry Website | (current site) | HTML, CSS, JS | Existing screenshot | Ready |
+
+MoMali (UCT-Cortex-Hub-Fintech-Hackathon) was removed at the owner's request on 2026-11-22.
 
 Excluded by his choice: `Edurand_V2` and `UFH-MARKETPLACE` (README only), `hello-world`, this
 portfolio repo, private repos and repos owned by others.

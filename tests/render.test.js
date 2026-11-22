@@ -17,15 +17,15 @@ test('escapeHTML', () => {
 
 test('filterProjects', () => {
   assert.equal(R.filterProjects(SITE.projects, 'dotnet').length, 5);
-  assert.equal(R.filterProjects(SITE.projects, 'mobile').length, 2);
-  assert.equal(R.filterProjects(SITE.projects, 'api').length, 2);
+  assert.equal(R.filterProjects(SITE.projects, 'mobile').length, 1);
+  assert.equal(R.filterProjects(SITE.projects, 'api').length, 1);
   assert.equal(R.filterProjects(SITE.projects, 'web').length, 11);
-  assert.equal(R.filterProjects(SITE.projects, 'all').length, 14);
+  assert.equal(R.filterProjects(SITE.projects, 'all').length, 13);
 });
 
 test('computeCounters', () => {
   const c = R.computeCounters(SITE);
-  assert.deepEqual(c.map(x => x.value), [10, 5, 8, 6]);
+  assert.deepEqual(c.map(x => x.value), [9, 5, 8, 6]);
   assert.deepEqual(c.map(x => x.label), ['Public projects on GitHub', 'Hackathons & pitch events', 'Certifications', 'Languages spoken']);
 });
 

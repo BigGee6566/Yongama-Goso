@@ -48,31 +48,31 @@ function onProjects(fn, opts = {}) {
 const visibleCards = (page) => page.locator('.project-card:not([hidden])').count();
 const activeInDialog = (page) => page.evaluate(() => !!document.activeElement.closest('[role=dialog]'));
 
-test('renders 14 cards, from http and from file://, with no console errors', async () => {
+test('renders 13 cards, from http and from file://, with no console errors', async () => {
   await onProjects(async (page) => {
-    assert.equal(await page.locator('.project-card').count(), 14);
+    assert.equal(await page.locator('.project-card').count(), 13);
     assert.equal(await page.locator('h1').count(), 1);
     assert.deepEqual(page.consoleErrors, []);
   });
   await withPage(async (page) => {
     await stubExternal(page);
     await page.goto(pathToFileURL(path.join(root, 'projects.html')).href, { waitUntil: 'load' });
-    assert.equal(await page.locator('.project-card').count(), 14);
+    assert.equal(await page.locator('.project-card').count(), 13);
     assert.deepEqual(page.consoleErrors, []);
   });
 });
 
-test('filter chips show 14, 11, 2, 5 and 2 cards and keep a status count', async () => {
+test('filter chips show 13, 11, 1, 5 and 1 cards and keep a status count', async () => {
   await onProjects(async (page) => {
     const chips = await page.$$eval('.filters button[aria-pressed]', (bs) => bs.map((b) => [b.textContent.trim(), b.dataset.filter]));
     assert.deepEqual(chips, [['All', 'all'], ['Web', 'web'], ['Mobile', 'mobile'], ['.NET', 'dotnet'], ['APIs', 'api']]);
-    const want = { all: 14, web: 11, mobile: 2, dotnet: 5, api: 2 };
+    const want = { all: 13, web: 11, mobile: 1, dotnet: 5, api: 1 };
     for (const [filter, n] of Object.entries(want)) {
       await page.locator(`.filters button[data-filter="${filter}"]`).click();
       assert.equal(await visibleCards(page), n, filter);
       assert.equal(await page.locator(`.filters button[data-filter="${filter}"]`).getAttribute('aria-pressed'), 'true');
       assert.equal(await page.locator('.filters button[aria-pressed="true"]').count(), 1, 'one chip pressed');
-      assert.equal((await page.locator('[role=status]').textContent()).trim(), `Showing ${n} projects`);
+      assert.equal((await page.locator('[role=status]').textContent()).trim(), `Showing ${n} ${n === 1 ? "project" : "projects"}`);
     }
   });
 });
@@ -109,7 +109,7 @@ test('a card opens a named dialog; Tab stays inside; Escape closes and returns f
 
 test('the close button and an overlay click close the dialog; only one opens at a time', async () => {
   await onProjects(async (page) => {
-    const open = () => page.locator('.project-card[data-slug="momali"] .project-card__open').click();
+    const open = () => page.locator('.project-card[data-slug="fintech-api"] .project-card__open').click();
     await open();
     await page.locator('[role=dialog] button[aria-label="Close"]').click();
     assert.equal(await page.locator('[role=dialog]').count(), 0);
@@ -220,7 +220,7 @@ test('no sideways scroll at 360px', async () => {
 
 test('a malformed #hash is ignored: no dialog, no errors, filters still work', async () => {
   await onProjects(async (page) => {
-    assert.equal(await page.locator('.project-card').count(), 14);
+    assert.equal(await page.locator('.project-card').count(), 13);
     assert.equal(await page.locator('[role=dialog]').count(), 0);
     await page.locator('.filters button[data-filter="dotnet"]').click();
     assert.equal(await visibleCards(page), 5);

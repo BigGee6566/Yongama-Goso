@@ -163,18 +163,6 @@
         }
       },
       {
-        slug: 'momali',
-        title: 'MoMali',
-        tagline: 'A personal finance app from the UCT Cortex Hub Fintech Hackathon.',
-        description: 'The Expo mobile app has a dashboard with a financial health score, transactions, budgets, a coach tab and a profile, behind a sign-in on the device, and the user grants consent separately for balances, transactions, income and debit orders. It runs on demo data stored on the device. A separate FastAPI and PostgreSQL API provides accounts, rotating refresh tokens, budgets, consent management and POPIA data export and erasure; the app does not call it yet.',
-        context: 'Team project, UCT Cortex Hub Fintech Hackathon',
-        categories: ['mobile', 'api'],
-        stack: ['TypeScript', 'React Native/Expo', 'Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker'],
-        repo: 'https://github.com/BigGee6566/UCT-Cortex-Hub-Fintech-Hackathon',
-        capture: 'pending',
-        media: noCapture('media/projects/pending-cover.webp')
-      },
-      {
         slug: 'fintech-api',
         title: 'Fintech FastAPI tutorial API',
         tagline: 'A small tutorial API built with FastAPI and SQLAlchemy.',
