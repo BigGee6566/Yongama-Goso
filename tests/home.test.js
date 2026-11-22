@@ -217,8 +217,11 @@ test('reduced motion: the ticker holds roles[0], counters and reveals are final,
 test('every image has alt text; no sideways scroll at 360px', async () => {
   await onHome(async (page) => {
     const alts = await page.$$eval('img', (is) => is.map((i) => (i.getAttribute('alt') || '').trim()));
-    assert.ok(alts.length >= 6, 'portrait, CTA photo and the featured posters');
+    // A captured project card shows a <video poster> instead of an <img>, so count both.
+    const videoLabels = await page.$$eval('video[poster]', (vs) => vs.map((v) => (v.getAttribute('aria-label') || '').trim()));
+    assert.ok(alts.length + videoLabels.length >= 6, 'portrait, CTA photo and the featured posters');
     assert.ok(alts.every((a) => a.length > 0), 'every <img> has alt text');
+    assert.ok(videoLabels.every((a) => a.length > 0), 'every poster <video> has an aria-label');
     for (const y of [0, 900, 1800, 2700, 3600, 4500, 5400]) {
       await page.evaluate((top) => window.scrollTo(0, top), y);
       await page.waitForTimeout(100);

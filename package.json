@@ -3,7 +3,8 @@
   "private": true,
   "description": "Static portfolio site (no build step). Tests only.",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "capture": "node tools/capture/capture.js"
   },
   "devDependencies": {
     "playwright": "1.63.0"

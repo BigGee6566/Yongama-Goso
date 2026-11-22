@@ -80,7 +80,7 @@
 
   function videoHTML(p, attrs) {
     var v = videoSources(p.media.video);
-    return '<video ' + attrs + ' poster="' + esc(p.media.poster) + '">' +
+    return '<video ' + attrs + ' aria-label="' + esc(p.title + ' demo') + '" poster="' + esc(p.media.poster) + '">' +
       '<source src="' + esc(v.mp4) + '" type="video/mp4">' +
       '<source src="' + esc(v.webm) + '" type="video/webm">' +
       '</video>';

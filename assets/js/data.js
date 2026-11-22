@@ -118,8 +118,13 @@
         stack: ['HTML', 'CSS', 'JavaScript', 'localStorage'],
         repo: 'https://github.com/BigGee6566/HexSoftwares_Simple_Blog_Website',
         live: 'https://simple-blog-website-mu.vercel.app',
-        capture: 'pending',
-        media: noCapture('media/projects/pending-cover.webp')
+        capture: 'captured',
+        media: {
+          poster: 'media/projects/nova-journal/poster.webp',
+          shots: ['media/projects/nova-journal/shot-1.webp', 'media/projects/nova-journal/shot-2.webp', 'media/projects/nova-journal/shot-3.webp', 'media/projects/nova-journal/shot-4.webp'],
+          demoData: false,
+          video: { mp4: 'media/projects/nova-journal/demo.mp4', webm: 'media/projects/nova-journal/demo.webm' }
+        }
       },
       {
         slug: 'open-data-dashboard',
@@ -131,8 +136,13 @@
         stack: ['HTML', 'CSS', 'JavaScript', 'World Bank API', 'Chart.js'],
         repo: 'https://github.com/BigGee6566/open-data-api-dashboard',
         live: 'https://biggee6566.github.io/open-data-api-dashboard/',
-        capture: 'pending',
-        media: noCapture('media/projects/pending-cover.webp')
+        capture: 'captured',
+        media: {
+          poster: 'media/projects/open-data-dashboard/poster.webp',
+          shots: ['media/projects/open-data-dashboard/shot-1.webp', 'media/projects/open-data-dashboard/shot-2.webp', 'media/projects/open-data-dashboard/shot-3.webp', 'media/projects/open-data-dashboard/shot-4.webp'],
+          demoData: false,
+          video: { mp4: 'media/projects/open-data-dashboard/demo.mp4', webm: 'media/projects/open-data-dashboard/demo.webm' }
+        }
       },
       {
         slug: 'thaba-shield',
@@ -144,8 +154,13 @@
         stack: ['JavaScript', 'React Native/Expo', 'Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker'],
         repo: 'https://github.com/BigGee6566/thaba-shield',
         live: 'https://thaba-shield.vercel.app',
-        capture: 'pending',
-        media: noCapture('media/projects/pending-cover.webp')
+        capture: 'captured',
+        media: {
+          poster: 'media/projects/thaba-shield/poster.webp',
+          shots: ['media/projects/thaba-shield/shot-1.webp', 'media/projects/thaba-shield/shot-2.webp', 'media/projects/thaba-shield/shot-3.webp'],
+          demoData: false,
+          video: { mp4: 'media/projects/thaba-shield/demo.mp4', webm: 'media/projects/thaba-shield/demo.webm' }
+        }
       },
       {
         slug: 'momali',
