@@ -165,7 +165,8 @@ test('the script stubs define their globals and load in Node', () => {
   const site = require('../assets/js/data.js');
   assert.strictEqual(typeof site, 'object');
   assert.ok(Array.isArray(site.projects), 'data.js exports SITE with projects');
-  assert.deepStrictEqual(require('../assets/js/render.js'), {});
+  // render.js was filled in Task 6 (tested in render.test.js); it must still load.
+  assert.strictEqual(typeof require('../assets/js/render.js').escapeHTML, 'function');
 });
 
 test('every local link in the header and footer returns 200', async () => {
