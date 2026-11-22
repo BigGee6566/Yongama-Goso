@@ -488,7 +488,9 @@ body[data-page="home"] .site-header.is-scrolled {
   text-decoration-color: var(--vermilion);
   text-decoration-thickness: .06em;
   text-underline-offset: .24em;  /* below the descenders, so the line never breaks */
-  overflow-wrap: anywhere;     /* never wider than a 360px screen */
+  /* No overflow-wrap/word-break here: the only break point is the <wbr> before the @,
+     so the address wraps there and never mid-word. The font-size clamp keeps each
+     half (goso.yonga / @gmail.com) inside a 360px screen. */
   transition: color var(--dur-fast) var(--ease-out);
 }
 

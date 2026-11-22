@@ -516,13 +516,72 @@
     rescrollToHash();   // #gonex / #certificates sit below sections that just grew
   }
 
+  /* ---- Contact ------------------------------------------------------------ */
+
+  // Posts the form to Formspree with fetch (ported from the old site) and says
+  // what happened in `status`, a polite live region. The button is disabled
+  // while the request is in flight so a double click cannot send it twice.
+  function initContactForm(form, status) {
+    if (!form || !status) return;
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      status.textContent = 'Sending your message...';
+      status.classList.remove('success', 'error');
+      var button = form.querySelector("button[type='submit']");
+      if (button) button.disabled = true;
+      try {
+        var response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' }   // Formspree answers JSON, not a redirect page
+        });
+        if (response.ok) {
+          status.textContent = 'Thanks! Your message has been sent.';
+          status.classList.add('success');
+          form.reset();
+        } else {
+          status.textContent = 'Sorry, there was a problem sending your message.';
+          status.classList.add('error');
+        }
+      } catch (error) {
+        status.textContent = 'Network error. Please try again in a moment.';
+        status.classList.add('error');
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  }
+
+  var SOCIALS = [
+    ['linkedin', 'LinkedIn', 'fa-brands fa-linkedin-in'],
+    ['github', 'GitHub', 'fa-brands fa-github'],
+    ['facebook', 'Facebook', 'fa-brands fa-facebook-f'],
+    ['instagram', 'Instagram', 'fa-brands fa-instagram']
+  ];
+
+  function initContact() {
+    var esc = Render.escapeHTML;
+    var p = SITE.person;
+    fill('[data-contact-details]',
+      '<li><i class="fa-solid fa-envelope" aria-hidden="true"></i><div><span class="contact-list__label">Email</span>' +
+      '<a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a></div></li>' +
+      '<li><i class="fa-solid fa-location-dot" aria-hidden="true"></i><div><span class="contact-list__label">Based in</span>' +
+      '<span>' + esc(p.location) + '</span></div></li>');
+    fill('[data-contact-socials]', SOCIALS.map(function (s) {
+      return '<li><a class="social" href="' + esc(p.socials[s[0]]) + '" target="_blank" rel="noopener">' +
+        '<i class="' + s[2] + '" aria-hidden="true"></i><span>' + s[1] + '</span></a></li>';
+    }).join(''));
+    initContactForm(document.getElementById('contact-form'), document.getElementById('form-status'));
+    initReveal();
+  }
+
   // One entry per <body data-page="...">. Later tasks fill the others in.
   var PAGE_INITS = {
     home: initHome,
     projects: initProjects,
     journey: initJourney,
     recognition: initRecognition,
-    contact: function () {}
+    contact: initContact
   };
 
   function start() {

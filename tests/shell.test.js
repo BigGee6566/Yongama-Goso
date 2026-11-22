@@ -40,7 +40,8 @@ const read = (rel) => fs.readFileSync(path.join(root, rel), 'utf8');
 const block = (html, tag) => (html.match(new RegExp(`<${tag} class="site-${tag}"[\\s\\S]*?</${tag}>`)) || [])[0];
 const hrefs = (html) => [...html.matchAll(/href="([^"]*)"/g)].map((m) => m[1]);
 // Visible text of an HTML fragment, with the few entities we use decoded.
-const text = (html) => html.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
+// <wbr> is a zero-width break hint inside the footer email, not a gap, so it is dropped first.
+const text = (html) => html.replace(/<wbr>/g, '').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 
 // Answers every request that leaves the local site with an empty 200, so the browser
 // tests don't depend on the CDNs being reachable (the pinned URLs are checked statically).
