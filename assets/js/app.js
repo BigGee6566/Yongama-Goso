@@ -320,7 +320,9 @@
 
     initVideoPreviews(root);
 
-    var slug = decodeURIComponent(window.location.hash.slice(1));
+    // A malformed hash (e.g. #%E0%A4%A) makes decodeURIComponent throw; ignore it.
+    var slug = '';
+    try { slug = decodeURIComponent(window.location.hash.slice(1)); } catch (e) { /* no modal */ }
     if (bySlug[slug]) {
       var card = root.querySelector('.project-card[data-slug="' + slug + '"]');
       openProject(bySlug[slug], card.querySelector('.project-card__open'));

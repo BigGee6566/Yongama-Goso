@@ -217,3 +217,20 @@ test('no sideways scroll at 360px', async () => {
     assert.ok(width <= 360, `scrollWidth ${width}`);
   }, { viewport: { width: 360, height: 740 } });
 });
+
+test('a malformed #hash is ignored: no dialog, no errors, filters still work', async () => {
+  await onProjects(async (page) => {
+    assert.equal(await page.locator('.project-card').count(), 14);
+    assert.equal(await page.locator('[role=dialog]').count(), 0);
+    await page.locator('.filters button[data-filter="dotnet"]').click();
+    assert.equal(await visibleCards(page), 5);
+    assert.deepEqual(page.consoleErrors, []);
+  }, { hash: '#%E0%A4%A' });
+});
+
+test('the intro does not overclaim recordings', async () => {
+  await onProjects(async (page) => {
+    assert.equal((await page.locator('.page-intro').textContent()).trim(),
+      'Web apps, mobile apps, APIs and .NET systems I have built. Cards marked \u201cRunning capture coming soon\u201d are still being recorded.');
+  });
+});
