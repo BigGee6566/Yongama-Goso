@@ -23,7 +23,7 @@ test('ffmpegArgs mp4: H.264, yuv420p, faststart, no audio, 15 s cap, crf', () =>
   const a = ffmpegArgs('a.webm', 'b.mp4', 'mp4', 28);
   assert.ok(inOrder(a, ['-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', '-t', '15', '-crf', '28']), a.join(' '));
   assert.strictEqual(a[a.length - 1], 'b.mp4');
-  assert.ok(a.includes('scale=1280:-2'));
+  assert.ok(a.includes("scale='min(1280,iw)':-2"), 'never upscale: ' + a.join(' '));
 });
 
 test('ffmpegArgs webm: VP9, constant quality, no audio', () => {

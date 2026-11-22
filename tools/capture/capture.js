@@ -47,7 +47,7 @@ const VIEWPORTS = {
 function ffmpegArgs(input, output, kind, crf, startSec) {
   const head = ['-y'];
   if (startSec > 0) head.push('-ss', String(startSec));
-  head.push('-i', input, '-vf', 'scale=' + OUT_WIDTH + ':-2');
+  head.push('-i', input, '-vf', "scale='min(" + OUT_WIDTH + ",iw)':-2");
   const tail = kind === 'mp4'
     ? ['-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', '-t', String(MAX_SECONDS), '-crf', String(crf)]
     : ['-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', String(crf), '-an', '-t', String(MAX_SECONDS)];

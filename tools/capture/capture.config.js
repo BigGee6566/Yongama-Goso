@@ -93,4 +93,32 @@ module.exports = [
       { wait: 1500 },
     ],
   },
+  {
+    // Fintech API (FastAPI): the generated /docs page. GET /api-endpoint, then POST /speakers/
+    // with generic demo values. The API is run locally (native PostgreSQL, uvicorn on port
+    // 8010), so run: node tools/capture/capture.js fintech-api --url http://localhost:8010
+    slug: 'fintech-api',
+    url: 'http://localhost:8010',
+    viewport: 'desktop',
+    steps: [
+      { goto: '/docs' },
+      { wait: 1200 },
+      { shot: true },                                              // poster: the endpoint list
+      { click: '#operations-default-first_api_api_endpoint_get .opblock-summary' },
+      { click: '#operations-default-first_api_api_endpoint_get button.try-out__btn' },
+      { click: '#operations-default-first_api_api_endpoint_get button.execute' },
+      { wait: 1500 },
+      { shot: true },                                              // GET response visible
+      { click: '#operations-default-first_api_api_endpoint_get .opblock-summary' },
+      { click: '#operations-default-create_speaker_speakers__post .opblock-summary' },
+      { click: '#operations-default-create_speaker_speakers__post button.try-out__btn' },
+      { fill: ['#operations-default-create_speaker_speakers__post textarea.body-param__text', '{\n  "name": "Demo Speaker",\n  "bio": "A demo speaker bio",\n  "company": "Demo Company"\n}'] },
+      { wait: 600 },
+      { shot: true },                                              // request body filled in
+      { click: '#operations-default-create_speaker_speakers__post button.execute' },
+      { wait: 1500 },
+      { scroll: 760 },
+      { shot: true },                                              // 200 response visible
+    ],
+  },
 ];

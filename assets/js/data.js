@@ -183,8 +183,13 @@
         categories: ['api'],
         stack: ['Python', 'FastAPI', 'SQLAlchemy', 'PostgreSQL'],
         repo: 'https://github.com/BigGee6566/fintech_tut_fastAPI',
-        capture: 'pending',
-        media: noCapture('media/projects/pending-cover.webp')
+        capture: 'captured',
+        media: {
+          poster: 'media/projects/fintech-api/poster.webp',
+          shots: ['media/projects/fintech-api/shot-1.webp', 'media/projects/fintech-api/shot-2.webp', 'media/projects/fintech-api/shot-3.webp', 'media/projects/fintech-api/shot-4.webp'],
+          demoData: true,
+          video: { mp4: 'media/projects/fintech-api/demo.mp4', webm: 'media/projects/fintech-api/demo.webm' }
+        }
       },
       {
         slug: 'tutorconnect',
