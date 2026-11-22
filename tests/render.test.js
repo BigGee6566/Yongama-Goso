@@ -112,7 +112,7 @@ test('galleryHTML', () => {
   assert.equal(R.galleryHTML([], 'T'), '');
   const h = R.galleryHTML(['media/e/01-1400.webp', 'media/e/x.webp'], 'Hack');
   assert.ok(h.startsWith('<div class="gallery">'));
-  assert.ok(h.includes('<a class="gallery__item" href="media/e/01-1400.webp">'));
+  assert.ok(h.includes('<a class="gallery__item" href="media/e/01-1400.webp" target="_blank" rel="noopener">'));
   assert.ok(h.includes('src="media/e/01-640.webp"'));
   assert.ok(h.includes('src="media/e/x.webp"'));
   assert.ok(h.includes('alt="Hack — photo 1 of 2"'));

@@ -864,3 +864,361 @@
   object-fit: cover;
   border-radius: var(--radius-s);
 }
+
+/* ---- Journey page -----------------------------------------------------------------
+   Growth timeline, experience and event cards, education, skill chips and
+   languages. Markup comes from Render (timelineHTML, experienceCardHTML) and
+   initJourney in app.js. */
+
+/* Timeline: a vertical rail with a vermilion node per entry. Pending entries
+   (date to be confirmed) get a hollow, dashed node. On wide screens the date
+   hangs to the left of the rail. */
+.timeline {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 var(--space-6);
+  list-style: none;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 7px;
+  width: 2px;
+  background: var(--line-on-bone);
+}
+
+.timeline__item {
+  position: relative;
+  padding-bottom: var(--space-6);
+}
+
+.timeline__item:last-child { padding-bottom: 0; }
+
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  top: .3em;
+  left: calc(-1 * var(--space-6));
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--bone);
+  border-radius: 50%;
+  background: var(--vermilion);
+  box-shadow: 0 0 0 2px var(--vermilion);
+}
+
+.timeline__item--pending::before {
+  border: 2px dashed var(--vermilion);
+  background: var(--bone);
+  box-shadow: none;
+}
+
+.timeline__when {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--muted-on-bone);
+}
+
+.timeline__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.timeline__detail {
+  max-width: 40rem;
+  margin: var(--space-2) 0 0;
+  color: var(--muted-on-bone);
+}
+
+@media (min-width: 760px) {
+  .timeline { padding-left: 14rem; }
+  .timeline::before { left: 12.45rem; }
+  .timeline__item::before { left: -1.75rem; }
+  .timeline__when {
+    position: absolute;
+    top: .55em;
+    left: -14rem;
+    width: 11.5rem;
+    margin: 0;
+    text-align: right;
+  }
+}
+
+/* Experience and event cards. A card sits on the opposite tone of its
+   section (bone on bone-2, bone-2 on bone) with a hairline edge. */
+.exp-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+}
+
+.exp-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-on-bone);
+  border-radius: var(--radius-m);
+  background: var(--bone-2);
+}
+
+.section--bone-2 .exp-card { background: var(--bone); }
+
+.exp-card__cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.exp-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-5);
+}
+
+/* Text-only cards (no photo) take a bead strip along the top instead. */
+.exp-card--text {
+  border-top: 0;
+  background-image: url("../img/beadband.svg");
+  background-repeat: repeat-x;
+  background-size: 20px 10px;
+  padding-top: 10px;
+}
+
+.exp-card--text { background-color: var(--bone-2); }
+.section--bone-2 .exp-card--text { background-color: var(--bone); }
+
+.exp-card__tag {
+  padding: 3px 8px;
+  border-radius: var(--radius-s);
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  line-height: 1.4;
+}
+
+.exp-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.exp-card__body p { margin: 0; }
+
+.exp-card__when {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--muted-on-bone);
+}
+
+.exp-card__org,
+.exp-card__subtitle { font-weight: 600; }
+
+.exp-card__description { color: var(--muted-on-bone); }
+
+.exp-card__highlights {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exp-card__highlights li {
+  position: relative;
+  padding-left: var(--space-4);
+  font-size: var(--text-s);
+}
+
+/* Highlights hang from small vermilion beads, as the footer list does. */
+.exp-card__highlights li::before {
+  content: "";
+  position: absolute;
+  top: .55em;
+  left: 0;
+  width: 8px;
+  height: 6px;
+  background: var(--vermilion);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.exp-card__gallery {
+  min-height: 44px;
+  margin-top: auto;
+  padding: 0 var(--space-5);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+
+.exp-card__gallery:hover {
+  background: var(--ink);
+  color: var(--bone);
+}
+
+/* Education rows and the language list. */
+.edu-list,
+.language-list {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.edu {
+  padding: var(--space-5);
+  border-left: 4px solid var(--vermilion);
+  background: var(--bone);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+}
+
+.edu__when {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--muted-on-bone);
+}
+
+.edu__award {
+  margin-top: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.edu__school { margin: var(--space-2) 0 0; font-weight: 600; }
+
+.language-list {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+  gap: var(--space-3);
+}
+
+.language {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-4);
+  border: 1px solid var(--line-on-bone);
+  border-radius: var(--radius-m);
+  background: var(--bone);
+}
+
+.language__name {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.language__level {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted-on-bone);
+}
+
+/* Skill chips. A chip with a "Used in" list is a <details>: the summary is
+   the chip, the list unfolds beneath it. */
+.skill-group + .skill-group { margin-top: var(--space-7); }
+
+.skill-group__title {
+  margin-bottom: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skill {
+  border: 1px solid var(--line-on-bone);
+  border-radius: var(--radius-s);
+  background: var(--bone-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+}
+
+.skill > .skill__name { min-height: 44px; padding: 0 var(--space-4); }
+
+.skill__name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.skill__name i { font-size: 1.3em; line-height: 1; }
+
+.skill summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  list-style: none;
+  cursor: pointer;
+}
+
+.skill summary::-webkit-details-marker { display: none; }
+
+.skill__count {
+  min-width: 1.5em;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bone);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+.skill summary:hover { background: var(--bone); }
+.skill details[open] { background: var(--bone); border-radius: var(--radius-s); }
+.skill details[open] summary { border-bottom: 1px solid var(--line-on-bone); }
+
+.skill__used { padding: var(--space-3) var(--space-4) var(--space-4); }
+
+.skill__used-label {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--muted-on-bone);
+}
+
+.skill__used ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-xs);
+}
+
+.skill__used li + li { margin-top: 2px; }

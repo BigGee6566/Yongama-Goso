@@ -134,7 +134,7 @@
     if (!images || !images.length) return '';
     var n = images.length;
     return '<div class="gallery">' + images.map(function (src, i) {
-      return '<a class="gallery__item" href="' + esc(src) + '">' +
+      return '<a class="gallery__item" href="' + esc(src) + '" target="_blank" rel="noopener">' +
         '<img src="' + esc(thumb(src)) + '" alt="' + esc(title + ' — photo ' + (i + 1) + ' of ' + n) + '" loading="lazy">' +
         '</a>';
     }).join('') + '</div>';

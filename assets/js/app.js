@@ -385,11 +385,105 @@
     rescrollToHash();
   }
 
+  /* ---- Journey ------------------------------------------------------------ */
+
+  // Devicon class for each stack item or tool that has one. Checked against
+  // devicon@2.17.0's stylesheet; anything missing here (ASP.NET Web Forms,
+  // VB.NET, Entity Framework 6, ADO.NET, localStorage, UI/UX, SQL, the World
+  // Bank API, Microsoft Office, Google Workspace) shows a plain mono chip
+  // rather than a near-miss logo that would misname the technology.
+  var DEVICON = {
+    'HTML': 'devicon-html5-plain',
+    'CSS': 'devicon-css3-plain',
+    'JavaScript': 'devicon-javascript-plain',
+    'TypeScript': 'devicon-typescript-plain',
+    'React': 'devicon-react-original',
+    'React Native/Expo': 'devicon-reactnative-original',
+    'Chart.js': 'devicon-chartjs-plain',
+    'Bootstrap': 'devicon-bootstrap-plain',
+    'Python': 'devicon-python-plain',
+    'FastAPI': 'devicon-fastapi-plain',
+    'SQLAlchemy': 'devicon-sqlalchemy-plain',
+    'PostgreSQL': 'devicon-postgresql-plain',
+    'SQL Server': 'devicon-microsoftsqlserver-plain',
+    'C#': 'devicon-csharp-plain',
+    'Docker': 'devicon-docker-plain',
+    'Git': 'devicon-git-plain',
+    'Visual Studio': 'devicon-visualstudio-plain'
+  };
+
+  // One chip. `used` (project titles) is optional: with it, the chip has a
+  // <details> that opens a "Used in" list, so the grid stays calm until asked.
+  function skillChipHTML(name, used) {
+    var esc = Render.escapeHTML;
+    var icon = DEVICON[name] ? '<i class="' + DEVICON[name] + '" aria-hidden="true"></i>' : '';
+    var label = '<span class="skill__name">' + icon + esc(name) + '</span>';
+    if (!used || !used.length) return '<li class="skill">' + label + '</li>';
+    return '<li class="skill skill--used"><details>' +
+      '<summary>' + label + '<span class="skill__count" aria-hidden="true">' + used.length + '</span></summary>' +
+      '<div class="skill__used"><p class="skill__used-label">Used in</p><ul>' +
+      used.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') +
+      '</ul></div></details></li>';
+  }
+
+  function renderSkills(site) {
+    var chips = [];
+    Render.skillUsage(site.projects).forEach(function (titles, name) {
+      chips.push(skillChipHTML(name, titles));
+    });
+    return '<div class="skill-group" data-group="built-with"><h3 class="skill-group__title">Built with</h3>' +
+      '<ul class="skills">' + chips.join('') + '</ul></div>' +
+      '<div class="skill-group" data-group="tools"><h3 class="skill-group__title">Tools</h3>' +
+      '<ul class="skills">' + site.cvTools.map(function (t) { return skillChipHTML(t); }).join('') + '</ul></div>';
+  }
+
+  function initJourney() {
+    var esc = Render.escapeHTML;
+    function cards(kind) {
+      return SITE.experiences.filter(function (e) {
+        return (e.kind === 'event') === (kind === 'event');
+      }).map(Render.experienceCardHTML).join('');
+    }
+    fill('[data-timeline]', Render.timelineHTML(SITE.timeline));
+    fill('[data-experience]', cards('work'));
+    fill('[data-events]', cards('event'));
+    fill('[data-education]', SITE.education.map(function (e) {
+      return '<li class="edu"><span class="edu__when">' + esc(e.when) + '</span>' +
+        '<h3 class="edu__award">' + esc(e.award) + '</h3><p class="edu__school">' + esc(e.school) + '</p></li>';
+    }).join(''));
+    fill('[data-skills]', renderSkills(SITE));
+    fill('[data-languages]', SITE.languages.map(function (l) {
+      return '<li class="language"><span class="language__name">' + esc(l.name) + '</span>' +
+        '<span class="language__level">' + esc(l.level) + '</span></li>';
+    }).join(''));
+
+    // "View gallery" buttons open the event's photos in the shared modal.
+    var byId = {};
+    SITE.experiences.forEach(function (e) { byId[e.id] = e; });
+    document.querySelectorAll('.exp-card__gallery').forEach(function (button) {
+      var e = byId[button.dataset.gallery];
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.addEventListener('click', function () {
+        Modal.open('<h2 id="gallery-title-' + esc(e.id) + '">' + esc(e.title) + '</h2>' +
+          Render.galleryHTML(e.gallery, e.title), { label: e.title, opener: button });
+      });
+    });
+
+    // Reveal each timeline entry and card as it scrolls in (a no-op under
+    // reduced motion; see initReveal).
+    document.querySelectorAll('.timeline__item, .exp-card, .edu').forEach(function (el, i) {
+      el.setAttribute('data-reveal', '');
+      el.style.setProperty('--reveal-delay', (i % 3) * 80 + 'ms');
+    });
+    initReveal();
+    rescrollToHash();   // #experience / #skills sit below sections that just grew
+  }
+
   // One entry per <body data-page="...">. Later tasks fill the others in.
   var PAGE_INITS = {
     home: initHome,
     projects: initProjects,
-    journey: function () {},
+    journey: initJourney,
     recognition: function () {},
     contact: function () {}
   };
