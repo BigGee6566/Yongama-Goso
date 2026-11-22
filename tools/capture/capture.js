@@ -88,8 +88,29 @@ function waitReady(url, timeoutMs) {
   });
 }
 
+/**
+ * Resolve a "$env:NAME" reference (the whole string) from the environment, so a recipe can
+ * log in without ever holding a credential. Any other text is returned unchanged.
+ * Throws a clear error when the variable is unset or empty.
+ */
+function resolveEnv(text, env) {
+  const m = /^\$env:([A-Za-z_][A-Za-z0-9_]*)$/.exec(String(text));
+  if (!m) return text;
+  const value = (env || process.env)[m[1]];
+  if (value === undefined || value === '') throw new Error('recipe needs the environment variable ' + m[1] + ', which is not set');
+  return value;
+}
+
+/** A step with requires:"NAME" is skipped unless that environment variable is set and non-empty. */
+function shouldRun(step, env) {
+  if (!step.requires) return true;
+  const value = (env || process.env)[step.requires];
+  return value !== undefined && value !== '';
+}
+
 /** Run one step on a page. mode "video" pauses on shots; mode "shot" takes them. */
 async function playStep(page, step, base, mode, shots) {
+  if (!shouldRun(step)) return; // e.g. an authenticated screen when no demo login was found
   if (step.goto !== undefined) {
     const target = /^https?:/.test(step.goto) ? step.goto : new URL(step.goto, base).href;
     await page.goto(target, { waitUntil: 'networkidle' });
@@ -97,9 +118,10 @@ async function playStep(page, step, base, mode, shots) {
     await page.click(step.click);
   } else if (step.fill) {
     // <select> elements are chosen by value; everything else is typed.
+    const text = resolveEnv(step.fill[1]);
     const isSelect = await page.$eval(step.fill[0], (el) => el.tagName === 'SELECT');
-    if (isSelect) await page.selectOption(step.fill[0], step.fill[1]);
-    else await page.fill(step.fill[0], step.fill[1]);
+    if (isSelect) await page.selectOption(step.fill[0], text);
+    else await page.fill(step.fill[0], text);
   } else if (step.scroll !== undefined) {
     // Smooth scroll so the clip shows the movement.
     await page.evaluate((y) => window.scrollBy({ top: y, behavior: 'smooth' }), step.scroll);
@@ -204,5 +226,5 @@ async function main(argv) {
   }
 }
 
-module.exports = { ffmpegArgs, runRecipe };
+module.exports = { ffmpegArgs, runRecipe, resolveEnv, shouldRun };
 if (require.main === module) main(process.argv.slice(2)).catch((e) => { console.error(e); process.exit(1); });

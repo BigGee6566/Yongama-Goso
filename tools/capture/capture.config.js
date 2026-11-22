@@ -11,6 +11,10 @@
  *   - steps     the walk-through, played in order:
  *       { goto: path-or-url }  { click: selector }  { fill: [selector, text] }
  *       { scroll: pixels }     { wait: ms }         { shot: true }
+ *     Any step may add requires:'NAME': it is skipped unless that environment variable is set.
+ *     A fill value of '$env:NAME' is read from the environment when the step runs. A recipe
+ *     never holds a credential: the Windows kit (capture-windows.ps1) sets DEMO_USER and
+ *     DEMO_PASS from each app's own documentation, or leaves them unset to skip the login.
  *     Selectors are Playwright selectors, so `text=Some label` works.
  *     { shot: true } saves a screenshot. The FIRST one also becomes the poster.
  *
@@ -119,6 +123,148 @@ module.exports = [
       { wait: 1500 },
       { scroll: 760 },
       { shot: true },                                              // 200 response visible
+    ],
+  },
+
+  // ---------------------------------------------------------------------------------------------
+  // The five ASP.NET Web Forms apps. They cannot run in the Linux build container, so they are
+  // recorded on the owner's Windows PC by tools/capture/capture-windows.ps1. That script builds
+  // each site in a temporary copy, points it at a NEW *_PortfolioDemo database, starts IIS
+  // Express and runs `node tools/capture/capture.js <slug> --url http://localhost:<port>/`.
+  // The url below is only a placeholder: --url replaces it.
+  //
+  // Logins: the script puts the demo account into DEMO_USER / DEMO_PASS for this one process;
+  // these recipes only ever name those variables. With no demo login found, the steps marked
+  // requires:'DEMO_USER' are skipped and only the public screens are recorded. Every step is
+  // read-only (the walk-through is played twice, so nothing may change state). Selectors end in
+  // [id$="..."] because Web Forms prefixes control ids with the container name.
+  // ---------------------------------------------------------------------------------------------
+  {
+    // TutorConnect (VB.NET, PostgreSQL). The login is the administrator the script creates
+    // through the app's own first-run setup page, so only the admin screens are shown.
+    slug: 'tutorconnect',
+    url: 'http://localhost:0/',
+    viewport: 'desktop',
+    steps: [
+      { goto: '/Account/Login.aspx' },
+      { wait: 900 },
+      { shot: true },
+      { fill: ['input[id$="txtUserName"]', '$env:DEMO_USER'], requires: 'DEMO_USER' },
+      { fill: ['input[id$="txtPassword"]', '$env:DEMO_PASS'], requires: 'DEMO_USER' },
+      { click: 'input[id$="btnLogin"]', requires: 'DEMO_USER' },
+      { wait: 1500, requires: 'DEMO_USER' },
+      { goto: '/Admin/Dashboard.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/Admin/Users/ManageUsers.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/Admin/Subjects/ManageSubjects.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+    ],
+  },
+  {
+    // StudyLink (C#, EF6, SQL Server): the public pages, then the System Admin's screens.
+    slug: 'studylink',
+    url: 'http://localhost:0/',
+    viewport: 'desktop',
+    steps: [
+      { goto: '/' },
+      { wait: 900 },
+      { shot: true },
+      { goto: '/Catalogue/Books.aspx' },
+      { wait: 800 },
+      { shot: true },
+      { goto: '/Account/Login.aspx' },
+      { wait: 600 },
+      { fill: ['input[id$="Identifier"]', '$env:DEMO_USER'], requires: 'DEMO_USER' },
+      { fill: ['input[id$="Password"]', '$env:DEMO_PASS'], requires: 'DEMO_USER' },
+      { click: 'input[id$="LoginButton"]', requires: 'DEMO_USER' },
+      { wait: 1500, requires: 'DEMO_USER' },
+      { goto: '/Admin/Dashboard.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/Admin/AuditLog.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+    ],
+  },
+  {
+    // SmartShelf (C#, EF6, SQL Server): the sign-in page, then the Store Manager's screens.
+    slug: 'smartshelf',
+    url: 'http://localhost:0/',
+    viewport: 'desktop',
+    steps: [
+      { goto: '/Login.aspx' },
+      { wait: 900 },
+      { shot: true },
+      { fill: ['input[id$="txtUsername"]', '$env:DEMO_USER'], requires: 'DEMO_USER' },
+      { fill: ['input[id$="txtPassword"]', '$env:DEMO_PASS'], requires: 'DEMO_USER' },
+      { click: 'input[id$="btnLogin"]', requires: 'DEMO_USER' },
+      { wait: 1500, requires: 'DEMO_USER' },
+      { goto: '/Manager/Dashboard.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/Manager/Inventory.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/Manager/Reports.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+    ],
+  },
+  {
+    // BusNova (C#, ADO.NET, SQL Server): the public home, then the manager's screens.
+    slug: 'busnova',
+    url: 'http://localhost:0/',
+    viewport: 'desktop',
+    steps: [
+      { goto: '/Home.aspx' },
+      { wait: 900 },
+      { shot: true },
+      { goto: '/Login.aspx' },
+      { wait: 600 },
+      { fill: ['input[id$="txtEmail"]', '$env:DEMO_USER'], requires: 'DEMO_USER' },
+      { fill: ['input[id$="txtPassword"]', '$env:DEMO_PASS'], requires: 'DEMO_USER' },
+      { click: 'input[id$="btnLogin"]', requires: 'DEMO_USER' },
+      { wait: 1500, requires: 'DEMO_USER' },
+      { goto: '/Dashboard.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/ReportTicketSales.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/LiveMap.aspx', requires: 'DEMO_USER' },
+      { wait: 1500, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+    ],
+  },
+  {
+    // Logisticore (C#, ADO.NET, SQL Server): the sign-in page, then the Staff Portal admin screens.
+    slug: 'logisticore',
+    url: 'http://localhost:0/',
+    viewport: 'desktop',
+    steps: [
+      { goto: '/Default.aspx' },
+      { wait: 900 },
+      { shot: true },
+      { goto: '/Login.aspx' },
+      { wait: 600 },
+      { click: '#btnRoleStaff', requires: 'DEMO_USER' },
+      { fill: ['input[id$="txtEmail"]', '$env:DEMO_USER'], requires: 'DEMO_USER' },
+      { fill: ['input[id$="txtPassword"]', '$env:DEMO_PASS'], requires: 'DEMO_USER' },
+      { click: 'input[id$="btnLogin"]', requires: 'DEMO_USER' },
+      { wait: 1500, requires: 'DEMO_USER' },
+      { goto: '/Admin/Dashboard.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/Admin/Shipments.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
+      { goto: '/Ops/Dashboard.aspx', requires: 'DEMO_USER' },
+      { wait: 900, requires: 'DEMO_USER' },
+      { shot: true, requires: 'DEMO_USER' },
     ],
   },
 ];
