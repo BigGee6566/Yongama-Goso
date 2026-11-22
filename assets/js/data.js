@@ -106,13 +106,14 @@
 
     // The 14 in-scope projects, in spec §6 order. Copy paraphrases each repo's README or code (S5);
     // the last four keep the old site's title and description verbatim (S3). Live links: S6.
+    // context names the team, course or programme the repo names (README, docs or team page), else "Personal project".
     projects: [
       {
         slug: 'nova-journal',
         title: 'NOVA Journal',
         tagline: 'A technology and creativity blog in plain HTML, CSS and JavaScript.',
         description: 'Built for Task 1 of the Hex Softwares Web Development Internship. Readers can search, filter by topic, sort and bookmark articles, switch between dark and light themes, and write new posts with an image upload that is resized in the browser. Posts, bookmarks, comments and form entries are kept in localStorage, so they stay in the browser that created them; the contact and newsletter forms do not send anything.',
-        context: 'Personal project',
+        context: 'Hex Softwares Web Development Internship, Task 1',
         categories: ['web'],
         stack: ['HTML', 'CSS', 'JavaScript', 'localStorage'],
         repo: 'https://github.com/BigGee6566/HexSoftwares_Simple_Blog_Website',
@@ -138,7 +139,7 @@
         title: 'ThabaShield',
         tagline: 'A three-layer security console with an Expo client and a FastAPI hub.',
         description: 'A security dashboard with three layers: a document scanner that checks uploaded files with SHA-256 hashes and heuristic risk scoring, API anomaly detection that uses an Isolation Forest model to flag outliers in API traffic, and SafeCharge, which monitors telemetry from EV charging stations. The Expo client runs on web, iOS and Android, the FastAPI hub stores events in PostgreSQL, and the services run with Docker Compose. The API traffic and charging-station telemetry come from a traffic generator and a software emulator, not real devices.',
-        context: 'Personal project',
+        context: 'Team project',
         categories: ['mobile'],
         stack: ['JavaScript', 'React Native/Expo', 'Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker'],
         repo: 'https://github.com/BigGee6566/thaba-shield',
@@ -151,7 +152,7 @@
         title: 'MoMali',
         tagline: 'A personal finance app from the UCT Cortex Hub Fintech Hackathon.',
         description: 'The Expo mobile app has a dashboard with a financial health score, transactions, budgets, a coach tab and a profile, behind a sign-in on the device, and the user grants consent separately for balances, transactions, income and debit orders. It runs on demo data stored on the device. A separate FastAPI and PostgreSQL API provides accounts, rotating refresh tokens, budgets, consent management and POPIA data export and erasure; the app does not call it yet.',
-        context: 'Personal project',
+        context: 'Team project, UCT Cortex Hub Fintech Hackathon',
         categories: ['mobile', 'api'],
         stack: ['TypeScript', 'React Native/Expo', 'Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker'],
         repo: 'https://github.com/BigGee6566/UCT-Cortex-Hub-Fintech-Hackathon',
@@ -175,7 +176,7 @@
         title: 'TutorConnect',
         tagline: 'A tutoring management system for students, tutors and administrators.',
         description: 'Students find tutors, request sessions, track their bookings and write reviews. Tutors publish their availability, accept or decline requests, and manage sessions and postponements. Administrators approve users, manage subjects and study levels, moderate reviews and read the audit log. Security includes PBKDF2 password hashing, account lockout, rate limiting and parameterised SQL.',
-        context: 'Personal project',
+        context: 'Nova Tech Developers, UFH IFS303',
         categories: ['dotnet', 'web'],
         stack: ['VB.NET', 'ASP.NET Web Forms', 'PostgreSQL'],
         repo: 'https://github.com/BigGee6566/TutorConnect',
@@ -199,7 +200,7 @@
         title: 'SmartShelf',
         tagline: 'A supermarket management system.',
         description: 'Built for the Forte Supermarket scenario, it covers the checkout counter, the stockroom and the manager\'s office, with a supplier portal attached. Cashiers ring up sales and cash up their tills. Managers maintain the catalogue, track stock by batch and expiry date, raise purchase orders and run reports on top sellers, low stock, expiry and waste, and supplier performance. Suppliers confirm orders and see reports on their own products.',
-        context: 'Personal project',
+        context: 'UFH IFS303E coursework',
         categories: ['dotnet', 'web'],
         stack: ['C#', 'ASP.NET Web Forms', 'Entity Framework 6', 'SQL Server'],
         repo: 'https://github.com/BigGee6566/SmartShelf',
@@ -453,10 +454,11 @@
       }
     ],
 
-    // The 6 old-site certificates with their S3 titles and issuers (S3 gives no dates), then the two from S1.
+    // The 6 old-site certificates with their S3 titles and issuers (S3), then the two from S1. S3 gives no dates;
+    // S1 dates the FNB App Academy certificate (23 July 2025) and none of the other five.
     // The last two have no image yet, so they render as text-only cards.
     certificates: [
-      { slug: 'fnb-full-stack', title: 'Full Stack Developer Certificate', issuer: 'FNB App Academy 2025', when: PENDING, image: 'media/certificates/fnb-full-stack.webp' },
+      { slug: 'fnb-full-stack', title: 'Full Stack Developer Certificate', issuer: 'FNB App Academy 2025', when: '23 Jul 2025', image: 'media/certificates/fnb-full-stack.webp' },
       { slug: 'digital-learning', title: 'Digital Learning Certificate', issuer: 'Youth Development service', when: PENDING, image: 'media/certificates/digital-learning.webp' },
       { slug: 'hp-effective-business-websites', title: 'Effective Business Websites Certificate', issuer: 'HP Life | HP Foundation', when: PENDING, image: 'media/certificates/hp-effective-business-websites.webp' },
       { slug: 'hp-ai-for-beginners', title: 'AI for Beginners Certificate', issuer: 'HP Life | HP Foundation', when: PENDING, image: 'media/certificates/hp-ai-for-beginners.webp' },

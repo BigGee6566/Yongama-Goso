@@ -72,6 +72,29 @@ test('every project has the text fields filled in', () => {
   }
 });
 
+// The team, course or programme each repo names. "Personal project" only where the repo
+// (README, docs, about or team page, commit authors) shows no team, course or programme.
+const CONTEXT = {
+  'nova-journal': 'Hex Softwares Web Development Internship, Task 1', // README "Task", about.html
+  'open-data-dashboard': 'Personal project',
+  'thaba-shield': 'Team project', // client/app/(marketing)/team.jsx; members are not named on the site
+  'momali': 'Team project, UCT Cortex Hub Fintech Hackathon', // docs/architecture.md mentions a teammate
+  'fintech-api': 'Personal project',
+  'tutorconnect': 'Nova Tech Developers, UFH IFS303', // StudyLink README: "the team's earlier tutoring system"
+  'studylink': 'Nova Tech Developers, UFH IFS303', // README
+  'smartshelf': 'UFH IFS303E coursework', // SYSTEM_OVERVIEW.md
+  'busnova': 'University systems-development coursework', // README
+  'logisticore': 'C Sharp Shooters', // README
+  'placeme': 'Personal project',
+  'edurand': 'Personal project',
+  'journeymap': 'Personal project',
+  'laundry': 'Personal project',
+};
+
+test('each project context names its team, course or programme; the rest are personal projects', () => {
+  assert.deepStrictEqual(Object.fromEntries(SITE.projects.map((p) => [p.slug, p.context])), CONTEXT);
+});
+
 test('repo is set for exactly the first 10, on github.com/BigGee6566', () => {
   SITE.projects.forEach((p, i) => {
     if (i < 10) assert.ok(p.repo && p.repo.startsWith('https://github.com/BigGee6566/'), `${p.slug}: bad repo ${p.repo}`);
@@ -219,6 +242,17 @@ test('8 certificates, the 6 S3 images in order, and text-only YES and UCT–Cort
     'media/certificates/hp-starting-small-business.webp',
     'media/certificates/hp-finding-funding.webp',
   ]);
+  // S1 dates the FNB App Academy certificate; S3 dates none of the six, and S1 lists no other of them.
+  assert.deepStrictEqual(SITE.certificates.slice(0, 6).map((c) => [c.slug, c.when]), [
+    ['fnb-full-stack', '23 Jul 2025'],
+    ['digital-learning', PENDING],
+    ['hp-effective-business-websites', PENDING],
+    ['hp-ai-for-beginners', PENDING],
+    ['hp-starting-small-business', PENDING],
+    ['hp-finding-funding', PENDING],
+  ]);
+  const fnbTimeline = SITE.timeline.find((t) => /FNB App Academy/.test(t.detail));
+  assert.strictEqual(fnbTimeline.when, '23 Jul 2025', 'the timeline and the certificate agree on the FNB date');
   const textOnly = SITE.certificates.filter((c) => !c.image).map(({ title, issuer, when }) => ({ title, issuer, when }));
   assert.deepStrictEqual(textOnly, [
     { title: 'Quality Work Experience Programme', issuer: 'Youth Employment Service (YES)', when: '1 Aug 2026' },
