@@ -479,12 +479,49 @@
     rescrollToHash();   // #experience / #skills sit below sections that just grew
   }
 
+  /* ---- Recognition -------------------------------------------------------- */
+
+  function initRecognition() {
+    var esc = Render.escapeHTML;
+    fill('[data-recognition]', Render.recognitionHTML(SITE.recognition));
+    // Every SITE string is escaped; the vision is the verbatim sentence.
+    fill('[data-gonex-summary]', SITE.gonex.summary.map(function (p) {
+      return '<p>' + esc(p) + '</p>';
+    }).join(''));
+    fill('[data-gonex-vision]', '<blockquote class="pull-quote">' + esc(SITE.gonex.vision) + '</blockquote>');
+    var link = document.querySelector('[data-gonex-link]');
+    if (link) link.setAttribute('href', SITE.gonex.url);
+    fill('[data-certificates]', SITE.certificates.map(Render.certificateCardHTML).join(''));
+
+    // Image cards open the full scan in the shared dialog. Text cards (no
+    // scan yet) have no button, so they stay inert. The dialog is named by
+    // its first h2[id]; the issuer line shows below the image.
+    var byImage = {};
+    SITE.certificates.forEach(function (c) { byImage[c.image] = c; });
+    document.querySelectorAll('.cert-card__open').forEach(function (button) {
+      var c = byImage[button.dataset.full];
+      if (!c) return;
+      button.addEventListener('click', function () {
+        Modal.open('<h2 id="cert-title-' + esc(c.slug) + '">' + esc(c.title) + '</h2>' +
+          '<img src="' + esc(button.dataset.full) + '" alt="' + esc(c.title) + ' certificate">' +
+          '<p>' + esc(c.issuer) + ' \u00b7 ' + esc(c.when) + '</p>', { label: c.title, opener: button });
+      });
+    });
+
+    document.querySelectorAll('.recognition > li, .pull-quote, .cert-card').forEach(function (el, i) {
+      el.setAttribute('data-reveal', '');
+      el.style.setProperty('--reveal-delay', (i % 4) * 70 + 'ms');
+    });
+    initReveal();
+    rescrollToHash();   // #gonex / #certificates sit below sections that just grew
+  }
+
   // One entry per <body data-page="...">. Later tasks fill the others in.
   var PAGE_INITS = {
     home: initHome,
     projects: initProjects,
     journey: initJourney,
-    recognition: function () {},
+    recognition: initRecognition,
     contact: function () {}
   };
 

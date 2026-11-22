@@ -1222,3 +1222,116 @@
 }
 
 .skill__used li + li { margin-top: 2px; }
+
+/* ---- Recognition page ----------------------------------------------------------------
+   Gonex profile on ink: text left, the vision set as a pull-quote between two
+   bead bands on the right. Then the certificate gallery. */
+.gonex__grid {
+  display: grid;
+  gap: var(--space-7);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .gonex__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-8); }
+}
+
+.gonex__text { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+.gonex__text .section-title { margin: 0; }
+.gonex__summary { display: grid; gap: var(--space-4); max-width: 60ch; color: var(--muted-on-ink); }
+
+/* The bead bands frame the quote above and below. */
+.gonex__vision::before,
+.gonex__vision::after {
+  content: "";
+  display: block;
+  height: 16px;
+  background: url("../img/beadband.svg") 0 0 / 32px 16px repeat-x;
+}
+
+.pull-quote {
+  position: relative;
+  margin: 0;
+  padding: var(--space-6) 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* A large vermilion quote mark (well over 24px, so it passes on ink). */
+.pull-quote::before {
+  content: "\201C";
+  display: block;
+  height: .55em;
+  color: var(--vermilion);
+  font-size: 2.2em;
+  line-height: 1;
+}
+
+.cert-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+}
+
+.cert-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-on-bone);
+  border-radius: var(--radius-m);
+  background: var(--bone);
+}
+
+.cert-card__open {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: var(--ink);
+  cursor: zoom-in;
+}
+
+.cert-card__open img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: top;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.cert-card__open:hover img { transform: scale(1.03); }
+.cert-card__open { overflow: hidden; }
+
+.cert-card figcaption,
+.cert-card--text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.cert-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: 800;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.cert-card__issuer { color: var(--muted-on-bone); font-size: var(--text-s); }
+.cert-card__when { font-family: var(--font-mono); font-size: var(--text-xs); }
+
+/* Text-only cards (no scan yet) take the bead strip along the top, like the
+   text experience cards. */
+.cert-card--text {
+  padding-top: calc(10px + var(--space-5));
+  background: var(--bone) url("../img/beadband.svg") 0 0 / 20px 10px repeat-x;
+}
+
+/* Certificate scan in the dialog: whole image, no cropping. */
+.modal__content > img { display: block; width: 100%; height: auto; max-height: 68vh; object-fit: contain; background: var(--bone-2); border-radius: var(--radius-s); }
