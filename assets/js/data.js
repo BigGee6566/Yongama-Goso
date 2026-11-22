@@ -104,7 +104,7 @@
       'I approach every project with discipline, curiosity, and a mindset of continuous improvement.'
     ],
 
-    // The 14 in-scope projects, in spec §6 order. Copy paraphrases each repo's README or code (S5);
+    // The 13 in-scope projects, in spec §6 order. Copy paraphrases each repo's README or code (S5);
     // the last four keep the old site's title and description verbatim (S3). Live links: S6.
     // context names the team, course or programme the repo names (README, docs or team page), else "Personal project".
     projects: [

@@ -4,6 +4,7 @@
   "description": "Static portfolio site (no build step). Tests only.",
   "scripts": {
     "test": "node --test",
+    "serve": "node tests/helpers/serve-cli.js",
     "capture": "node tools/capture/capture.js"
   },
   "devDependencies": {

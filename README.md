@@ -1,58 +1,155 @@
-## Hi there
-This is my personal developer portfolio website built using **HTML, CSS, and JavaScript**.
-It showcases my skills, projects, certificates, experience, and contact information in a clean, modern, and responsive design.
+# Yongama Goso: portfolio site
+
+The personal portfolio of Yongama Goso, a full-stack developer and the founder of Gonex Innovation Hub in Sterkspruit, Eastern Cape. It is live at https://biggee6566.github.io/Yongama-Goso/.
+
+It has five pages:
+
+| Page | File | What it shows |
+| --- | --- | --- |
+| Home | `index.html` | Intro, counters, what I do, featured projects, recognition, approach |
+| Projects | `projects.html` | All 13 projects with filters, and a detail window with a demo clip |
+| Journey | `journey.html` | Timeline, experience, events, education, skills, languages |
+| Recognition | `recognition.html` | Awards, Gonex Innovation Hub, certificates |
+| Contact | `contact.html` | Email, social links and a contact form (sent through Formspree) |
+
+The design is written up in [`docs/superpowers/specs/2026-11-21-portfolio-redesign-design.md`](docs/superpowers/specs/2026-11-21-portfolio-redesign-design.md).
 
 ---
 
-## About the Portfolio
+## The stack
 
-This portfolio was created to:
-- Present my **projects** and the tools used
-- Display my **technical skills**
-- Showcase my **certificates and achievements**
-- Highlight my **experience** through real events and hackathons
-- Provide an easy way to **contact me**
+- Plain HTML, CSS and vanilla JavaScript. There is no framework and **no build step**: the files in this repo are the files that get served.
+- Hosted on GitHub Pages (the `.nojekyll` file tells Pages to serve the files as they are).
+- Fonts come from Google Fonts. Icons come from Font Awesome and Devicon (both loaded from a CDN).
+- Node.js and Playwright are only used for the tests and the capture tool. They are not part of the site.
 
-The design focuses on simplicity, readability, and a professional layout inspired by modern UI principles.
+How the code is laid out:
 
----
-
-## Technologies Used
-
-- **HTML5** - Page structure and content
-- **CSS3** - Styling, layout, responsiveness, and animations
-- **JavaScript (Vanilla)** - Dynamic experience cards, modal, and form submission
-- **Font Awesome** - Social media icons
-- **Devicon** - Technology skill icons
+- `assets/js/data.js` holds all the content (projects, events, certificates, timeline and so on).
+- `assets/js/render.js` turns that content into HTML.
+- `assets/js/app.js` and `assets/js/modal.js` add behaviour (menu, filters, the project window, counters, scroll effects).
+- `assets/css/tokens.css`, `layout.css` and `components.css` hold the styles. Colours, fonts and spacing are defined once in `tokens.css`.
+- `media/` holds the optimised images and the project demo clips. `Yongama_Goso_CV.pdf` is the CV for the "Download CV" button; edit `cv/resume.html`, then run `sh cv/build.sh` to regenerate it.
+- `tools/` holds the image optimiser, the capture tool and the fingerprint helper. `tests/` holds the tests.
 
 ---
 
-## Features
+## How to view it
 
-- Responsive layout (desktop, tablet, mobile)
-- Hero section with profile image and social links
-- Skills section with technology icons
-- Projects section with descriptions and tool badges
-- Experience section with 4 event cards
-- Fullscreen modal with hero image, highlights, and gallery
-- Certificates gallery (6 certificates) with lightbox previews
-- Contact form connected to Formspree (real email submissions)
-- Clean dark-themed design with cyan accent colors
+Either open `index.html` directly in your browser, or run a small local server:
 
----
+```sh
+npm install        # once, to get Playwright (only needed for tests and captures)
+npm run serve      # prints a URL such as http://127.0.0.1:12345; open it
+```
 
-## Structure
-
-- `index.html` - Main layout and styles
-- `script` - Experience data, modal behavior, and contact form submission
-- `Images/` - All images used in the portfolio (projects, certificates, experience galleries)
-- `Yongama_Goso_CV.pdf` - The CV served by the "Download CV" button. Edit `cv/resume.html`, then run `sh cv/build.sh` to regenerate it
+`npm run serve` runs `tests/helpers/serve-cli.js`, which serves the repo folder on a free local port. Stop it with Ctrl+C.
 
 ---
 
-## Run Locally
+## Running the tests
 
-Open `index.html` in your browser. No build steps required.
+```sh
+npm test
+```
+
+This runs `node --test`, which finds every `*.test.js` file under `tests/`. Always use `npm test`: running `node --test tests/` can behave differently. The browser tests need Playwright's Chromium (`npx playwright install chromium`).
+
+What the tests guard:
+
+- **Privacy** (`tests/privacy.test.js`, `tests/privacy-helper.test.js`): no served file and not this README may contain any of the private values listed by fingerprint, the withheld event identifiers, or the name of a project the owner asked to remove. See "The privacy guard" below.
+- **Data** (`tests/data.test.js`): the content is complete and consistent. There are 13 projects in order, slugs are unique, categories are valid, capture states match their media, every media path exists, demo clips are small, dates are real or say "Date to be confirmed", and contact details are only the public set.
+- **Pages** (`home`, `projects`, `journey`, `recognition`, `contact`, `shell`, `render` tests): each page renders the right content in a real browser, filters and counters work, and the shared header and footer are present.
+- **Accessibility behaviours**: the mobile menu opens and closes, the project window is a labelled dialog that traps focus, closes with Escape and the close button, and returns focus. Animations respect reduced motion, and the role ticker can be paused.
+- **Tools** (`optimize-images.test.js`, `capture.test.js`, `cv.test.js`, `harness.test.js`): the image optimiser, capture tool and CV build do what they say.
+
+---
+
+## How the content works
+
+Nearly everything you read on the site lives in **`assets/js/data.js`**. To change a project, an event, a certificate, a date or a line of text, edit that file and refresh the page. You do not need to touch the HTML.
+
+Comments in `data.js` marked "source" or `S3`, `S5`, `S6` and so on say where each piece of text came from (the old site, a repository README, a verified live link). Keep that habit: when you add or change something, say where it came from, and do not state anything you cannot back up. Where a date is not known, the text is exactly `Date to be confirmed`.
+
+Run `npm test` after editing. The data tests catch missing images, wrong counts and typos in categories.
+
+---
+
+## Images
+
+Source photos stay where they are (`Images/`). The optimiser writes small WebP copies into `media/` and records them in `media/manifest.json`:
+
+```sh
+python3 tools/optimize-images.py --repos <folder that contains your cloned project repos>
+```
+
+It needs Python 3 with Pillow. It does not delete or change your original images; it only writes into `media/`. It is safe to run again, and it removes manifest entries for files it no longer produces. Logos for the Windows apps are taken from the cloned repos, so point `--repos` at the folder that holds them.
+
+---
+
+## Captures (demo clips and screenshots)
+
+Project demo clips and screenshots are recorded from the **running** app with the capture tool:
+
+```sh
+npm run capture -- <slug>
+# or
+node tools/capture/capture.js <slug>
+```
+
+Add `--url <address>` to record an app running somewhere else. It needs Playwright and `ffmpeg`. Each recipe lives in `tools/capture/capture.config.js`. The tool writes `poster.webp`, `shot-1.webp` and so on, and `demo.mp4` and `demo.webm` into `media/projects/<slug>/`.
+
+**Never put capture files in `media/manifest.json`.** The image optimiser removes manifest entries it does not produce, so capture media would be deleted from the manifest on the next run. `data.js` points at the capture files directly, and `tests/data.test.js` checks that they exist and that each clip is at most 2,621,440 bytes.
+
+### Capture status
+
+| Project | Slug | Status |
+| --- | --- | --- |
+| NOVA Journal | `nova-journal` | Captured, recorded from the live site |
+| Open Data Dashboard | `open-data-dashboard` | Captured, recorded from the live site |
+| ThabaShield | `thaba-shield` | Captured, recorded from the live site |
+| Fintech FastAPI Tutorial API | `fintech-api` | Captured, from a local run with demo data |
+| TutorConnect | `tutorconnect` | Pending: needs the Windows PC steps below |
+| StudyLink | `studylink` | Pending: needs the Windows PC steps below |
+| SmartShelf | `smartshelf` | Pending: needs the Windows PC steps below |
+| BusNova | `busnova` | Pending: needs the Windows PC steps below |
+| Logisticore Courier Service | `logisticore` | Pending: needs the Windows PC steps below |
+| PlaceMe | `placeme` | Existing screenshot (no recording) |
+| EduRand | `edurand` | Existing screenshot (no recording) |
+| JourneyMap | `journeymap` | Existing screenshot (no recording) |
+| Laundry Website | `laundry` | Existing screenshot (no recording) |
+
+The "capture kit" for the five pending apps is ready, but it has not been run yet. Until it is, their cards say "Running capture coming soon".
+
+---
+
+## Adding the two held-back exam games later
+
+Two entrance-exam games are held back until the exam has been marked, so they are not on the site and are not named anywhere in this repo. When it is time to add them, it is a data-only change:
+
+1. Add a project entry for each in `assets/js/data.js` (slug, title, tagline, description, stack, repo and so on), following the existing entries.
+2. Record them with the capture tool, or give them a logo or screenshot and mark them `existing-screenshot`, the same way as the other projects.
+3. Update the numbers the data tests expect (the project count of 13 and the category counts in `tests/data.test.js`, and the nine-repo and counter checks if they apply), and the "Public projects" counter input in `data.js` if it changes.
+4. Make sure the privacy tests still pass. The two names are deliberately not in any test list today, so there is nothing to remove there; just do not add them to the "removed project" list in `tests/privacy.test.js`.
+5. Run `npm test`, then commit.
+
+No HTML or CSS change is needed, because the project cards and filters are built from the data.
+
+---
+
+## The privacy guard
+
+Some personal details must never appear on the public site. `tests/privacy.test.js` checks every served file, and this README, against **SHA-256 fingerprints** stored in `tests/fixtures/forbidden.json`. Only the fingerprints are committed, never the private values themselves, so the repo does not reveal them.
+
+If the list of private values changes, regenerate the fingerprints from a plain-text file of `label|value` lines:
+
+```sh
+node tools/hash-forbidden.js <plaintext-file>
+```
+
+Keep that plaintext file outside the repo, or in a git-ignored folder. **Never commit it.** Do not paste the values into any file, issue or commit message either, and do not write them in this README, because the test scans it.
+
+Public contact details on the site are limited to an email address and social links.
 
 ---
 
