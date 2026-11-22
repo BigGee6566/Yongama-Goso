@@ -251,11 +251,6 @@
       return '<li class="service"><h4 class="service__title">' + esc(s.title) + '</h4><p>' + esc(s.text) + '</p></li>';
     }).join(''));
 
-    fill('[data-featured]', FEATURED.map(function (slug) {
-      var p = site.projects.filter(function (x) { return x.slug === slug; })[0];
-      return p ? Render.projectCardHTML(p) : '';
-    }).join(''));
-
     fill('[data-recognition]', Render.recognitionHTML(site.recognition));
 
     fill('[data-approach]', site.approach.map(function (a, i) {
@@ -263,21 +258,108 @@
     }).join(''));
   }
 
-  // Until Task 8 builds the project modal, a featured card's button opens that
-  // project on the Projects page. Task 8 swaps this one function for
-  // initProjectGrid(). Meanwhile the button leads to a page, not a dialog, so
-  // its aria-haspopup="dialog" would mislead screen readers; it is removed.
-  function initFeaturedCards(root) {
+  /* ---- Project grid: shared by Home (featured) and Projects ------------------- */
+
+  // Plays a card's video on hover or keyboard focus (and pauses on leave) where
+  // the device has a hover-capable pointer. On touch devices there is no hover,
+  // so a video plays while at least 60% of it is on screen instead. Under
+  // reduced motion nothing ever autoplays: the poster stays, and the modal's
+  // video has controls for anyone who wants to press play.
+  function initVideoPreviews(root) {
+    if (!root || prefersReducedMotion()) return;
+    var videos = [].slice.call(root.querySelectorAll('.project-card video'));
+    if (!videos.length) return;
+
+    // play() returns a promise that rejects if the browser blocks or interrupts it;
+    // that is harmless here, so the rejection is swallowed.
+    function play(v) { var r = v.play(); if (r && r.catch) r.catch(function () {}); }
+
+    if (window.matchMedia('(hover: hover)').matches) {
+      videos.forEach(function (v) {
+        var card = v.closest('.project-card');
+        card.addEventListener('mouseenter', function () { play(v); });
+        card.addEventListener('mouseleave', function () { v.pause(); });
+        card.addEventListener('focusin', function () { play(v); });
+        card.addEventListener('focusout', function (e) {
+          // Moving focus between the card's own links must not stop the video.
+          if (!card.contains(e.relatedTarget)) v.pause();
+        });
+      });
+    } else if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) play(entry.target); else entry.target.pause();
+        });
+      }, { threshold: 0.6 });
+      videos.forEach(function (v) { io.observe(v); });
+    }
+  }
+
+  // Renders projects as cards into root, makes each card's media button open the
+  // project's modal, and opens the modal for a matching #<slug> in the URL
+  // (this is how Home's old "open on projects.html" links and shared links land).
+  function initProjectGrid(root, projects) {
     if (!root) return;
-    root.querySelectorAll('.project-card__open').forEach(function (b) {
-      b.removeAttribute('aria-haspopup');
+    root.innerHTML = projects.map(Render.projectCardHTML).join('');
+
+    var bySlug = {};
+    projects.forEach(function (p) { bySlug[p.slug] = p; });
+
+    function openProject(p, button) {
+      Modal.open(Render.projectModalHTML(p), { label: p.title, opener: button });
+    }
+
+    root.querySelectorAll('.project-card').forEach(function (card) {
+      var p = bySlug[card.dataset.slug];
+      var button = card.querySelector('.project-card__open');
+      // Render's markup has no accessible name beyond the image alt, so say what
+      // the button does.
+      button.setAttribute('aria-label', 'Open ' + p.title + ' details');
+      button.addEventListener('click', function () { openProject(p, button); });
     });
-    root.addEventListener('click', function (event) {
-      var open = event.target.closest('.project-card__open');
-      if (!open) return;
-      var slug = open.closest('.project-card').dataset.slug;
-      window.location.href = 'projects.html#' + encodeURIComponent(slug);
+
+    initVideoPreviews(root);
+
+    var slug = decodeURIComponent(window.location.hash.slice(1));
+    if (bySlug[slug]) {
+      var card = root.querySelector('.project-card[data-slug="' + slug + '"]');
+      openProject(bySlug[slug], card.querySelector('.project-card__open'));
+    }
+  }
+
+  // The filter chips: exactly one is pressed at a time; the others' cards get
+  // the hidden attribute, and a role="status" line announces the new count.
+  function initFilters(root, projects) {
+    var chips = [].slice.call(document.querySelectorAll('.filters [data-filter]'));
+    var status = document.querySelector('[data-filter-status]');
+    if (!root || !chips.length) return;
+
+    function apply(category) {
+      var keep = {};
+      Render.filterProjects(projects, category).forEach(function (p) { keep[p.slug] = true; });
+      root.querySelectorAll('.project-card').forEach(function (card) {
+        card.hidden = !keep[card.dataset.slug];
+        // A hidden card must not keep playing.
+        var v = card.querySelector('video');
+        if (v && card.hidden) v.pause();
+      });
+      chips.forEach(function (c) {
+        c.setAttribute('aria-pressed', c.dataset.filter === category ? 'true' : 'false');
+      });
+      var n = Object.keys(keep).length;
+      if (status) status.textContent = 'Showing ' + n + (n === 1 ? ' project' : ' projects');
+    }
+
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () { apply(c.dataset.filter); });
     });
+    apply('all');
+  }
+
+  function initProjects() {
+    var root = document.querySelector('[data-projects]');
+    initProjectGrid(root, SITE.projects);
+    initFilters(root, SITE.projects);
   }
 
   // The browser jumps to a #section before app.js has filled the sections
@@ -294,7 +376,9 @@
     renderHome(SITE);
     initTicker(document.querySelector('[data-ticker]'), SITE.roles);
     initCounters(document.querySelector('[data-counters]'));
-    initFeaturedCards(document.querySelector('[data-featured]'));
+    initProjectGrid(document.querySelector('[data-featured]'), FEATURED.map(function (slug) {
+      return SITE.projects.filter(function (p) { return p.slug === slug; })[0];
+    }).filter(Boolean));
     initReveal();
     rescrollToHash();
   }
@@ -302,7 +386,7 @@
   // One entry per <body data-page="...">. Later tasks fill the others in.
   var PAGE_INITS = {
     home: initHome,
-    projects: function () {},
+    projects: initProjects,
     journey: function () {},
     recognition: function () {},
     contact: function () {}

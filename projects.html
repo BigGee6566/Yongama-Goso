@@ -51,6 +51,24 @@
   <section class="page-head">
     <div class="container">
       <h1 class="page-title">Projects</h1>
+      <p class="page-intro">Web apps, mobile apps, APIs and .NET systems I have built, with recordings of each one running. Projects marked &ldquo;Running capture coming soon&rdquo; are waiting for their recording.</p>
+    </div>
+  </section>
+
+  <section class="section projects-section">
+    <div class="container">
+      <div class="filters" role="group" aria-label="Filter projects by type">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="chip" data-filter="web" aria-pressed="false">Web</button>
+        <button type="button" class="chip" data-filter="mobile" aria-pressed="false">Mobile</button>
+        <button type="button" class="chip" data-filter="dotnet" aria-pressed="false">.NET</button>
+        <button type="button" class="chip" data-filter="api" aria-pressed="false">APIs</button>
+      </div>
+      <p class="filter-status" role="status" data-filter-status></p>
+      <div class="projects-grid" data-projects></div>
+      <noscript>
+        <p>This page needs JavaScript to list the projects. You can still browse my work on <a href="https://github.com/BigGee6566">GitHub</a>.</p>
+      </noscript>
     </div>
   </section>
 </main>

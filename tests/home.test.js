@@ -141,14 +141,21 @@ test('counters read 10 5 8 6 once scrolled into view', async () => {
   });
 });
 
-test('#featured shows the four featured cards; until the modal exists, a card opens projects.html#<slug>', async () => {
+test('#featured shows the four featured cards; a card opens the project dialog in place', async () => {
   await onHome(async (page) => {
     const slugs = await page.$$eval('#featured .project-card', (c) => c.map((x) => x.dataset.slug));
     assert.deepEqual(slugs, FEATURED);
     assert.equal(await page.locator('#featured a[href="projects.html"]', { hasText: 'See all projects' }).count(), 1);
 
-    await page.locator('#featured .project-card[data-slug="thaba-shield"] .project-card__open').click();
-    await page.waitForURL('**/projects.html#thaba-shield');
+    const opener = page.locator('#featured .project-card[data-slug="thaba-shield"] .project-card__open');
+    assert.equal(await opener.getAttribute('aria-haspopup'), 'dialog');
+    await opener.click();
+    const dialog = page.locator('[role=dialog][aria-modal=true]');
+    assert.equal(await dialog.count(), 1);
+    assert.ok(squash(await dialog.textContent()).includes('ThabaShield'));
+    assert.ok(page.url().endsWith('/index.html'), 'stayed on Home');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('[role=dialog]').count(), 0);
   });
 });
 
