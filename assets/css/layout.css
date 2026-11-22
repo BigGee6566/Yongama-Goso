@@ -351,7 +351,8 @@ body[data-page="home"] .site-header.is-scrolled {
   border-bottom-right-radius: 50% var(--curve);
 }
 
-.hero::before,
+/* On Home the contours radiate from behind the portrait instead
+   (.hero__portrait::before, in the Home block at the end of this file). */
 .page-head::before {
   content: "";
   position: absolute;
@@ -359,12 +360,6 @@ body[data-page="home"] .site-header.is-scrolled {
   z-index: -1;
   background: url("../img/contours.svg") 72% 40% / cover no-repeat;
   pointer-events: none;
-}
-
-/* Home's header floats over the hero, so the hero pads by its height. */
-.hero {
-  padding-top: calc(var(--header-h) + var(--space-8));
-  padding-bottom: calc(var(--space-8) + var(--curve));
 }
 
 /* Inner pages get a shallower arc than Home: the hero is the main event. */
@@ -631,4 +626,362 @@ body[data-page="home"] .site-header.is-scrolled {
 .footer-base a:hover {
   text-decoration: underline;
   text-decoration-color: var(--vermilion);
+}
+
+/* ==========================================================================
+   Home (index.html): hero, counter strip, About, the split sections and the
+   photo CTA band. The pieces inside them (ticker, counter card, capability
+   and project cards, lists) are in components.css.
+   ========================================================================== */
+
+/* How far the counter card rises into the hero, across its curved edge. */
+.hero,
+.counters {
+  --counter-overlap: clamp(3.5rem, 2rem + 4vw, 5.5rem);
+}
+
+/* The header floats over the hero, so the hero pads by its height on top,
+   and by the curve plus the card's overlap underneath. */
+.hero {
+  padding-top: calc(var(--header-h) + clamp(var(--space-5), 4vw, var(--space-8)));
+  padding-bottom: calc(var(--curve) + var(--counter-overlap) + var(--space-6));
+}
+
+.hero__grid {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 900px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    gap: var(--space-6);
+  }
+}
+
+/* The stacked name: one word per line, set as one tight block. */
+.hero__name {
+  margin-block: var(--space-4) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  font-weight: 900;
+  line-height: .84;
+  letter-spacing: -.005em;
+  text-transform: uppercase;
+}
+
+.hero__name > span {
+  display: block;
+}
+
+/* A vermilion bead sits at cap height after GOSO, as in the logo mark.
+   vertical-align lifts its bottom edge .5em above the baseline. */
+.hero__name > span:last-child::after {
+  content: "";
+  display: inline-block;
+  width: .22em;
+  height: .16em;
+  margin-left: .07em;
+  vertical-align: .52em;
+  background: var(--vermilion);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.hero__lead {
+  max-width: 44ch;
+  color: var(--muted-on-ink);
+  font-size: clamp(1.0625rem, .95rem + .5vw, var(--text-l));  /* 17 to 21px */
+  line-height: 1.5;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+/* The portrait: an arch (a hill's outline), with the contour rings spreading
+   out behind it across the whole hero. The figure sets no z-index on purpose,
+   so its z-index:-1 rings sit in the hero's layer: above the ink, below the
+   text, and trimmed by the hero's overflow:hidden, curved edge included. */
+.hero__portrait {
+  position: relative;
+  width: min(78%, 21rem);
+  margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  .hero__portrait {
+    width: min(100%, 27.5rem);
+    margin: 0 0 0 auto;
+  }
+}
+
+/* contours.svg's innermost ring sits 54% across and 45% down the file, so
+   the translate puts the ring's centre on the portrait's centre. */
+.hero__portrait::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: max(1100px, 125vw);
+  aspect-ratio: 1;
+  translate: -54% -45%;
+  background: url("../img/contours.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.hero__frame {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 999px 999px var(--radius-l) var(--radius-l);
+  background: var(--ink-2);
+}
+
+.hero__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 25%;
+}
+
+/* A second arch in vermilion outline, offset like a second print pass. */
+.hero__portrait::after {
+  content: "";
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border: 2px solid var(--vermilion);
+  border-radius: 999px 999px var(--radius-l) var(--radius-l);
+  pointer-events: none;
+}
+
+/* The location label, pinned over the frame's lower-left edge like a map label. */
+.hero__place {
+  position: absolute;
+  z-index: 2;
+  left: calc(-1 * var(--space-5));
+  bottom: var(--space-6);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  max-width: calc(100% + var(--space-4));
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-on-ink);
+  border-radius: var(--radius-s);
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+
+.hero__place i {
+  color: var(--vermilion);
+}
+
+/* The load sequence: the hero's parts rise in one after another, staggered
+   by animation-delay. Only for people who have not asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__roles,
+  .hero__name > span,
+  .hero__lead,
+  .hero__actions,
+  .hero__frame,
+  .hero__place {
+    animation: hero-rise 900ms var(--ease-out) both;
+  }
+
+  .hero__name > span:first-child { animation-delay: 90ms; }
+  .hero__name > span:last-child { animation-delay: 180ms; }
+  .hero__frame { animation-delay: 240ms; }
+  .hero__lead { animation-delay: 320ms; }
+  .hero__actions { animation-delay: 420ms; }
+  .hero__place { animation-delay: 620ms; }
+
+  .hero__portrait::before,
+  .hero__portrait::after {
+    animation: hero-fade 1600ms ease both 300ms;
+  }
+}
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(32px); }
+}
+
+@keyframes hero-fade {
+  from { opacity: 0; }
+}
+
+/* The counter card straddles the hero's curved bottom edge. */
+.counters {
+  position: relative;
+  z-index: 2;
+  margin-top: calc(-1 * var(--counter-overlap));
+}
+
+/* Without JavaScript, a line at the top of About points to GitHub and the
+   CV, and the boxes app.js would have filled are hidden rather than shown empty. */
+.noscript-note {
+  padding-bottom: var(--space-7);
+  font-weight: 500;
+}
+
+.counters__card:empty,
+.facts:empty,
+.services:has(.services__list:empty) {
+  display: none;
+}
+
+/* ---- Section heads ------------------------------------------------------ */
+.section-head {
+  margin-bottom: var(--space-7);
+}
+
+/* Title on the left, a link on the right (wrapping under it on phones). */
+.section-head--split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+}
+
+/* ---- Asymmetric two-column sections --------------------------------------
+   A narrow head column that stays put (sticky) while the wider body column
+   scrolls past it. About is 5:7 and drops its text below the title; the
+   Recognition and Approach sections are 4:8. */
+.about__grid,
+.split {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 900px) {
+  .about__grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .about__body {
+    padding-top: var(--space-8);   /* starts lower than the title: the asymmetry */
+  }
+
+  .split {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .about__head,
+  .split__head {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-6));
+  }
+}
+
+.about__text {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 62ch;
+  color: var(--muted-on-bone);
+}
+
+.about__lead {
+  color: var(--ink);
+  font-size: clamp(1.1875rem, 1rem + .6vw, 1.5rem);  /* 19 to 24px */
+  font-weight: 500;
+  line-height: var(--leading-snug);
+}
+
+.about__body .link-arrow {
+  margin-top: var(--space-6);
+}
+
+.split__head .link-arrow {
+  margin-top: var(--space-5);
+}
+
+/* ---- Photo CTA band -------------------------------------------------------
+   A full-width event photo, turned to greyscale, under an ink overlay that is
+   darkest behind the words (left) and lets the photo through on the right. */
+.cta-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(var(--space-8), 2rem + 8vw, 11rem);
+  background: var(--ink);
+  color: var(--bone);
+}
+
+.cta-band__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+  filter: grayscale(1) contrast(1.08);
+}
+
+.cta-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(100deg, rgba(14,17,22,.95) 0%, rgba(14,17,22,.88) 50%, rgba(14,17,22,.7) 100%);
+}
+
+/* Wide screens: the photo (a portrait-format shot) fills the right half, so
+   the person on stage stays whole, and the overlay is solid ink behind the
+   words, fading out across the photo's left edge. */
+@media (min-width: 900px) {
+  .cta-band__photo {
+    left: auto;
+    width: 48%;
+    object-position: 50% 30%;
+  }
+
+  .cta-band::before {
+    background: linear-gradient(90deg, var(--ink) 52%, rgba(14,17,22,.55) 74%, rgba(14,17,22,.2) 100%);
+  }
+
+}
+
+.cta-band__title {
+  max-width: 13em;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1.3rem + 2.8vw, 4rem);
+  font-weight: 800;
+  line-height: .98;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+/* Wide screens: keep the words on the solid ink half (the viewport's left
+   52%, less the gutter). */
+@media (min-width: 900px) {
+  .cta-band__title {
+    max-width: min(13em, calc(52vw - var(--gutter) - var(--space-6)));
+  }
+}
+
+.cta-band__hl {
+  color: var(--vermilion);
+}
+
+.cta-band__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-7);
 }

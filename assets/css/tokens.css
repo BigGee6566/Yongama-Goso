@@ -50,7 +50,7 @@
   --text-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);   /* 24 to 36px */
   --text-2xl: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem); /* 36 to 60px: section titles */
   --text-3xl: clamp(3rem, 1.8rem + 5.4vw, 6rem);       /* 48 to 96px: page titles */
-  --text-hero: clamp(4.5rem, 1rem + 15vw, 12.5rem);    /* the stacked name */
+  --text-hero: clamp(64px, 12vw, 180px);               /* the stacked name on Home */
 
   --leading-tight: .9;   /* display type is set tight: it reads as one shape */
   --leading-snug: 1.25;

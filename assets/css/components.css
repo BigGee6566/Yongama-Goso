@@ -1,7 +1,9 @@
 /* ==========================================================================
    components.css: reusable pieces that sit inside the layout.
-   For now: the skip link and buttons. Later tasks add cards, chips, badges,
-   counters, the timeline, the modal, galleries and the form here.
+   The skip link and buttons, then Home's pieces: kicker, arrow link, role
+   ticker, counter card, facts list, capability cards, services, project
+   cards, badges, the recognition and approach lists, and scroll reveals.
+   Later tasks add chips, the timeline, the modal, galleries and the form.
    ========================================================================== */
 
 /* ---- Skip link -----------------------------------------------------------
@@ -76,4 +78,602 @@
 /* Font Awesome icons inside buttons sit at the label's size. */
 .btn i {
   font-size: .95em;
+}
+
+/* ---- Kicker ------------------------------------------------------------
+   The small mono label above a section title, hung from a vermilion bead
+   (the bead is decoration, so vermilion is fine here even on bone; the
+   text itself stays ink, or bone on dark grounds). */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.kicker::before {
+  content: "";
+  width: 10px;
+  height: 8px;
+  background: var(--vermilion);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* ---- Arrow link ----------------------------------------------------------
+   A text link with a vermilion underline and an arrow that nudges on hover.
+   The 44px line height makes it an easy target. It is inline-block, not
+   flex: flex would turn the arrow into a block that inherits the underline. */
+.link-arrow {
+  display: inline-block;
+  line-height: 44px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--vermilion);
+  text-decoration-thickness: 2px;
+  text-underline-offset: .35em;
+}
+
+.link-arrow i {
+  display: inline-block;         /* inline-blocks don't inherit the underline */
+  margin-left: var(--space-1);
+  font-size: .85em;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.link-arrow:hover i {
+  transform: translateX(4px);
+}
+
+/* ---- Role ticker (Home hero) ---------------------------------------------
+   The current role in vermilion display caps. app.js swaps the word with
+   .is-out (old word slides up and away) then .is-in (new word rises from
+   below); clip-path trims both to the line, so nothing shows outside it. */
+.hero__roles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  color: var(--vermilion);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, .95rem + 1.1vw, 1.875rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.ticker {
+  display: block;
+  clip-path: inset(0 -.2em);
+}
+
+.ticker__word {
+  display: block;
+}
+
+.ticker__word.is-out {
+  animation: ticker-out 280ms cubic-bezier(.5, 0, .75, 0) both;
+}
+
+.ticker__word.is-in {
+  animation: ticker-in 420ms var(--ease-out) both;
+}
+
+@keyframes ticker-out {
+  to { opacity: 0; transform: translateY(-100%); }
+}
+
+@keyframes ticker-in {
+  from { opacity: 0; transform: translateY(100%); }
+}
+
+/* The pause control: a small round button drawn in CSS (two bars; a play
+   triangle once pressed), so it never depends on the icon font loading. */
+.ticker-pause {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--line-on-ink);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted-on-ink);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.ticker-pause[hidden] {
+  display: none;   /* display above would otherwise beat the hidden attribute */
+}
+
+.ticker-pause:hover {
+  border-color: var(--vermilion);
+  color: var(--bone);
+}
+
+.ticker-pause::before {
+  content: "";
+  width: 8px;
+  height: 10px;
+  border-inline: 3px solid currentColor;
+}
+
+.ticker-pause[aria-pressed="true"]::before {
+  width: 9px;
+  margin-left: 2px;
+  border: 0;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* ---- Counter card (Home) ---------------------------------------------------
+   Bone card with a strip of the bead band along its top. Two columns on
+   phones, four from 760px. Numbers are mono with tabular figures, so they
+   don't jiggle sideways while counting up. */
+.counters__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  padding: 10px 0 0;
+  list-style: none;
+  overflow: hidden;
+  border-radius: var(--radius-l);
+  background: var(--bone);
+  color: var(--ink);
+  box-shadow: 0 30px 60px -30px rgba(14,17,22,.55), 0 0 0 1px var(--line-on-bone);
+}
+
+.counters__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: url("../img/beadband.svg") 0 0 / 20px 10px repeat-x;
+}
+
+.counter {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4);
+}
+
+/* Hairlines between cells: left edges inside a row, top edges between rows. */
+.counter:nth-child(even) { border-left: 1px solid var(--line-on-bone); }
+.counter:nth-child(n+3) { border-top: 1px solid var(--line-on-bone); }
+
+@media (min-width: 760px) {
+  .counters__card { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .counter { padding: var(--space-6); }
+  .counter + .counter { border-left: 1px solid var(--line-on-bone); }
+  .counter:nth-child(n+3) { border-top: 0; }
+}
+
+.counter__value {
+  font-family: var(--font-mono);
+  font-size: clamp(2.5rem, 1.7rem + 2.6vw, 4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter__label {
+  color: var(--muted-on-bone);
+  font-size: var(--text-s);
+  line-height: 1.35;
+}
+
+/* ---- Facts list (About) ----------------------------------------------------- */
+.facts {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-6) 0 0;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line-on-bone);
+}
+
+.facts dt {
+  color: var(--muted-on-bone);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ---- Capability cards (What I do) -------------------------------------------
+   Bone cards on the bone-2 band, each with its Font Awesome icon in an ink
+   tile (vermilion on ink is 6.1:1). A vermilion rule grows along the bottom
+   on hover. One column on phones, two on tablets, four on wide screens. */
+.capabilities {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 1100px) {
+  .capabilities { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.capability {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5);
+  border: 1px solid var(--line-on-bone);
+  border-radius: var(--radius-m);
+  background: var(--bone);
+}
+
+.capability::after {
+  content: "";
+  position: absolute;
+  left: var(--space-5);
+  right: var(--space-5);
+  bottom: -1px;
+  height: 3px;
+  background: var(--vermilion);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.capability:hover::after {
+  transform: scaleX(1);
+}
+
+.capability__icon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--radius-s);
+  background: var(--ink);
+  color: var(--vermilion);
+  font-size: 1.25rem;
+}
+
+.capability__num {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-5);
+  color: var(--muted-on-bone);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.capability__title {
+  margin-top: var(--space-3);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.capability__text {
+  color: var(--muted-on-bone);
+  font-size: var(--text-s);
+}
+
+/* Services: the old site's three offers, as a quieter row under the cards. */
+.services {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-7);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line-on-bone);
+}
+
+@media (min-width: 900px) {
+  .services { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--space-6); }
+}
+
+.services__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.services__list {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service__title {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-l);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+}
+
+.service p {
+  color: var(--muted-on-bone);
+  font-size: var(--text-s);
+}
+
+/* ---- Project cards ------------------------------------------------------------
+   Markup from Render.projectCardHTML. The media sits inside the card's open
+   button; the body holds the title, tagline, context, stack badges and links.
+   Task 8 adds the modal and the Projects grid; these are the shared basics. */
+/* Home's four featured cards: one column, then two, then a row of four. */
+.featured-grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1100px) {
+  .featured-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-on-bone);
+  border-radius: var(--radius-m);
+  background: var(--bone-2);
+}
+
+.project-card__open {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;              /* trims the image as it zooms on hover */
+  border: 0;
+  border-radius: var(--radius-m) var(--radius-m) 0 0;
+  background: var(--ink);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.project-card__media {
+  display: block;
+  aspect-ratio: 16 / 10;
+}
+
+.project-card__media img,
+.project-card__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.project-card__open:hover .project-card__media img,
+.project-card__open:hover .project-card__media video {
+  transform: scale(1.03);
+}
+
+/* Logos (projects still waiting for a capture on his PC) sit on a light tile. */
+.project-card--logo .project-card__media {
+  background: var(--bone);
+}
+
+.project-card--logo .project-card__media img {
+  object-fit: contain;
+  padding: 12%;
+}
+
+/* The "Running capture coming soon" badge rides on the media's corner. */
+.project-card__open .badge--pending {
+  position: absolute;
+  left: var(--space-3);
+  top: var(--space-3);
+}
+
+/* On a pending card the placeholder image already says this in large type,
+   so the badge is kept for screen readers only. */
+.project-card[data-capture="pending"] .badge--pending {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.project-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.project-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.project-card__context {
+  color: var(--muted-on-bone);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.project-card__links {
+  display: flex;
+  gap: var(--space-5);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.project-card__links:empty {
+  display: none;
+}
+
+.project-card__links a {
+  display: inline-block;
+  line-height: 24px;              /* at least 24px tall: WCAG 2.2 target size */
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--vermilion);
+  text-decoration-thickness: 2px;
+  text-underline-offset: .3em;
+}
+
+.project-card__links a::after {
+  content: "\2197";              /* ↗: opens elsewhere */
+  display: inline-block;         /* inline-blocks don't inherit the underline */
+  margin-left: 3px;
+  font-size: .9em;
+}
+
+/* ---- Badges ------------------------------------------------------------------ */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid var(--line-on-bone);
+  border-radius: var(--radius-s);
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  line-height: 1.4;
+}
+
+.badge--pending {
+  border-color: transparent;
+  background: var(--ink);
+  color: var(--bone);
+}
+
+/* ---- Recognition list ------------------------------------------------------------
+   Markup from Render.recognitionHTML: numbered rows between hairlines. */
+.recognition {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: recognition;
+  border-top: 1px solid var(--line-on-bone);
+}
+
+.recognition > li {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-5) 0 var(--space-5) 3.25rem;
+  border-bottom: 1px solid var(--line-on-bone);
+  counter-increment: recognition;
+}
+
+.recognition > li::before {
+  content: counter(recognition, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: calc(var(--space-5) + .35em);
+  color: var(--muted-on-bone);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.recognition__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.recognition__detail {
+  max-width: 60ch;
+  color: var(--muted-on-bone);
+}
+
+.recognition__when {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+/* ---- Approach (Home) ---------------------------------------------------------------
+   His three working principles, set large, each numbered in mono. */
+.approach {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: approach;
+}
+
+.approach > li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-4);
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--line-on-bone);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  counter-increment: approach;
+}
+
+.approach > li:last-child {
+  border-bottom: 1px solid var(--line-on-bone);
+}
+
+.approach > li::before {
+  content: counter(approach, decimal-leading-zero);
+  padding-top: .55em;
+  color: var(--muted-on-bone);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+/* ---- Scroll reveal -----------------------------------------------------------------
+   app.js (initReveal) adds .reveal-ready to <html> only when it can watch the
+   page, then .is-visible to each [data-reveal] element as it scrolls into view.
+   --reveal-delay staggers siblings. Nothing here applies under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 700ms var(--ease-out) var(--reveal-delay, 0ms),
+      transform 700ms var(--ease-out) var(--reveal-delay, 0ms);
+  }
+
+  .reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
 }

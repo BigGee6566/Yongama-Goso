@@ -48,9 +48,121 @@
 </header>
 
 <main id="main">
-  <section class="hero">
+  <!-- Home. The fixed copy (name, buttons, CTA) is written here; app.js (initHome) fills
+       every element marked data-* below from SITE in data.js, through render.js. -->
+  <section class="hero" id="hero">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <!-- Role ticker. The cycling word is hidden from screen readers; they hear the
+             whole list once, from .hero__roles-all, instead of a change every few seconds. -->
+        <p class="hero__roles" data-ticker-root>
+          <button class="ticker-pause" type="button" aria-pressed="false" data-ticker-pause hidden>
+            <span class="visually-hidden">Pause the role animation</span>
+          </button>
+          <span class="hero__roles-all visually-hidden" aria-live="polite" data-ticker-all>Chief Problem Solver</span>
+          <span class="ticker" aria-hidden="true"><span class="ticker__word" data-ticker>Chief Problem Solver</span></span>
+        </p>
+        <h1 class="hero__name"><span>Yongama</span> <span>Goso</span></h1>
+        <p class="hero__lead">I build complete digital products, from clean, responsive interfaces to reliable backends. Through Gonex Innovation Hub, which I founded in Sterkspruit, I bring practical digital skills to young people and women.</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="contact.html">Work with me <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a class="btn btn--ghost" href="projects.html">View projects</a>
+          <a class="btn btn--ghost" href="https://www.linkedin.com/in/yongama-goso-85aaaa2b0" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i> LinkedIn</a>
+        </div>
+      </div>
+      <figure class="hero__portrait">
+        <div class="hero__frame">
+          <img src="media/profile/portrait-1200.webp"
+               srcset="media/profile/portrait-640.webp 640w, media/profile/portrait-1200.webp 1200w"
+               sizes="(min-width: 900px) 440px, 320px"
+               width="1200" height="1321" alt="Portrait of Yongama Goso" fetchpriority="high">
+        </div>
+        <figcaption class="hero__place"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> KuGompo City (East London), Eastern Cape</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="counters" class="counters">
     <div class="container">
-      <h1 class="page-title">Yongama Goso</h1>
+      <h2 class="visually-hidden">At a glance</h2>
+      <ul class="counters__card" data-counters></ul>
+    </div>
+  </section>
+
+  <section id="about" class="section about">
+    <noscript>
+      <p class="container noscript-note">This page needs JavaScript for some sections. You can still browse my work on <a href="https://github.com/BigGee6566">GitHub</a> or <a href="Yongama_Goso_CV.pdf" download>download my CV</a>.</p>
+    </noscript>
+    <div class="container about__grid">
+      <div class="about__head" data-reveal>
+        <p class="kicker">About me</p>
+        <h2 class="section-title">A problem solver from Sterkspruit</h2>
+        <dl class="facts" data-about-facts></dl>
+      </div>
+      <div class="about__body" data-reveal>
+        <div class="about__text" data-about-text></div>
+        <a class="link-arrow" href="journey.html">Follow my journey <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="what-i-do" class="section section--bone-2">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="kicker">Capabilities</p>
+        <h2 class="section-title">What I do</h2>
+      </div>
+      <ol class="capabilities" data-capabilities></ol>
+      <div class="services" data-reveal>
+        <h3 class="services__title">Services I offer</h3>
+        <ul class="services__list" data-services></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="featured" class="section">
+    <div class="container">
+      <div class="section-head section-head--split" data-reveal>
+        <div>
+          <p class="kicker">Selected projects</p>
+          <h2 class="section-title">Featured work</h2>
+        </div>
+        <a class="link-arrow" href="projects.html">See all projects <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="featured-grid" data-featured></div>
+    </div>
+  </section>
+
+  <section id="recognition-highlights" class="section section--bone-2">
+    <div class="container split">
+      <div class="split__head" data-reveal>
+        <p class="kicker">Highlights</p>
+        <h2 class="section-title">Recognition</h2>
+        <a class="link-arrow" href="recognition.html">More recognition <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="split__body" data-recognition data-reveal></div>
+    </div>
+  </section>
+
+  <section id="cta" class="cta-band on-ink">
+    <img class="cta-band__photo" src="media/events/startup-grind/07-1400.webp" width="1050" height="1400"
+         alt="On stage at the Startup Grind All-Star Pitch Battle in East London" loading="lazy">
+    <div class="container cta-band__inner" data-reveal>
+      <h2 class="cta-band__title">I'm open to software development opportunities, and <span class="cta-band__hl">Gonex Innovation Hub</span> welcomes partners, funders and schools.</h2>
+      <div class="cta-band__actions">
+        <a class="btn btn--primary" href="contact.html">Work with me <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a class="btn btn--ghost" href="recognition.html#gonex">Partner with Gonex</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="approach" class="section">
+    <div class="container split">
+      <div class="split__head" data-reveal>
+        <p class="kicker">How I work</p>
+        <h2 class="section-title">My approach</h2>
+      </div>
+      <ol class="approach" data-approach></ol>
     </div>
   </section>
 </main>
