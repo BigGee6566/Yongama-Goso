@@ -72,6 +72,8 @@ The script checks all of these first and stops with a message naming anything mi
 
 ### The command
 
+Run it with `-WhatIf` first, then one slug at a time (for example `-Slugs smartshelf`), before recording all five.
+
 ```powershell
 .\tools\capture\capture-windows.ps1 -ReposRoot C:\path\to\the\checkouts
 ```
@@ -80,12 +82,12 @@ Add `-WhatIf` for a dry run that only prints the plan, `-Slugs studylink,smartsh
 
 ### What it does
 
-For each app: it creates a new database named `<App>_PortfolioDemo` (`StudyLink_PortfolioDemo`, `SmartShelf_PortfolioDemo`, `BusNova_PortfolioDemo`, `Logisticore_PortfolioDemo` in SQL Server, `TutorConnect_PortfolioDemo` in local PostgreSQL) from the repo's own scripts, copies the project to `%TEMP%\portfolio-capture\<slug>`, points the copy at that database, builds it with MSBuild, starts IIS Express on a free port, runs `node tools/capture/capture.js <slug> --url http://localhost:<port>/`, and stops IIS Express. The demo login is read at run time from the repo's own docs (SmartShelf `README.md`, BusNova and Logisticore `CREDENTIALS.md`); for StudyLink and TutorConnect the script generates a throw-away password and creates the admin account through the app. If no login is found, only the public screens are recorded.
+For each app: it creates a new database named `<App>_PortfolioDemo` (`StudyLink_PortfolioDemo`, `SmartShelf_PortfolioDemo`, `BusNova_PortfolioDemo`, `Logisticore_PortfolioDemo` in SQL Server, `tutorconnect_portfoliodemo` in local PostgreSQL, lower case on purpose) from the repo's own scripts, copies the project to `%TEMP%\portfolio-capture\<slug>`, points the copy at that database, builds it with MSBuild, starts IIS Express on a free port, runs `node tools/capture/capture.js <slug> --url http://localhost:<port>/`, and stops IIS Express. The demo login is read at run time from the repo's own docs (SmartShelf `README.md`, BusNova and Logisticore `CREDENTIALS.md`); for StudyLink and TutorConnect the script generates a throw-away password and creates the admin account through the app. If no login is found, only the public screens are recorded.
 
 ### What it does not touch
 
-- Your existing databases: it only ever creates, and with `-Force` drops, databases whose name ends in `_PortfolioDemo`. The repos' SQL scripts hard-code their own database names, so each is rewritten in a temporary copy and checked before it runs; the run aborts if anything would still target another database.
-- The repositories' working trees: every change (connection strings, cookie settings, local settings) is made in the temporary copy, which is deleted at the end (`-KeepTemp` keeps it).
+- Your existing databases: it only ever creates, and with `-Force` drops, databases whose name ends in `_PortfolioDemo`. The repos' SQL scripts hard-code their own database names, so every occurrence of the original name is rewritten to the demo name in a temporary copy, and the copy only runs if it then passes a strict check: the original name appears nowhere, there are no sqlcmd directives (`:connect`, `:r`, `!!`), and no statement names another database. TutorConnect's PostgreSQL script must contain no `\` meta-commands and no database, role or server statements. Config patching also fails closed (no connection string found, `configSource`, or a string with no database name aborts the run), and `-PgHost` must be localhost, 127.0.0.1 or ::1.
+- The repositories' working trees: every change (connection strings, cookie settings, local settings) is made in the temporary copy, which is always deleted at the end, even after an error or Ctrl+C (`-KeepTemp` keeps it; those files may contain your local PostgreSQL password).
 - The hosted Supabase database: TutorConnect is pointed at your local PostgreSQL, and the script refuses to start if any config it will use names a hosted database.
 - `assets/js/data.js`: the script never edits it, and no credential is written to any file in this repo.
 

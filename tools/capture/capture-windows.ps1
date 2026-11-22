@@ -44,7 +44,9 @@
   _PortfolioDemo can ever be dropped.
 
 .PARAMETER KeepTemp
-  Keep $env:TEMP\portfolio-capture after the run (it holds a throw-away demo password).
+  Keep $env:TEMP\portfolio-capture after the run. Those files may contain the local database
+  password (PGPASSWORD) and the generated demo passwords; by default they are always deleted,
+  even after an error or Ctrl+C.
 
 .EXAMPLE
   .\tools\capture\capture-windows.ps1 -ReposRoot C:\Users\me\source\repos -WhatIf
@@ -88,7 +90,7 @@ $BusNovaFreshMigrations = @(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19)
 
 $Apps = [ordered]@{
     tutorconnect = @{
-        Repo = 'TutorConnect'; Db = 'TutorConnect_PortfolioDemo'; Engine = 'postgres'
+        Repo = 'TutorConnect'; Db = 'tutorconnect_portfoliodemo'; Engine = 'postgres'
         SiteDir = ''; Project = 'TutorConnect.vbproj'; ReadyPath = '/Account/Login.aspx'
     }
     studylink    = @{
@@ -115,6 +117,7 @@ $Apps = [ordered]@{
     logisticore  = @{
         Repo = 'C-Sharp-Shooter'; Db = 'Logisticore_PortfolioDemo'; Engine = 'sqlserver'; OrigDb = 'Logisticore'
         SiteDir = ''; Project = 'FortCarrier&Logistics.csproj'; ReadyPath = '/Default.aspx'
+        ScriptCreatesDb = $true   # its script refuses to run if the database already exists, so it is not pre-created
         # The "clean database + full demo data" script; it already creates every table.
         Scripts = @('App_Data\SEEDDATASCHEMA.sql')
     }
@@ -331,12 +334,12 @@ function Test-PgDatabaseExists([string]$Name) {
 
 function New-PgDatabase([string]$Name) {
     Assert-DemoName $Name
-    Invoke-Psql 'postgres' @('-c', "CREATE DATABASE `"$Name`"") | Out-Null
+    Invoke-Psql 'postgres' @('-c', "CREATE DATABASE $Name") | Out-Null
 }
 
 function Remove-PgDatabase([string]$Name) {
     Assert-DemoName $Name
-    Invoke-Psql 'postgres' @('-c', "DROP DATABASE `"$Name`" WITH (FORCE)") | Out-Null
+    Invoke-Psql 'postgres' @('-c', "DROP DATABASE $Name WITH (FORCE)") | Out-Null
 }
 
 # ---------------------------------------------------------------------------------------------
@@ -344,46 +347,76 @@ function Remove-PgDatabase([string]$Name) {
 # Run unchanged they would hit the owner's real catalog, so each is rewritten to the demo name in
 # a temporary copy and then checked: if anything still targets another database, the run aborts.
 # ---------------------------------------------------------------------------------------------
+# One pass that tells string literals from comments correctly (a "/*" inside a string is not a
+# comment). Comments are always dropped; string literals are blanked unless KeepStrings.
+function Get-SqlStripped([string]$Text, [bool]$KeepStrings) {
+    $keep = $KeepStrings
+    return [regex]::Replace($Text, "'(?:[^']|'')*'|--[^\r\n]*|/\*[\s\S]*?\*/", {
+            param($m)
+            if ($m.Value.StartsWith("'")) { if ($keep) { return $m.Value } else { return "''" } }
+            return ' '
+        })
+}
+
 function Convert-SqlScriptForDemo([string]$SourcePath, [string]$DestPath, [string]$OriginalDb, [string]$DemoDb) {
     Assert-DemoName $DemoDb
     Assert-UnderTemp $DestPath
     $text = [System.IO.File]::ReadAllText($SourcePath)
-    $n = [regex]::Escape($OriginalDb)
-    $text = [regex]::Replace($text, "(?im)(\bUSE\s+)\[?$n\]?(?![\w])", ('${1}[' + $DemoDb + ']'))
-    $text = [regex]::Replace($text, "(?i)(DB_ID\(\s*N?')$n(')", ('${1}' + $DemoDb + '${2}'))
-    $text = [regex]::Replace($text, "(?i)(\b(?:CREATE|DROP|ALTER|BACKUP|RESTORE)\s+DATABASE\s+)\[?$n\]?(?![\w])", ('${1}[' + $DemoDb + ']'))
-    $text = [regex]::Replace($text, "(?i)(\bDATABASE::)\[?$n\]?(?![\w])", ('${1}[' + $DemoDb + ']'))
-    Assert-SqlTargetsOnlyDemo $text $DemoDb $SourcePath
+    # Every whole-word occurrence of the original name (USE, CREATE/DROP DATABASE, DB_ID('..'),
+    # three-part names, quoted or bracketed, dynamic SQL inside strings, comments, PRINT text)
+    # becomes the demo name, so nothing can point at the real catalog by any route.
+    $text = [regex]::Replace($text, ('(?i)(?<![\w])' + [regex]::Escape($OriginalDb) + '(?![\w])'), $DemoDb)
+    Assert-SqlTargetsOnlyDemo $text $OriginalDb $DemoDb $SourcePath
     $dir = Split-Path -Parent $DestPath
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
     [System.IO.File]::WriteAllText($DestPath, $text, (New-Object System.Text.UTF8Encoding($true)))
 }
 
-function Assert-SqlTargetsOnlyDemo([string]$Text, [string]$DemoDb, [string]$Label) {
+# A whitelist: the rewritten script is accepted only if the original name is gone everywhere,
+# there are no sqlcmd directives, and no statement names another database.
+function Assert-SqlTargetsOnlyDemo([string]$Text, [string]$OriginalDb, [string]$DemoDb, [string]$Label) {
     $problems = New-Object System.Collections.Generic.List[string]
-    $ok = @($DemoDb.ToLowerInvariant(), 'current')
+    $demo = $DemoDb.ToLowerInvariant()
+    $ok = @($demo, 'current')
 
-    # Checked on the raw text, comments included: nothing may create, drop, alter, back up or
-    # restore a database other than the demo one.
+    # 1. The original name must not survive ANYWHERE (code, strings, comments), as a whole word
+    #    or as the start of a longer identifier such as <Name>_Test.
+    foreach ($m in [regex]::Matches($Text, ('(?i)(?<![\w])' + [regex]::Escape($OriginalDb) + '(?![\w])'))) { $problems.Add('original name: ' + $m.Value) }
+    $codeNoStrings = Get-SqlStripped $Text $false
+    foreach ($m in [regex]::Matches($codeNoStrings, ('(?i)(?<![\w])' + [regex]::Escape($OriginalDb) + '\w+'))) {
+        if ($m.Value.ToLowerInvariant() -ne $demo) { $problems.Add('similar name: ' + $m.Value) }
+    }
+
+    # 2. sqlcmd directives (:connect, :r, !!cmd ...) are never allowed, on any line.
+    foreach ($m in [regex]::Matches($Text, '(?m)^\s*(:|!!)\S*')) { $problems.Add('sqlcmd directive: ' + $m.Value.Trim()) }
+
+    # 3. No statement may create, drop, alter, back up or restore another database.
     foreach ($m in [regex]::Matches($Text, '(?i)\b(?:DROP|ALTER|CREATE|RESTORE|BACKUP)\s+DATABASE\s+\[?(\w+)\]?')) {
         if ($ok -notcontains $m.Groups[1].Value.ToLowerInvariant()) { $problems.Add($m.Value) }
     }
     foreach ($m in [regex]::Matches($Text, '(?i)\bDATABASE::\[?(\w+)')) {
-        if ($m.Groups[1].Value.ToLowerInvariant() -ne $DemoDb.ToLowerInvariant()) { $problems.Add($m.Value) }
+        if ($m.Groups[1].Value.ToLowerInvariant() -ne $demo) { $problems.Add($m.Value) }
     }
     foreach ($m in [regex]::Matches($Text, "(?i)DB_ID\(\s*N?'([^']+)'")) {
-        if ($m.Groups[1].Value.ToLowerInvariant() -ne $DemoDb.ToLowerInvariant()) { $problems.Add($m.Value) }
+        if ($m.Groups[1].Value.ToLowerInvariant() -ne $demo) { $problems.Add($m.Value) }
     }
 
-    # Checked on the code only (comments and string literals removed).
-    $code = [regex]::Replace($Text, '/\*[\s\S]*?\*/', '')
-    $code = [regex]::Replace($code, '--[^\r\n]*', '')
-    $code = [regex]::Replace($code, "'(?:[^']|'')*'", "''")
-    foreach ($m in [regex]::Matches($code, '(?im)^\s*USE\s+\[?(\w+)\]?')) {
-        $name = $m.Groups[1].Value.ToLowerInvariant()
-        if ($name -ne $DemoDb.ToLowerInvariant() -and $name -ne 'master') { $problems.Add($m.Value.Trim()) }
+    # 4. USE may name only the demo database or master (checked in code and in strings, comments dropped).
+    $codeWithStrings = Get-SqlStripped $Text $true
+    # (A USE inside a string counts when it ends at ';' or a line break, or is the whole literal;
+    # ordinary prose such as 'will use again.' does not.)
+    $usePatterns = @(
+        '(?i)(?<![\w@#.])USE\s+[\[''"]?(\w+)[\]"]?(?=\s*(?:;|\r?\n|$))',
+        "(?i)'\s*USE\s+[\[""]?(\w+)[\]""]?\s*'"
+    )
+    foreach ($pattern in $usePatterns) {
+        foreach ($m in [regex]::Matches($codeWithStrings, $pattern)) {
+            $name = $m.Groups[1].Value.ToLowerInvariant()
+            if ($name -ne $demo -and $name -ne 'master') { $problems.Add($m.Value.Trim()) }
+        }
     }
-    foreach ($m in [regex]::Matches($code, '(?i)\b(DROP\s+LOGIN|CREATE\s+LOGIN|ALTER\s+LOGIN|xp_cmdshell|sp_configure|SHUTDOWN|sp_detach_db|sp_attach_db|sp_addsrvrolemember)\b')) {
+    # 5. Nothing that reaches outside the database or the server.
+    foreach ($m in [regex]::Matches($codeWithStrings, '(?i)\b(DROP\s+LOGIN|CREATE\s+LOGIN|ALTER\s+LOGIN|xp_cmdshell|sp_configure|SHUTDOWN|sp_detach_db|sp_attach_db|sp_addsrvrolemember|OPENROWSET|OPENDATASOURCE|OPENQUERY|sp_addlinkedserver)\b')) {
         $problems.Add($m.Value)
     }
 
@@ -392,7 +425,34 @@ function Assert-SqlTargetsOnlyDemo([string]$Text, [string]$DemoDb, [string]$Labe
     }
 }
 
-function Invoke-SqlScripts([string]$SiteRoot, [string[]]$Patterns, $App, [string]$WorkDir) {
+# TutorConnect's PostgreSQL script: Supabase-only role grants are removed in the temp copy (the
+# roles do not exist locally and are cluster-wide, so they are not created), then it must pass
+# a whitelist: no psql meta-commands and no statement that touches databases, roles or the server.
+function Convert-PgScriptForDemo([string]$SourcePath, [string]$DestPath) {
+    Assert-UnderTemp $DestPath
+    $text = [System.IO.File]::ReadAllText($SourcePath)
+    $text = [regex]::Replace($text, '(?im)^[ \t]*REVOKE\s+ALL\s+ON\s+ALL\s+(?:TABLES|FUNCTIONS)\s+IN\s+SCHEMA\s+dbo\s+FROM\s+anon\s*,\s*authenticated\s*;[ \t]*\r?$', '-- (Supabase-only role revoke removed for the local demo)')
+    Assert-PgScriptSafe $text $SourcePath
+    $dir = Split-Path -Parent $DestPath
+    if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    [System.IO.File]::WriteAllText($DestPath, $text, (New-Object System.Text.UTF8Encoding($false)))
+}
+
+function Assert-PgScriptSafe([string]$Text, [string]$Label) {
+    $problems = New-Object System.Collections.Generic.List[string]
+    foreach ($m in [regex]::Matches($Text, '(?m)^\s*\\\S*')) { $problems.Add('psql meta-command: ' + $m.Value.Trim()) }
+    $code = [regex]::Replace($Text, "'(?:[^']|'')*'|--[^\r\n]*|/\*[\s\S]*?\*/", { param($m) if ($m.Value.StartsWith("'")) { "''" } else { ' ' } })
+    foreach ($m in [regex]::Matches($code, '(?i)\b(?:CREATE|DROP|ALTER)\s+(?:DATABASE|ROLE|USER|GROUP|TABLESPACE|SERVER|SYSTEM)\b')) { $problems.Add($m.Value) }
+    foreach ($m in [regex]::Matches($code, '(?i)\b(?:SET\s+(?:SESSION\s+AUTHORIZATION|ROLE)|COPY\b[^;]*\bPROGRAM|dblink|postgres_fdw|pg_read_file|pg_read_binary_file|lo_import|lo_export|pg_terminate_backend)\b')) { $problems.Add($m.Value) }
+    foreach ($m in [regex]::Matches($code, '(?i)\bCREATE\s+EXTENSION\s+(?:IF\s+NOT\s+EXISTS\s+)?(\w+)')) {
+        if ($m.Groups[1].Value.ToLowerInvariant() -ne 'citext') { $problems.Add($m.Value) }
+    }
+    if ($problems.Count -gt 0) {
+        throw ("Safety check failed for $Label (PostgreSQL): " + (($problems | Select-Object -Unique) -join '; ') + '. Nothing was run.')
+    }
+}
+
+function Invoke-SqlScripts([string]$SiteRoot, [string[]]$Patterns, $App, [string]$WorkDir, [string]$Context) {
     foreach ($pattern in $Patterns) {
         $files = @(Get-ChildItem -Path (Join-Path $SiteRoot $pattern) -File -ErrorAction SilentlyContinue | Sort-Object Name)
         if ($files.Count -eq 0) { throw "The repo has no script matching $pattern (looked in $SiteRoot)." }
@@ -400,8 +460,8 @@ function Invoke-SqlScripts([string]$SiteRoot, [string[]]$Patterns, $App, [string
             $dest = Join-Path (Join-Path $WorkDir 'sql') $f.Name
             Convert-SqlScriptForDemo $f.FullName $dest $App.OrigDb $App.Db
             Write-Note ('running ' + $f.Name)
-            # -d names the demo database for scripts with no USE line; -I = QUOTED_IDENTIFIER ON; -f 65001 = UTF-8 input.
-            Invoke-SqlcmdTool @('-d', $App.Db, '-I', '-f', '65001', '-i', $dest) | Out-Null
+            # -d names the demo database for scripts with no USE line (master when the script creates it); -I = QUOTED_IDENTIFIER ON; -f 65001 = UTF-8 input.
+            Invoke-SqlcmdTool @('-d', $Context, '-I', '-f', '65001', '-i', $dest) | Out-Null
         }
     }
 }
@@ -459,6 +519,10 @@ function Update-WebConfig([string]$Path, $App, [string]$PgConnectionNoPassword) 
     $xml.PreserveWhitespace = $true
     $xml.Load($Path)
 
+    # Fail closed: a connection that cannot be seen and patched could fall back to the real database.
+    if (@($xml.SelectNodes('//*[@configSource]')).Count -gt 0) { throw "Safety check: $Path uses configSource, so its connection strings live in another file. Nothing was started." }
+    if (@($xml.SelectNodes('//connectionStrings/add')).Count -eq 0) { throw "Safety check: $Path has no connection-string entries to patch. Nothing was started." }
+
     foreach ($node in @($xml.SelectNodes('//connectionStrings/add'))) {
         $cs = $node.GetAttribute('connectionString')
         if ($App.Engine -eq 'postgres') {
@@ -477,13 +541,17 @@ function Update-WebConfig([string]$Path, $App, [string]$PgConnectionNoPassword) 
     # Verify what was written: every catalog is the demo one, and no hosted database is named.
     $check = New-Object System.Xml.XmlDocument
     $check.Load($Path)
+    $checked = 0
     foreach ($node in @($check.SelectNodes('//connectionStrings/add'))) {
         $cs = $node.GetAttribute('connectionString')
         if ($cs -match '(?i)(Initial Catalog|Database)\s*=\s*([^;]+)') {
             if ($Matches[2].Trim() -ne $App.Db) { throw "Safety check: connection '$($node.GetAttribute('name'))' still targets '$($Matches[2].Trim())'." }
+            $checked++
         }
+        else { throw "Safety check: connection '$($node.GetAttribute('name'))' names no database (Initial Catalog/Database), so it could use the login's default. Nothing was started." }
         if ($cs -match '(?i)supabase|pooler\.') { throw "Safety check: connection '$($node.GetAttribute('name'))' names a hosted database." }
     }
+    if ($checked -eq 0) { throw "Safety check: no connection string in $Path was verified. Nothing was started." }
 }
 
 function Write-LocalSettings([string]$SiteRoot, [string]$Slug, $App, [string]$DemoPassword, [string]$PgConnection) {
@@ -640,13 +708,17 @@ function Invoke-App([string]$Slug, $Tools) {
             # The schema script targets Supabase, which pre-creates the "extensions" schema.
             Invoke-Psql $app.Db @('-c', 'CREATE SCHEMA IF NOT EXISTS extensions') | Out-Null
             $schema = Join-Path $siteRoot 'App_Data\Scripts\postgres\01_CreateSchema.sql'
-            Write-Note 'running postgres\01_CreateSchema.sql (this connection is the demo database only)'
-            Invoke-Psql $app.Db @('-f', $schema) | Out-Null
+            $schemaSafe = Join-Path (Join-Path $work 'sql') '01_CreateSchema.sql'
+            Convert-PgScriptForDemo $schema $schemaSafe
+            Write-Note 'running postgres\01_CreateSchema.sql (checked copy; this connection is the demo database only)'
+            Invoke-Psql $app.Db @('-f', $schemaSafe) | Out-Null
         }
         else {
             if ((Test-SqlDatabaseExists $app.Db) -and $Force) { Remove-SqlDatabase $app.Db }
-            New-SqlDatabase $app.Db; $dbCreated = $true
-            Invoke-SqlScripts $siteRoot $app.Scripts $app $work
+            $context = $app.Db
+            if ($app.ContainsKey('ScriptCreatesDb')) { $context = 'master' } else { New-SqlDatabase $app.Db }
+            $dbCreated = $true
+            Invoke-SqlScripts $siteRoot $app.Scripts $app $work $context
         }
 
         # ---- build ----
@@ -684,13 +756,13 @@ function Invoke-App([string]$Slug, $Tools) {
                 # The DEBUG build seeds the demo accounts on first start, with the generated Seed:DevPassword.
                 $login = @{ User = 'admin'; Pass = $demoPass }
                 Write-Step 'studylink : loading the two-month sample data'
-                Invoke-SqlScripts $siteRoot $app.PostScripts $app $work
+                Invoke-SqlScripts $siteRoot $app.PostScripts $app $work $app.Db
             }
             'smartshelf' {
                 $login = Get-DocumentedLogin (Join-Path $siteRoot 'README.md') 'Username' { param($r) $r['Role'] -like 'Store Manager*' }
             }
             'busnova' {
-                $login = Get-DocumentedLogin (Join-Path $siteRoot 'CREDENTIALS.md') 'Username' { param($r) $r['Username'] -eq 'admin' }
+                $login = Get-DocumentedLogin (Join-Path $siteRoot 'CREDENTIALS.md') 'Email' { param($r) $r['Username'] -eq 'admin' }   # BusNova signs in by Email, staff included
             }
             'logisticore' {
                 $login = Get-DocumentedLogin (Join-Path $siteRoot 'CREDENTIALS.md') 'Email' { param($r) $r['Role'] -like '*Admin*' }
@@ -734,6 +806,10 @@ function Invoke-App([string]$Slug, $Tools) {
 # Main
 # =============================================================================================
 if ($PSVersionTable.PSVersion.Major -lt 5) { throw 'PowerShell 5.1 or newer is required.' }
+# Before ANY probe: TutorConnect must use a local PostgreSQL server, never a remote or hosted one.
+if (@('localhost', '127.0.0.1', '::1', '[::1]') -notcontains $PgHost.Trim().ToLowerInvariant()) {
+    throw "-PgHost '$PgHost' is not a loopback address. Only localhost, 127.0.0.1 or ::1 are accepted, so the demo can never reach a hosted database."
+}
 if (-not (Test-Path $ReposRoot)) { throw "ReposRoot '$ReposRoot' does not exist." }
 $Slugs = @($Slugs | Select-Object -Unique)
 
@@ -759,19 +835,27 @@ if ($conflicts.Count -gt 0) {
 }
 
 $ok = @(); $failed = @()
-foreach ($slug in $Slugs) {
-    $app = $Apps[$slug]
-    $action = "Create $($app.Db), build a temporary copy, run IIS Express, record media/projects/$slug"
-    if (-not $PSCmdlet.ShouldProcess($slug, $action)) {
-        Write-Note "plan for ${slug}: copy to $TempRoot\$slug; patch the COPY's Web.config to $($app.Db); build; IIS Express on a free port; node tools/capture/capture.js $slug --url http://localhost:<port>/"
-        continue
+try {
+    foreach ($slug in $Slugs) {
+        $app = $Apps[$slug]
+        $action = "Create $($app.Db), build a temporary copy, run IIS Express, record media/projects/$slug"
+        if (-not $PSCmdlet.ShouldProcess($slug, $action)) {
+            Write-Note "plan for ${slug}: copy to $TempRoot\$slug; patch the COPY's Web.config to $($app.Db); build; IIS Express on a free port; node tools/capture/capture.js $slug --url http://localhost:<port>/"
+            continue
+        }
+        Invoke-App $slug $tools
+        if ($script:AppOk) { $ok += $slug } else { $failed += $slug }
     }
-    Invoke-App $slug $tools
-    if ($script:AppOk) { $ok += $slug } else { $failed += $slug }
 }
-
-if ($PSCmdlet.ShouldProcess($TempRoot, 'Remove the temporary copies')) {
-    if (-not $KeepTemp -and (Test-Path $TempRoot)) { Remove-Item -Recurse -Force $TempRoot -ErrorAction SilentlyContinue }
+finally {
+    # Always, even after an error or Ctrl+C: the temp copies hold the local PostgreSQL password and
+    # the generated demo passwords. Only -KeepTemp leaves them behind.
+    if (-not $KeepTemp -and -not $WhatIfPreference -and (Test-Path $TempRoot)) {
+        Assert-UnderTemp (Join-Path $TempRoot 'x')
+        Remove-Item -Recurse -Force $TempRoot -ErrorAction SilentlyContinue -Confirm:$false -WhatIf:$false
+        if (Test-Path $TempRoot) { Write-Warn "Could not fully delete $TempRoot. Delete it by hand: it may hold a local database password." }
+    }
+    elseif ($KeepTemp -and (Test-Path $TempRoot)) { Write-Warn "Kept $TempRoot (-KeepTemp). It may contain your local PostgreSQL password; delete it when done." }
 }
 
 if ($WhatIfPreference) { Write-Step 'Dry run only: nothing was created, built or recorded.'; return }
