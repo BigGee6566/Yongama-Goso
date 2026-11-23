@@ -30,7 +30,7 @@ How the code is laid out:
 - `assets/js/app.js` and `assets/js/modal.js` add behaviour (menu, filters, the project window, counters, scroll effects).
 - `assets/css/tokens.css`, `layout.css` and `components.css` hold the styles. Colours, fonts and spacing are defined once in `tokens.css`.
 - `media/` holds the optimised images and the project demo clips. `Yongama_Goso_CV.pdf` is the CV for the "Download CV" button; edit `cv/resume.html`, then run `sh cv/build.sh` to regenerate it.
-- `tools/` holds the image optimiser, the capture tool and the fingerprint helper. `tests/` holds the tests.
+- `tools/` holds the image optimiser and the capture tool. `tests/` holds the tests.
 
 ---
 
@@ -57,7 +57,7 @@ This runs `node --test`, which finds every `*.test.js` file under `tests/`. Alwa
 
 What the tests guard:
 
-- **Privacy** (`tests/privacy.test.js`, `tests/privacy-helper.test.js`): no served file and not this README may contain any of the private values listed by fingerprint, the withheld event identifiers, or the name of a project the owner asked to remove. See "The privacy guard" below.
+- **Privacy** (`tests/privacy.test.js`, `tests/privacy-helper.test.js`): no served file and not this README may contain a phone link (the `tel` URL scheme), a South African mobile number, an email address other than the public one, any of the private values (checked when the git-ignored private values file is present), the held-back game names, or the name of a project the owner asked to remove. See "The privacy guard" below.
 - **Data** (`tests/data.test.js`): the content is complete and consistent. There are 13 projects in order, slugs are unique, categories are valid, capture states match their media, every media path exists, demo clips are small, dates are real or say "Date to be confirmed", and contact details are only the public set.
 - **Pages** (`home`, `projects`, `journey`, `recognition`, `contact`, `shell`, `render` tests): each page renders the right content in a real browser, filters and counters work, and the shared header and footer are present.
 - **Accessibility behaviours**: the mobile menu opens and closes, the project window is a labelled dialog that traps focus, closes with Escape and the close button, and returns focus. Animations respect reduced motion, and the role ticker can be paused.
@@ -139,17 +139,21 @@ No HTML or CSS change is needed, because the project cards and filters are built
 
 ## The privacy guard
 
-Some personal details must never appear on the public site. `tests/privacy.test.js` checks every served file, and this README, against **SHA-256 fingerprints** stored in `tests/fixtures/forbidden.json`. Only the fingerprints are committed, never the private values themselves, so the repo does not reveal them.
+Some personal details must never appear on the public site. `tests/privacy.test.js` scans every served file (what git would publish, minus `tests/`, `tools/`, `docs/` and `node_modules/`) and this README, in two layers.
 
-If the list of private values changes, regenerate the fingerprints from a plain-text file of `label|value` lines:
+**Always on.** These rules need no private file, so they run in every clone:
 
-```sh
-node tools/hash-forbidden.js <plaintext-file>
-```
+- no phone link (the `tel` URL scheme) anywhere;
+- no South African mobile number (`+27` or a leading `0`, then `6x`, `7x` or `8x` and seven more digits, spaced, hyphenated or split across tags);
+- no email address other than `goso.yonga@gmail.com`.
 
-Keep that plaintext file outside the repo, or in a git-ignored folder. **Never commit it.** Do not paste the values into any file, issue or commit message either, and do not write them in this README, because the test scans it.
+`tests/cv.test.js` applies the same rules to the text of `Yongama_Goso_CV.pdf`.
 
-Public contact details on the site are limited to an email address and social links.
+**Private values.** The exact private values (contact and other personal details that must stay off the site) are listed only in a plain-text file of `label|value` lines that is **never committed**. By default it is `.superpowers/sdd/2026-11-21-portfolio-redesign/forbidden-plaintext.txt`, which the root `.gitignore` ignores; set `PORTFOLIO_PRIVATE_VALUES` to use a file somewhere else. At test time the file is read into memory, and each value is compared with the text by SHA-256, so the tests and their output only ever name the labels. Nothing derived from the values (no hash, no list) is written to disk or committed. Where the file is absent, as in a fresh clone, these checks are skipped with a message that says so, and the always-on rules still run.
+
+**Never commit the plaintext file.** Do not paste the values into any file, issue or commit message either, and do not write them in this README, because the test scans it.
+
+Public contact details on the site are limited to that email address and social links.
 
 ---
 

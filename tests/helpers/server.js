@@ -3,6 +3,7 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -36,19 +37,23 @@ function startServer(rootDir) {
   });
 }
 
-const EXCLUDED = new Set(['node_modules', 'tests', 'tools', 'docs', '.git']);
+// Not published: tooling, tests and docs, excluded from the repo root only (a folder with one
+// of these names deeper in the tree is still scanned).
+const EXCLUDED_ROOT_DIRS = ['node_modules/', 'tests/', 'tools/', 'docs/', '.git/'];
 const SCANNED = /\.(html|js|css|json|svg)$/i;
 
-// Repo-relative (forward-slash) paths of every publishable text file.
+// Repo-relative (forward-slash) paths of every publishable text file: what git would publish,
+// i.e. tracked files plus untracked files that are not git-ignored (`git ls-files -co
+// --exclude-standard`). Ignored folders such as .superpowers/ are never part of the set.
 function servedFiles(rootDir) {
-  const out = [];
-  (function walk(dir) {
-    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (e.isDirectory()) { if (!EXCLUDED.has(e.name)) walk(path.join(dir, e.name)); }
-      else if (SCANNED.test(e.name)) out.push(path.relative(rootDir, path.join(dir, e.name)).split(path.sep).join('/'));
-    }
-  })(rootDir);
-  return out.sort();
+  const listed = execFileSync('git', ['ls-files', '-z', '-co', '--exclude-standard'], {
+    cwd: rootDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
+  }).split('\0').filter(Boolean);
+  return [...new Set(listed)]
+    .filter((rel) => !EXCLUDED_ROOT_DIRS.some((d) => rel.startsWith(d)))
+    .filter((rel) => SCANNED.test(rel))
+    .filter((rel) => fs.existsSync(path.join(rootDir, rel))) // a tracked file deleted on disk
+    .sort();
 }
 
 module.exports = { startServer, servedFiles };

@@ -1,3 +1,7 @@
 node_modules/
 tools/capture/.work/
 .env
+# Working notes and the private values file for the privacy tests. Never commit them.
+.superpowers/
+.ruff_cache/
+.media-stage-*/
