@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Rebuild Yongama Goso's portfolio as a five-page static site that follows chumamemela.co.za's
+**Goal:** Rebuild Yongama Goso's portfolio as a five-page static site that follows the reference site's
 structure in his own visual identity. Every project is shown with real captures of the running app,
 and every fact traces to his CV, his biography, his current site or his repos.
 

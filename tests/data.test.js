@@ -230,6 +230,13 @@ test('the inter-university hackathon is a mentor event dated with an en dash, an
     'recognition must list the mentor role with the en-dash date');
 });
 
+test('the Gonex founder role has no known date, so it says "Date to be confirmed"; its 8 weeks stay in the highlights', () => {
+  const e = SITE.experiences.find((x) => x.id === 'gonex-founder');
+  assert.ok(e, 'missing gonex-founder');
+  assert.strictEqual(e.when, PENDING);
+  assert.ok(e.highlights.some((h) => /8 weeks/.test(h)), 'the 8-week programme is still mentioned');
+});
+
 test('8 certificates, the 6 S3 images in order, and text-only YES and UCT–Cortex cards', () => {
   assert.strictEqual(SITE.certificates.length, 8);
   assert.strictEqual(SITE.certificates.filter((c) => !('image' in c)).length, 2);

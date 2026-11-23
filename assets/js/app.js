@@ -66,6 +66,14 @@
       if (isOpen() && !header.contains(event.target)) setOpen(false);
     });
 
+    // So does moving focus out of the header (Tab past the last link), so the open panel
+    // does not cover the element that now has focus. A null relatedTarget (focus going
+    // nowhere, e.g. a click on a non-focusable part of the panel) is left to the click rule.
+    header.addEventListener('focusout', function (event) {
+      var next = event.relatedTarget;
+      if (isOpen() && next && !header.contains(next)) setOpen(false);
+    });
+
     // Growing past the breakpoint resets the menu, so it is not found
     // half-open when the window shrinks again.
     // (Safari before 14 only knows the older addListener spelling.)
@@ -420,7 +428,8 @@
     var label = '<span class="skill__name">' + icon + esc(name) + '</span>';
     if (!used || !used.length) return '<li class="skill">' + label + '</li>';
     return '<li class="skill skill--used"><details>' +
-      '<summary>' + label + '<span class="skill__count" aria-hidden="true">' + used.length + '</span></summary>' +
+      '<summary>' + label + '<span class="skill__count" aria-hidden="true">' + used.length + '</span>' +
+      '<span class="visually-hidden">, used in ' + used.length + (used.length === 1 ? ' project' : ' projects') + '</span></summary>' +
       '<div class="skill__used"><p class="skill__used-label">Used in</p><ul>' +
       used.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') +
       '</ul></div></details></li>';
@@ -462,6 +471,7 @@
     SITE.experiences.forEach(function (e) { byId[e.id] = e; });
     document.querySelectorAll('.exp-card__gallery').forEach(function (button) {
       var e = byId[button.dataset.gallery];
+      if (!e) return;   // no experience with that id: leave the button inert
       button.setAttribute('aria-haspopup', 'dialog');
       button.addEventListener('click', function () {
         Modal.open('<h2 id="gallery-title-' + esc(e.id) + '">' + esc(e.title) + '</h2>' +

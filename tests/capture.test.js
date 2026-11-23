@@ -6,7 +6,10 @@ const assert = require('node:assert');
 
 const SITE = require('../assets/js/data.js');
 const recipes = require('../tools/capture/capture.config.js');
-const { ffmpegArgs, resolveEnv, shouldRun } = require('../tools/capture/capture.js');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { ffmpegArgs, resolveEnv, shouldRun, checkResponse, removeStaleShots } = require('../tools/capture/capture.js');
 
 // True when `wanted` appears in `args` in this relative order.
 function inOrder(args, wanted) {
@@ -77,4 +80,24 @@ test('the five Windows recipes exist, point at a placeholder URL and never hold 
       }
     }
   }
+});
+
+test('checkResponse: a non-2xx answer stops the capture; 2xx and same-document navigations pass', () => {
+  const res = (status) => ({ ok: () => status >= 200 && status < 300, status: () => status });
+  assert.doesNotThrow(() => checkResponse(res(200), 'http://x/'));
+  assert.doesNotThrow(() => checkResponse(null, 'http://x/#top'));
+  assert.throws(() => checkResponse(res(404), 'http://x/missing'), /HTTP 404 from http:\/\/x\/missing/);
+  assert.throws(() => checkResponse(res(500), 'http://x/'), /HTTP 500/);
+});
+
+test('removeStaleShots deletes only shot-N.webp files', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'capture-shots-'));
+  try {
+    for (const f of ['shot-1.webp', 'shot-2.webp', 'shot-12.webp', 'poster.webp', 'demo.mp4', 'shot-1.png', 'myshot-1.webp']) {
+      fs.writeFileSync(path.join(dir, f), '');
+    }
+    removeStaleShots(dir);
+    assert.deepStrictEqual(fs.readdirSync(dir).sort(), ['demo.mp4', 'myshot-1.webp', 'poster.webp', 'shot-1.png']);
+    removeStaleShots(path.join(dir, 'missing')); // no folder yet: nothing to do
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });

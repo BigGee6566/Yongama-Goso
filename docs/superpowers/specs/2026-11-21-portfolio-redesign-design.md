@@ -2,15 +2,15 @@
 
 **Date:** 2026-11-21
 **Owner:** Yongama Goso (BigGee6566)
-**Status:** Draft, awaiting approval
+**Status:** Approved 2026-11-21; implemented
 **Branch:** `claude/keen-franklin-gqohrd`
 
 ---
 
 ## 1. Intent and why
 
-Yongama wants his personal portfolio rebuilt so it follows the structure and feel of
-https://www.chumamemela.co.za/ (a personal-brand site for an AI trainer and startup coach), while
+Yongama wants his personal portfolio rebuilt so it follows the structure and feel of a reference
+personal-brand site that he chose (it is not named here), while
 presenting *his own* work: every project he has built (including his public GitHub repos), his skills,
 tools, experience, capabilities, growth and public recognition.
 
@@ -59,8 +59,8 @@ or shown as an explicit "pending" item. Nothing is invented.
 
 **Anti-goals** (failure even if the site "works")
 - Any fabricated number, date, award, quote or client.
-- A site that looks like a clone of Chuma Memela's. Chuma Memela is one of his CV referees, so the
-  resemblance would be noticed.
+- A site that looks like a clone of the reference site. The reference site's owner is one of his
+  CV referees, so the resemblance would be noticed.
 - Publishing his phone number, home street address, student email or referees' contact details.
 - Media that is not a real capture of the real app: no mock-ups passed off as running software, and
   no AI-generated screenshots.
@@ -125,8 +125,8 @@ Excluded by his choice: `Edurand_V2` and `UFH-MARKETPLACE` (README only), `hello
 portfolio repo, private repos and repos owned by others.
 
 **Held back until the UCT INF4001N 2027 entrance exam is marked** (his decision, 2026-11-21):
-- `SA-NQOBA`: 19 commits by BigGee6566 and 1 by AsandaDingezweni.
-- `CONQUEST-GAME`: its only commit is authored by Liyema Vundle.
+- `SA-NQOBA`: 19 of 20 commits by BigGee6566.
+- `CONQUEST-GAME`: its only commit is by another author.
 
 Neither appears anywhere on the site. Adding them later is a data-only change.
 

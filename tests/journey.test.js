@@ -6,18 +6,10 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { startServer } = require('./helpers/server.js');
-const { withPage } = require('./helpers/browser.js');
+const { withPage, stubExternal } = require('./helpers/browser.js');
 const SITE = require('../assets/js/data.js');
 
 const root = path.join(__dirname, '..');
-
-// Requests that leave the local site get an empty 200 (no network in tests).
-async function stubExternal(page) {
-  await page.route((url) => /^https?:$/.test(url.protocol) && url.hostname !== '127.0.0.1', (route) => {
-    const type = route.request().resourceType() === 'stylesheet' ? 'text/css' : 'application/octet-stream';
-    return route.fulfill({ status: 200, contentType: type, body: '' });
-  });
-}
 
 let server;
 test.before(async () => { server = await startServer(root); });
@@ -115,6 +107,8 @@ test('"ASP.NET Web Forms" chip lists 5 project titles under "Used in"', async ()
     const want = SITE.projects.filter((p) => p.stack.includes('ASP.NET Web Forms')).map((p) => p.title);
     assert.deepEqual(used.map((s) => s.trim()).sort(), want.sort());
     assert.ok((await chip.textContent()).includes('Used in'));
+    // The visible count is aria-hidden; screen readers get it as words in the summary.
+    assert.equal((await chip.locator('summary .visually-hidden').textContent()).trim(), ', used in 5 projects');
   });
 });
 

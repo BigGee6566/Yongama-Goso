@@ -108,12 +108,28 @@ function shouldRun(step, env) {
   return value !== undefined && value !== '';
 }
 
+/**
+ * Throw unless a navigation answered 2xx. An error page (404, 500, a login wall's 403) would
+ * otherwise be recorded as if it were the app. `res` is null for same-document navigations.
+ */
+function checkResponse(res, target) {
+  if (res && !res.ok()) throw new Error('HTTP ' + res.status() + ' from ' + target + '; nothing was recorded from it');
+}
+
+/** Delete every shot-N.webp in dir, so a run that takes fewer shots leaves no stale ones behind. */
+function removeStaleShots(dir) {
+  if (!fs.existsSync(dir)) return;
+  for (const f of fs.readdirSync(dir)) {
+    if (/^shot-\d+\.webp$/.test(f)) fs.rmSync(path.join(dir, f));
+  }
+}
+
 /** Run one step on a page. mode "video" pauses on shots; mode "shot" takes them. */
 async function playStep(page, step, base, mode, shots) {
   if (!shouldRun(step)) return; // e.g. an authenticated screen when no demo login was found
   if (step.goto !== undefined) {
     const target = /^https?:/.test(step.goto) ? step.goto : new URL(step.goto, base).href;
-    await page.goto(target, { waitUntil: 'networkidle' });
+    checkResponse(await page.goto(target, { waitUntil: 'networkidle' }), target);
   } else if (step.click !== undefined) {
     await page.click(step.click);
   } else if (step.fill) {
@@ -192,7 +208,8 @@ async function runRecipe(recipe, outDir, opts) {
     for (const step of recipe.steps) await playStep(spage, step, base, 'shot', shots);
     await sctx.close();
 
-    // Encode everything.
+    // Encode everything. Both passes succeeded, so the old shots can go now.
+    removeStaleShots(outDir);
     const result = { poster: path.join(outDir, 'poster.webp'), shots: [], mp4: path.join(outDir, 'demo.mp4'), webm: path.join(outDir, 'demo.webm') };
     shots.list.forEach((png, i) => {
       const out = path.join(outDir, 'shot-' + (i + 1) + '.webp');
@@ -226,5 +243,5 @@ async function main(argv) {
   }
 }
 
-module.exports = { ffmpegArgs, runRecipe, resolveEnv, shouldRun };
+module.exports = { ffmpegArgs, runRecipe, resolveEnv, shouldRun, checkResponse, removeStaleShots };
 if (require.main === module) main(process.argv.slice(2)).catch((e) => { console.error(e); process.exit(1); });

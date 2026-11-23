@@ -7,7 +7,7 @@ It has five pages:
 | Page | File | What it shows |
 | --- | --- | --- |
 | Home | `index.html` | Intro, counters, what I do, featured projects, recognition, approach |
-| Projects | `projects.html` | All 13 projects with filters, and a detail window with a demo clip |
+| Projects | `projects.html` | All 13 projects with filters, and a detail window with screenshots, or a logo while a capture is pending, plus a demo clip for the four that have been recorded |
 | Journey | `journey.html` | Timeline, experience, events, education, skills, languages |
 | Recognition | `recognition.html` | Awards, Gonex Innovation Hub, certificates |
 | Contact | `contact.html` | Email, social links and a contact form (sent through Formspree) |
@@ -125,12 +125,12 @@ The "capture kit" for the five pending apps is ready, but it has not been run ye
 
 ## Adding the two held-back exam games later
 
-Two entrance-exam games are held back until the exam has been marked, so they are not on the site and are not named anywhere in this repo. When it is time to add them, it is a data-only change:
+Two entrance-exam games are held back until the exam has been marked, so they are not on the site and this README does not name them. They are named in the design notes under `docs/` and in the "withheld identifiers" test in `tests/privacy.test.js`, which fails if either name appears in a served file. When it is time to add them, it is a data-only change plus that one test:
 
 1. Add a project entry for each in `assets/js/data.js` (slug, title, tagline, description, stack, repo and so on), following the existing entries.
 2. Record them with the capture tool, or give them a logo or screenshot and mark them `existing-screenshot`, the same way as the other projects.
 3. Update the numbers the data tests expect (the project count of 13 and the category counts in `tests/data.test.js`, and the nine-repo and counter checks if they apply), and the "Public projects" counter input in `data.js` if it changes.
-4. Make sure the privacy tests still pass. The two names are deliberately not in any test list today, so there is nothing to remove there; just do not add them to the "removed project" list in `tests/privacy.test.js`.
+4. In `tests/privacy.test.js`, delete the "no served file mentions the withheld identifiers" test (or remove the game you are adding from its pattern). Otherwise it fails as soon as a name is in `data.js`. Do not add them to the "removed project" list in the same file.
 5. Run `npm test`, then commit.
 
 No HTML or CSS change is needed, because the project cards and filters are built from the data.

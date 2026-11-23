@@ -147,7 +147,7 @@
       {
         slug: 'thaba-shield',
         title: 'ThabaShield',
-        tagline: 'A three-layer security console with an Expo client and a FastAPI hub.',
+        tagline: 'A three-layer security dashboard with an Expo client and a FastAPI hub.',
         description: 'A security dashboard with three layers: a document scanner that checks uploaded files with SHA-256 hashes and heuristic risk scoring, API anomaly detection that uses an Isolation Forest model to flag outliers in API traffic, and SafeCharge, which monitors telemetry from EV charging stations. The Expo client runs on web, iOS and Android, the FastAPI hub stores events in PostgreSQL, and the services run with Docker Compose. The API traffic and charging-station telemetry come from a traffic generator and a software emulator, not real devices.',
         context: 'Team project',
         categories: ['mobile'],
@@ -399,7 +399,7 @@
         title: 'Founder & Programme Facilitator',
         tag: 'Work',
         org: 'Gonex Innovation Hub NPC, Sterkspruit, Eastern Cape',
-        when: '8-week programme',
+        when: PENDING,
         subtitle: 'A community-driven nonprofit in the Joe Gqabi District',
         description: 'I founded Gonex Innovation Hub NPC in Sterkspruit and facilitated its first programmes.',
         highlights: [

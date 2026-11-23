@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { startServer } = require('./helpers/server.js');
-const { withPage } = require('./helpers/browser.js');
+const { withPage, stubExternal } = require('./helpers/browser.js');
 const SITE = require('../assets/js/data.js');
 const Render = require('../assets/js/render.js');
 
@@ -29,15 +29,6 @@ const LEGACY = [
   ['services', '/index.html#what-i-do'],
   ['about', '/index.html#about'],
 ];
-
-// Same stub as shell.test.js: requests that leave the local site get an empty 200,
-// so the tests never depend on the CDNs (the pinned URLs are checked statically there).
-async function stubExternal(page) {
-  await page.route((url) => /^https?:$/.test(url.protocol) && url.hostname !== '127.0.0.1', (route) => {
-    const type = route.request().resourceType() === 'stylesheet' ? 'text/css' : 'application/octet-stream';
-    return route.fulfill({ status: 200, contentType: type, body: '' });
-  });
-}
 
 const squash = (s) => String(s).replace(/\s+/g, ' ').trim();
 
@@ -235,14 +226,16 @@ test('every image has alt text; no sideways scroll at 360px', async () => {
 test('Home transfers at most 2,621,440 local bytes before interaction', async () => {
   await withPage(async (page) => {
     await stubExternal(page);
-    const sizes = [];
-    page.on('response', async (res) => {
+    // Collect each body's promise as the response arrives, then await them all, so a body
+    // still being read when the page settles is counted rather than missed.
+    const bodies = [];
+    page.on('response', (res) => {
       if (new URL(res.url()).hostname !== '127.0.0.1') return; // CDN requests are stubbed
-      try { sizes.push((await res.body()).length); } catch { /* redirects have no body */ }
+      bodies.push(res.body().then((b) => b.length, () => 0)); // redirects have no body
     });
     await page.goto('/index.html', { waitUntil: 'networkidle' });
     await page.waitForTimeout(500);
-    const total = sizes.reduce((a, b) => a + b, 0);
+    const total = (await Promise.all(bodies)).reduce((a, b) => a + b, 0);
     assert.ok(total > 0, 'responses were counted');
     assert.ok(total <= BUDGET, `Home transferred ${total} bytes (budget ${BUDGET})`);
   }, { baseUrl: server.url, viewport: { width: 1440, height: 900 } });

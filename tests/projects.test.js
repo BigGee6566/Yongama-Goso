@@ -8,20 +8,12 @@ const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
 const { startServer } = require('./helpers/server.js');
-const { withPage } = require('./helpers/browser.js');
+const { withPage, stubExternal } = require('./helpers/browser.js');
 const SITE = require('../assets/js/data.js');
 
 const root = path.join(__dirname, '..');
 const dataJs = fs.readFileSync(path.join(root, 'assets/js/data.js'), 'utf8');
 const FIXTURE_VIDEO = { mp4: 'tests/fixtures/sample.mp4', webm: 'tests/fixtures/sample.webm' };
-
-// Same stub as home.test.js: requests that leave the local site get an empty 200.
-async function stubExternal(page) {
-  await page.route((url) => /^https?:$/.test(url.protocol) && url.hostname !== '127.0.0.1', (route) => {
-    const type = route.request().resourceType() === 'stylesheet' ? 'text/css' : 'application/octet-stream';
-    return route.fulfill({ status: 200, contentType: type, body: '' });
-  });
-}
 
 // Serves the real data.js plus one line giving the first project a (tiny) video,
 // because the real data has none yet. Everything else is the shipped code.
@@ -231,6 +223,6 @@ test('a malformed #hash is ignored: no dialog, no errors, filters still work', a
 test('the intro does not overclaim recordings', async () => {
   await onProjects(async (page) => {
     assert.equal((await page.locator('.page-intro').textContent()).trim(),
-      'Web apps, mobile apps, APIs and .NET systems I have built. Cards marked \u201cRunning capture coming soon\u201d are still being recorded.');
+      'Web apps, mobile apps, APIs and .NET systems I have built. Cards marked \u201cRunning capture coming soon\u201d have not been recorded yet.');
   });
 });

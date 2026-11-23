@@ -7,7 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { startServer } = require('./helpers/server.js');
-const { withPage } = require('./helpers/browser.js');
+const { withPage, stubExternal } = require('./helpers/browser.js');
 
 const root = path.join(__dirname, '..');
 
@@ -42,15 +42,6 @@ const hrefs = (html) => [...html.matchAll(/href="([^"]*)"/g)].map((m) => m[1]);
 // Visible text of an HTML fragment, with the few entities we use decoded.
 // <wbr> is a zero-width break hint inside the footer email, not a gap, so it is dropped first.
 const text = (html) => html.replace(/<wbr>/g, '').replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
-
-// Answers every request that leaves the local site with an empty 200, so the browser
-// tests don't depend on the CDNs being reachable (the pinned URLs are checked statically).
-async function stubExternal(page) {
-  await page.route((url) => /^https?:$/.test(url.protocol) && url.hostname !== '127.0.0.1', (route) => {
-    const type = route.request().resourceType() === 'stylesheet' ? 'text/css' : 'application/octet-stream';
-    return route.fulfill({ status: 200, contentType: type, body: '' });
-  });
-}
 
 test('header and footer are identical on all five pages, apart from aria-current', () => {
   const strip = (s) => s.replace(/ aria-current="page"/g, '');
@@ -253,6 +244,21 @@ test('below 900px the nav toggle opens and closes the links', async () => {
         await journey.evaluate((a) => a.addEventListener('click', (e) => e.preventDefault()));
         await journey.click();
         assert.strictEqual(await toggle.getAttribute('aria-expanded'), 'false', `${file}: following a link collapses`);
+
+        // Tabbing out of the header, past its last link (Download CV), collapses it too.
+        await toggle.click();
+        await page.locator('.site-header .site-nav a').last().focus();
+        await page.keyboard.press('Tab');
+        assert.ok(await page.evaluate(() => !document.querySelector('.site-header').contains(document.activeElement)),
+          `${file}: focus left the header`);
+        assert.strictEqual(await toggle.getAttribute('aria-expanded'), 'false', `${file}: focus leaving the header collapses`);
+
+        // Moving focus inside the header (toggle to a link) keeps it open.
+        await toggle.click();
+        await toggle.focus();
+        await links.first().focus();
+        assert.strictEqual(await toggle.getAttribute('aria-expanded'), 'true', `${file}: focus inside the header keeps it open`);
+        await page.keyboard.press('Escape');
       }
     }, { viewport: { width: 390, height: 844 }, baseUrl: s.url });
 

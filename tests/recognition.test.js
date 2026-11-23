@@ -6,18 +6,10 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { startServer } = require('./helpers/server.js');
-const { withPage } = require('./helpers/browser.js');
+const { withPage, stubExternal } = require('./helpers/browser.js');
 const SITE = require('../assets/js/data.js');
 
 const root = path.join(__dirname, '..');
-
-// Requests that leave the local site get an empty 200 (no network in tests).
-async function stubExternal(page) {
-  await page.route((url) => /^https?:$/.test(url.protocol) && url.hostname !== '127.0.0.1', (route) => {
-    const type = route.request().resourceType() === 'stylesheet' ? 'text/css' : 'application/octet-stream';
-    return route.fulfill({ status: 200, contentType: type, body: '' });
-  });
-}
 
 let server;
 test.before(async () => { server = await startServer(root); });

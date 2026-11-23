@@ -8,6 +8,9 @@
    - on close, focus returns to opener (the button that opened it).
    Only one dialog exists at a time: opening a second replaces the first.
 
+   Modal.open trusts its html: it is inserted as markup, unescaped. Callers must build it
+   from escaped text (Render's HTML builders, or Render.escapeHTML for every SITE string).
+
    Classic script (no modules) so it works from file://. */
 (function (root) {
   'use strict';
@@ -24,13 +27,19 @@
     });
   }
 
+  // Removes dialog c and its key handler and gives the page its scroll back. Focus is not
+  // moved here: close() returns it to the opener, open() moves it into the new dialog.
+  function teardown(c) {
+    document.removeEventListener('keydown', c.onKey, true);
+    c.el.remove();
+    document.body.style.overflow = c.prevOverflow;
+  }
+
   function close() {
     if (!current) return;
     var c = current;
     current = null;
-    document.removeEventListener('keydown', c.onKey, true);
-    c.el.remove();
-    document.body.style.overflow = c.prevOverflow;
+    teardown(c);
     // The opener may have been removed from the page in the meantime.
     if (c.opener && document.contains(c.opener) && c.opener.focus) c.opener.focus();
   }
@@ -38,12 +47,13 @@
   function open(html, options) {
     options = options || {};
     if (current) {
-      // Replacing: drop the old dialog but keep the ORIGINAL scroll state and opener.
+      // Replacing: drop the old dialog first. Its teardown restores the scroll state from
+      // before it opened, so the new dialog saves and later restores that original state.
+      // The opener is NOT carried over: the new dialog returns focus to options.opener, or
+      // to whatever had focus once the old dialog was gone.
       var old = current;
       current = null;
-      document.removeEventListener('keydown', old.onKey, true);
-      old.el.remove();
-      document.body.style.overflow = old.prevOverflow;
+      teardown(old);
     }
 
     var el = document.createElement('div');
