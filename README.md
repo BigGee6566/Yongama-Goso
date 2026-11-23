@@ -167,7 +167,7 @@ The script checks all of these first and stops with a message naming anything mi
 
 - Visual Studio 2022 (or Build Tools) with the ASP.NET and web development workload (MSBuild, found with `vswhere`) and IIS Express
 - SQL Server Express with `sqlcmd` (default instance `.\SQLEXPRESS`, change it with `-SqlInstance`)
-- PostgreSQL with `psql`, running locally (TutorConnect only), and `$env:PGPASSWORD` set to its password
+- PostgreSQL 13 or newer with `psql`, running locally (TutorConnect only; `-Force` uses `DROP DATABASE ... WITH (FORCE)`, which needs 13), and `$env:PGPASSWORD` set to its password
 - Node.js 20 or newer, `ffmpeg`, and Playwright (`npm install`, then `npx playwright install chromium`)
 - The five repositories checked out side by side (`BigGee6566_TutorConnect`, `BigGee6566_StudyLink`, `BigGee6566_SmartShelf`, `BigGee6566_BusNova_System`, `BigGee6566_C-Sharp-Shooter`)
 
@@ -187,7 +187,17 @@ For each app: it creates a new database named `<App>_PortfolioDemo` (`StudyLink_
 
 ### What it does not touch
 
-- Your existing databases: it only ever creates, and with `-Force` drops, databases whose name ends in `_PortfolioDemo`. The repos' SQL scripts hard-code their own database names, so every occurrence of the original name is rewritten to the demo name in a temporary copy, and the copy only runs if it then passes a strict check: the original name appears nowhere, there are no sqlcmd directives (`:connect`, `:r`, `!!`), and no statement names another database. TutorConnect's PostgreSQL script must contain no `\` meta-commands and no database, role or server statements. Config patching also fails closed (no connection string found, `configSource`, or a string with no database name aborts the run), and `-PgHost` must be localhost, 127.0.0.1 or ::1.
+- Your existing databases: it only ever creates, and with `-Force` drops, databases whose name ends in `_PortfolioDemo`. The repos' SQL scripts hard-code their own database names, so every occurrence of the original name is rewritten to the demo name in a temporary copy, and the copy only runs if it then passes a strict check. In SQL Server:
+  - the original name appears nowhere (code, strings or comments), not even as the start of a longer name;
+  - there are no sqlcmd directives (`:connect`, `:r`, `!!`);
+  - every `CREATE`, `ALTER`, `DROP`, `BACKUP` or `RESTORE DATABASE` names only the demo database (each name in a list counts, bracketed, quoted or bare, with or without `IF EXISTS`), and so does every `DATABASE::` and every `DB_ID('...')` with a literal name;
+  - every `USE` in the code names the demo database or `master`, whatever follows it on the line, and so does a `USE` inside a string (dynamic SQL) when it starts a statement, is written in capitals, or ends at `;`, a line break or the end of the string;
+  - `ALTER DATABASE CURRENT` is allowed only as `ALTER DATABASE CURRENT SET AUTO_CLOSE OFF` (optionally `WITH NO_WAIT`), never inside a string, and only while the demo database is in effect: the check starts from the database the script is run in (the demo database, or `master` for Logisticore's script, which creates its own) and follows each `USE` in order;
+  - nothing reaches outside the database or the server (logins, `xp_cmdshell`, `sp_configure`, `SHUTDOWN`, attach or detach, linked servers, `OPENROWSET`, `OPENDATASOURCE`, `OPENQUERY`).
+
+  TutorConnect's PostgreSQL script must contain no backslash anywhere (so no psql meta-command such as `\c` or `\i`), and no database, role, user, tablespace or server statement.
+
+  Config patching also fails closed (no connection string found, `configSource`, or a string with no database name aborts the run), and `-PgHost` must be localhost, 127.0.0.1 or ::1.
 - The repositories' working trees: every change (connection strings, cookie settings, local settings) is made in the temporary copy, which is always deleted at the end, even after an error or Ctrl+C (`-KeepTemp` keeps it; those files may contain your local PostgreSQL password).
 - The hosted Supabase database: TutorConnect is pointed at your local PostgreSQL, and the script refuses to start if any config it will use names a hosted database.
 - `assets/js/data.js`: the script never edits it, and no credential is written to any file in this repo.

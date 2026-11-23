@@ -358,31 +358,51 @@ function Get-SqlStripped([string]$Text, [bool]$KeepStrings) {
         })
 }
 
-function Convert-SqlScriptForDemo([string]$SourcePath, [string]$DestPath, [string]$OriginalDb, [string]$DemoDb) {
+function Convert-SqlScriptForDemo([string]$SourcePath, [string]$DestPath, [string]$OriginalDb, [string]$DemoDb, [string]$Context) {
     Assert-DemoName $DemoDb
     Assert-UnderTemp $DestPath
+    if ($Context -ne $DemoDb -and $Context -ne 'master') {
+        throw "Refusing to run $SourcePath in database '$Context': a script starts in $DemoDb or in master only."
+    }
     $text = [System.IO.File]::ReadAllText($SourcePath)
     # Every whole-word occurrence of the original name (USE, CREATE/DROP DATABASE, DB_ID('..'),
     # three-part names, quoted or bracketed, dynamic SQL inside strings, comments, PRINT text)
     # becomes the demo name, so nothing can point at the real catalog by any route.
     $text = [regex]::Replace($text, ('(?i)(?<![\w])' + [regex]::Escape($OriginalDb) + '(?![\w])'), $DemoDb)
-    Assert-SqlTargetsOnlyDemo $text $OriginalDb $DemoDb $SourcePath
+    Assert-SqlTargetsOnlyDemo $text $OriginalDb $DemoDb $Context $SourcePath
     $dir = Split-Path -Parent $DestPath
     if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
     [System.IO.File]::WriteAllText($DestPath, $text, (New-Object System.Text.UTF8Encoding($true)))
 }
 
-# A whitelist: the rewritten script is accepted only if the original name is gone everywhere,
-# there are no sqlcmd directives, and no statement names another database.
-function Assert-SqlTargetsOnlyDemo([string]$Text, [string]$OriginalDb, [string]$DemoDb, [string]$Label) {
+# A database name as T-SQL writes it: [bracketed], "quoted" or bare. Returns it unwrapped and in
+# lower case ([Other Db] -> 'other db'). Nothing is trimmed, so '[ X ]' is not 'x'.
+function Get-SqlNameValue([string]$Token) {
+    if ($Token -match '^\[([\s\S]*)\]$' -or $Token -match '^"([\s\S]*)"$') { $Token = $Matches[1] }
+    return $Token.ToLowerInvariant()
+}
+
+# A whitelist: the rewritten script is accepted only if
+#   1. the original name is gone everywhere;
+#   2. there are no sqlcmd directives;
+#   3. every CREATE/ALTER/DROP/BACKUP/RESTORE DATABASE names only the demo database (each name in a
+#      list, bracketed, quoted or bare), and so do DATABASE:: and DB_ID('...');
+#   4. every USE in the code names the demo database or master, whatever follows it, and a USE in
+#      a string (dynamic SQL) does too when it reads as a statement;
+#   5. ALTER DATABASE CURRENT appears only as ALTER DATABASE CURRENT SET AUTO_CLOSE OFF [WITH NO_WAIT],
+#      and only while the demo database is in effect: starting from $Context (the database sqlcmd
+#      starts in, -d), each USE changes it, in code order;
+#   6. nothing reaches outside the database or the server.
+function Assert-SqlTargetsOnlyDemo([string]$Text, [string]$OriginalDb, [string]$DemoDb, [string]$Context, [string]$Label) {
     $problems = New-Object System.Collections.Generic.List[string]
     $demo = $DemoDb.ToLowerInvariant()
-    $ok = @($demo, 'current')
+    $allowedUse = @($demo, 'master')
 
     # 1. The original name must not survive ANYWHERE (code, strings, comments), as a whole word
     #    or as the start of a longer identifier such as <Name>_Test.
     foreach ($m in [regex]::Matches($Text, ('(?i)(?<![\w])' + [regex]::Escape($OriginalDb) + '(?![\w])'))) { $problems.Add('original name: ' + $m.Value) }
-    $codeNoStrings = Get-SqlStripped $Text $false
+    $codeNoStrings = Get-SqlStripped $Text $false     # comments dropped, string literals blanked
+    $codeWithStrings = Get-SqlStripped $Text $true    # comments dropped, string literals kept
     foreach ($m in [regex]::Matches($codeNoStrings, ('(?i)(?<![\w])' + [regex]::Escape($OriginalDb) + '\w+'))) {
         if ($m.Value.ToLowerInvariant() -ne $demo) { $problems.Add('similar name: ' + $m.Value) }
     }
@@ -390,32 +410,68 @@ function Assert-SqlTargetsOnlyDemo([string]$Text, [string]$OriginalDb, [string]$
     # 2. sqlcmd directives (:connect, :r, !!cmd ...) are never allowed, on any line.
     foreach ($m in [regex]::Matches($Text, '(?m)^\s*(:|!!)\S*')) { $problems.Add('sqlcmd directive: ' + $m.Value.Trim()) }
 
-    # 3. No statement may create, drop, alter, back up or restore another database.
-    foreach ($m in [regex]::Matches($Text, '(?i)\b(?:DROP|ALTER|CREATE|RESTORE|BACKUP)\s+DATABASE\s+\[?(\w+)\]?')) {
-        if ($ok -notcontains $m.Groups[1].Value.ToLowerInvariant()) { $problems.Add($m.Value) }
+    # 3. Database statements, checked in the whole text. A bare CURRENT after ALTER is left to
+    #    step 5. A statement with no name at all (DROP DATABASE @x) is refused in the code.
+    $dbStatement = '(?i)\b(DROP|ALTER|CREATE|RESTORE|BACKUP)\s+DATABASE\b(?:\s+IF\s+EXISTS\b)?\s*((?:\[[^\]]+\]|"[^"]+"|\w+)(?:\s*,\s*(?:\[[^\]]+\]|"[^"]+"|\w+))*)?'
+    foreach ($m in [regex]::Matches($Text, $dbStatement)) {
+        foreach ($n in [regex]::Matches($m.Groups[2].Value, '\[[^\]]+\]|"[^"]+"|\w+')) {
+            $isCurrent = ($m.Groups[1].Value -ieq 'ALTER') -and ($n.Value -ieq 'CURRENT')
+            if (-not $isCurrent -and (Get-SqlNameValue $n.Value) -ne $demo) { $problems.Add($m.Value.Trim()) }
+        }
     }
-    foreach ($m in [regex]::Matches($Text, '(?i)\bDATABASE::\[?(\w+)')) {
-        if ($m.Groups[1].Value.ToLowerInvariant() -ne $demo) { $problems.Add($m.Value) }
+    foreach ($m in [regex]::Matches($codeWithStrings, $dbStatement)) {
+        if (-not $m.Groups[2].Success) { $problems.Add('database statement with no name: ' + $m.Value.Trim()) }
+    }
+    foreach ($m in [regex]::Matches($Text, '(?i)\bDATABASE\s*::\s*(\[[^\]]+\]|"[^"]+"|\w+)?')) {
+        if (-not $m.Groups[1].Success -or (Get-SqlNameValue $m.Groups[1].Value) -ne $demo) { $problems.Add($m.Value.Trim()) }
     }
     foreach ($m in [regex]::Matches($Text, "(?i)DB_ID\(\s*N?'([^']+)'")) {
         if ($m.Groups[1].Value.ToLowerInvariant() -ne $demo) { $problems.Add($m.Value) }
     }
 
-    # 4. USE may name only the demo database or master (checked in code and in strings, comments dropped).
-    $codeWithStrings = Get-SqlStripped $Text $true
-    # (A USE inside a string counts when it ends at ';' or a line break, or is the whole literal;
-    # ordinary prose such as 'will use again.' does not.)
-    $usePatterns = @(
-        '(?i)(?<![\w@#.])USE\s+[\[''"]?(\w+)[\]"]?(?=\s*(?:;|\r?\n|$))',
-        "(?i)'\s*USE\s+[\[""]?(\w+)[\]""]?\s*'"
-    )
-    foreach ($pattern in $usePatterns) {
-        foreach ($m in [regex]::Matches($codeWithStrings, $pattern)) {
-            $name = $m.Groups[1].Value.ToLowerInvariant()
-            if ($name -ne $demo -and $name -ne 'master') { $problems.Add($m.Value.Trim()) }
+    # 4 and 5. One pass over the code in order: each USE must name the demo database or master
+    #    and becomes the database in effect; each ALTER DATABASE CURRENT must be the allowed form,
+    #    ending its statement, while the demo database is in effect.
+    $inEffect = $Context.ToLowerInvariant()
+    $ordered = '(?i)(?<use>(?<![\w@#.])USE\b\s*(?<name>\[[^\]]+\]|"[^"]+"|\w+)?)|(?<current>\bALTER\s+DATABASE\s+CURRENT\b(?<allowed>\s+SET\s+AUTO_CLOSE\s+OFF(?:\s+WITH\s+NO_WAIT)?(?=[ \t]*(?:;|\r?\n|\z)))?)'
+    foreach ($m in [regex]::Matches($codeNoStrings, $ordered)) {
+        if ($m.Groups['use'].Success) {
+            if (-not $m.Groups['name'].Success) { $problems.Add('USE with no database name'); continue }
+            $inEffect = Get-SqlNameValue $m.Groups['name'].Value
+            if ($allowedUse -notcontains $inEffect) { $problems.Add('USE ' + $m.Groups['name'].Value) }
+        }
+        elseif (-not $m.Groups['allowed'].Success) {
+            $problems.Add('ALTER DATABASE CURRENT other than SET AUTO_CLOSE OFF [WITH NO_WAIT]')
+        }
+        elseif ($inEffect -ne $demo) {
+            $problems.Add("ALTER DATABASE CURRENT while the database in effect is $inEffect")
         }
     }
-    # 5. Nothing that reaches outside the database or the server.
+
+    # 4, in strings (dynamic SQL such as EXEC('USE Other SELECT 1')). A USE counts when it starts
+    # a statement (the literal's start, or after ';' or a line break), is written in capitals, or
+    # ends at ';', a line break or the literal's end; ordinary prose such as 'will use again.' does
+    # not. ALTER DATABASE CURRENT is never allowed in a string: its database cannot be checked.
+    foreach ($lit in [regex]::Matches($codeWithStrings, "'(?:[^']|'')*'")) {
+        $inner = $lit.Value.Substring(1, $lit.Value.Length - 2).Replace("''", "'")
+        $hits = @(
+            [regex]::Matches($inner, '(?im)(?:^|;)\s*USE\b\s*(\[[^\]]+\]|"[^"]+"|\w+)?')
+            [regex]::Matches($inner, '\bUSE\b\s*(\[[^\]]+\]|"[^"]+"|\w+)')
+            [regex]::Matches($inner, '(?i)\bUSE\s+(\[[^\]]+\]|"[^"]+"|\w+)\s*(?=;|\r?\n|\z)')
+        )
+        foreach ($m in $hits) {
+            if (-not $m.Groups[1].Success) { $problems.Add('USE with no database name in a string'); continue }
+            if ($allowedUse -notcontains (Get-SqlNameValue $m.Groups[1].Value)) { $problems.Add('USE ' + $m.Groups[1].Value + ' in a string') }
+        }
+        if ($inner -match '(?i)\bALTER\s+DATABASE\s+CURRENT\b') { $problems.Add('ALTER DATABASE CURRENT in a string') }
+    }
+    # (The earlier whole-literal rule, kept as it was.)
+    foreach ($m in [regex]::Matches($codeWithStrings, "(?i)'\s*USE\s+[\[""]?(\w+)[\]""]?\s*'")) {
+        $name = $m.Groups[1].Value.ToLowerInvariant()
+        if ($allowedUse -notcontains $name) { $problems.Add($m.Value.Trim()) }
+    }
+
+    # 6. Nothing that reaches outside the database or the server.
     foreach ($m in [regex]::Matches($codeWithStrings, '(?i)\b(DROP\s+LOGIN|CREATE\s+LOGIN|ALTER\s+LOGIN|xp_cmdshell|sp_configure|SHUTDOWN|sp_detach_db|sp_attach_db|sp_addsrvrolemember|OPENROWSET|OPENDATASOURCE|OPENQUERY|sp_addlinkedserver)\b')) {
         $problems.Add($m.Value)
     }
@@ -427,7 +483,8 @@ function Assert-SqlTargetsOnlyDemo([string]$Text, [string]$OriginalDb, [string]$
 
 # TutorConnect's PostgreSQL script: Supabase-only role grants are removed in the temp copy (the
 # roles do not exist locally and are cluster-wide, so they are not created), then it must pass
-# a whitelist: no psql meta-commands and no statement that touches databases, roles or the server.
+# a whitelist: no backslash at all (so no psql meta-command) and no statement that touches
+# databases, roles or the server.
 function Convert-PgScriptForDemo([string]$SourcePath, [string]$DestPath) {
     Assert-UnderTemp $DestPath
     $text = [System.IO.File]::ReadAllText($SourcePath)
@@ -440,7 +497,10 @@ function Convert-PgScriptForDemo([string]$SourcePath, [string]$DestPath) {
 
 function Assert-PgScriptSafe([string]$Text, [string]$Label) {
     $problems = New-Object System.Collections.Generic.List[string]
-    foreach ($m in [regex]::Matches($Text, '(?m)^\s*\\\S*')) { $problems.Add('psql meta-command: ' + $m.Value.Trim()) }
+    # psql runs \c, \connect, \i, \! and the rest wherever they appear on a line, and the schema
+    # script needs no backslash, so one anywhere (code, string or comment) stops the run.
+    $slash = $Text.IndexOf([char]'\')
+    if ($slash -ge 0) { $problems.Add('a backslash (psql meta-command) on line ' + $Text.Substring(0, $slash).Split("`n").Count) }
     $code = [regex]::Replace($Text, "'(?:[^']|'')*'|--[^\r\n]*|/\*[\s\S]*?\*/", { param($m) if ($m.Value.StartsWith("'")) { "''" } else { ' ' } })
     foreach ($m in [regex]::Matches($code, '(?i)\b(?:CREATE|DROP|ALTER)\s+(?:DATABASE|ROLE|USER|GROUP|TABLESPACE|SERVER|SYSTEM)\b')) { $problems.Add($m.Value) }
     foreach ($m in [regex]::Matches($code, '(?i)\b(?:SET\s+(?:SESSION\s+AUTHORIZATION|ROLE)|COPY\b[^;]*\bPROGRAM|dblink|postgres_fdw|pg_read_file|pg_read_binary_file|lo_import|lo_export|pg_terminate_backend)\b')) { $problems.Add($m.Value) }
@@ -458,7 +518,7 @@ function Invoke-SqlScripts([string]$SiteRoot, [string[]]$Patterns, $App, [string
         if ($files.Count -eq 0) { throw "The repo has no script matching $pattern (looked in $SiteRoot)." }
         foreach ($f in $files) {
             $dest = Join-Path (Join-Path $WorkDir 'sql') $f.Name
-            Convert-SqlScriptForDemo $f.FullName $dest $App.OrigDb $App.Db
+            Convert-SqlScriptForDemo $f.FullName $dest $App.OrigDb $App.Db $Context
             Write-Note ('running ' + $f.Name)
             # -d names the demo database for scripts with no USE line (master when the script creates it); -I = QUOTED_IDENTIFIER ON; -f 65001 = UTF-8 input.
             Invoke-SqlcmdTool @('-d', $Context, '-I', '-f', '65001', '-i', $dest) | Out-Null
