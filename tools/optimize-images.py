@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 
-QUALITY = 78
+QUALITY = 72   # WebP quality (lowered from 78 on 2026-11-25 to cut weight; still clean for photos and certificate text)
 METHOD = 6
 GALLERY_LONG = 1400   # long edge of full-size event photos
 THUMB_LONG = 640      # long edge of event thumbnails

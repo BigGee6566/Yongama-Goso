@@ -83,7 +83,15 @@ Source photos stay where they are (`Images/`). The optimiser writes small WebP c
 python3 tools/optimize-images.py --repos <folder that contains your cloned project repos>
 ```
 
-It needs Python 3 with Pillow. It does not delete or change your original images; it only writes into `media/`. It is safe to run again, and it removes manifest entries for files it no longer produces. Logos for the Windows apps are taken from the cloned repos, so point `--repos` at the folder that holds them.
+It needs Python 3 with Pillow. It does not delete or change your original images; it only writes into `media/` (WebP at quality 72). It is safe to run again, and it removes manifest entries for files it no longer produces. Logos for the Windows apps are taken from the cloned repos, so point `--repos` at the folder that holds them.
+
+To keep the originals themselves small, compress them in place after adding new photos:
+
+```sh
+python3 tools/compress-originals.py
+```
+
+It shrinks each JPEG/PNG in `Images/` to at most 2000 px on the long edge, re-saves JPEGs at quality 82, and **removes camera metadata (EXIF)**. File names and formats stay the same, so the optimiser still finds them. It only replaces a file when the result is smaller (or when it strips metadata). Run it *after* `optimize-images.py` if you want the site copies made from the untouched originals.
 
 ---
 
