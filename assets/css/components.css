@@ -192,6 +192,22 @@
   display: none;   /* display above would otherwise beat the hidden attribute */
 }
 
+/* Invisible to mouse and touch visitors, so the roles simply keep cycling.
+   It is still reachable with the Tab key and appears in place when it has
+   keyboard focus (like a skip link), which keeps the pause control that
+   WCAG 2.2.2 asks for available to keyboard and assistive-tech users. */
+.ticker-pause:not(:focus-visible) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .ticker-pause:hover {
   border-color: var(--vermilion);
   color: var(--bone);

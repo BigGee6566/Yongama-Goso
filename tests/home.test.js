@@ -181,9 +181,15 @@ test('the ticker cycles through SITE.roles without announcing every tick, and ca
       SITE.roles[0], { timeout: 6000 });
     assert.ok(SITE.roles.includes(squash(await word.textContent())), 'shows a role from SITE.roles');
 
+    // The pause control is invisible to mouse/touch visitors (1px, clipped) ...
     const pause = page.locator('#hero .ticker-pause');
-    assert.ok(await pause.isVisible(), 'pause control is visible while the ticker runs');
-    await pause.click();
+    const hiddenBox = await pause.boundingBox();
+    assert.ok(hiddenBox && hiddenBox.width <= 1 && hiddenBox.height <= 1, 'pause control is visually hidden by default');
+    // ... but a keyboard user can still reach it: it appears on focus and works with Enter.
+    await pause.focus();
+    const focusedBox = await pause.boundingBox();
+    assert.ok(focusedBox && focusedBox.width >= 20, 'pause control appears when it has keyboard focus');
+    await page.keyboard.press('Enter');
     assert.equal(await pause.getAttribute('aria-pressed'), 'true');
     await page.waitForTimeout(500); // let any in-flight swap finish
     const held = await word.textContent();
