@@ -49,7 +49,7 @@
         instagram: 'https://www.instagram.com/big_gee_the_one_and_only/'
       },
       cv: 'Yongama_Goso_CV.pdf',
-      portrait: { large: 'media/profile/portrait-1200.webp', small: 'media/profile/portrait-640.webp' }
+      portrait: { large: 'media/profile/portrait-880.webp', small: 'media/profile/portrait-440.webp' }
     },
 
     // Hero ticker (S2 titles, S3 "Full Stack Developer", S1/S2 Gonex).

@@ -28,7 +28,7 @@ GALLERY_LONG = 1400   # long edge of full-size event photos
 THUMB_LONG = 640      # long edge of event thumbnails
 CERT_LONG = 1600
 POSTER_LONG = 1600
-PORTRAIT_SIZES = (1200, 640)  # widths
+PORTRAIT_SIZES = (880, 440)  # widths; the cut-out is 878 px wide, so the 880 file stays 878 (never upscaled)
 LOGO_BOX = 800
 
 INK = (0x0E, 0x11, 0x16)
@@ -173,7 +173,7 @@ POSTERS = [
     ("Images/projects/image.png", "laundry"),
 ]
 
-PORTRAIT_SRC = "Images/profile/Image.jpeg"  # image.png is not a valid image
+PORTRAIT_SRC = "Images/profile/portrait-cutout.png"  # transparent cut-out (white background removed); image.png is not a valid image
 
 # slug -> (repo folder, path inside repo)
 LOGOS = {

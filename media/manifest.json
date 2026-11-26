@@ -1095,17 +1095,17 @@
     "h": 640,
     "bytes": 18220
   },
-  "media/profile/portrait-1200.webp": {
-    "src": "Images/profile/Image.jpeg",
-    "w": 1200,
-    "h": 1321,
-    "bytes": 45680
+  "media/profile/portrait-440.webp": {
+    "src": "Images/profile/portrait-cutout.png",
+    "w": 440,
+    "h": 558,
+    "bytes": 23026
   },
-  "media/profile/portrait-640.webp": {
-    "src": "Images/profile/Image.jpeg",
-    "w": 640,
-    "h": 705,
-    "bytes": 19182
+  "media/profile/portrait-880.webp": {
+    "src": "Images/profile/portrait-cutout.png",
+    "w": 878,
+    "h": 1114,
+    "bytes": 65522
   },
   "media/projects/busnova/logo.webp": {
     "src": "repos:BigGee6566_BusNova_System/BusNova_System_NoDB/Images/logo.jpeg",

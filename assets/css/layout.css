@@ -742,14 +742,26 @@ body[data-page="home"] .site-header.is-scrolled {
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: 999px 999px var(--radius-l) var(--radius-l);
-  background: var(--ink-2);
+  /* The portrait is a transparent cut-out, so the arch itself is the backdrop:
+     a soft bone glow behind the head and shoulders keeps the silhouette
+     readable on the dark ink, and a faint vermilion warmth rises from the base. */
+  background:
+    radial-gradient(62% 48% at 50% 40%, rgb(245 241 234 / 0.2), rgb(245 241 234 / 0) 72%),
+    radial-gradient(85% 45% at 50% 100%, rgb(255 90 54 / 0.16), rgb(255 90 54 / 0) 70%),
+    var(--ink-2);
 }
 
 .hero__frame img {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 25%;
+  padding-top: 7%;              /* breathing room under the round top of the arch */
+  object-fit: contain;          /* show the whole cut-out, never crop it */
+  object-position: 50% 100%;    /* stand it on the base of the arch */
+  /* The photo is cropped just below the arms; fading the last stretch lets
+     that edge dissolve into the arch instead of ending in a hard line. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
 }
 
 /* A second arch in vermilion outline, offset like a second print pass. */
@@ -787,6 +799,15 @@ body[data-page="home"] .site-header.is-scrolled {
 
 .hero__place i {
   color: var(--vermilion);
+}
+
+/* On narrow screens the label is two lines tall, so it moves down onto the
+   arch's base edge (where the cut-out has already faded) instead of covering
+   the arms. */
+@media (max-width: 899.98px) {
+  .hero__place {
+    bottom: calc(-1 * var(--space-5));
+  }
 }
 
 /* The load sequence: the hero's parts rise in one after another, staggered

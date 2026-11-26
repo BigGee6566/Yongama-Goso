@@ -61,8 +61,8 @@ test('static HTML: the fixed copy, the noscript fallback and the hero image attr
   const imgs = [...html.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
   const hero = imgs.filter((t) => t.includes('fetchpriority="high"'));
   assert.equal(hero.length, 1, 'exactly one image has fetchpriority="high"');
-  assert.match(hero[0], /src="media\/profile\/portrait-1200\.webp"/);
-  assert.match(hero[0], /srcset="[^"]*media\/profile\/portrait-640\.webp 640w[^"]*media\/profile\/portrait-1200\.webp 1200w"/);
+  assert.match(hero[0], /src="media\/profile\/portrait-880\.webp"/);
+  assert.match(hero[0], /srcset="[^"]*media\/profile\/portrait-440\.webp 440w[^"]*media\/profile\/portrait-880\.webp 880w"/);
   assert.match(hero[0], /\ssizes="[^"]+"/);
   for (const t of imgs.filter((x) => x !== hero[0])) assert.match(t, /loading="lazy"/, `lazy: ${t}`);
   assert.match(html, /<img [^>]*src="media\/events\/startup-grind\/07-1400\.webp"/, 'CTA photo is the startup-grind hero image');
